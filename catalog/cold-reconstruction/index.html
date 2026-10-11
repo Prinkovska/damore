@@ -1,0 +1,1340 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Холодна реконструкція — D’AMORE</title>
+<meta name="description" content="5-етапний догляд за волоссям: шампунь, маска, кондиціонер, молочко для блиску, спрей-термозахист.">
+<meta property="og:title" content="Холодна реконструкція — D’AMORE">
+<meta property="og:description" content="5-етапний догляд за волоссям: шампунь, маска, кондиціонер, молочко для блиску, спрей-термозахист.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23AB3724' d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z'/%3E%3C/svg%3E">
+<link rel="preload" href="../../assets/fonts/Onest-VariableFont_wght.ttf" as="font" type="font/ttf" crossorigin>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pinyon+Script&display=swap" rel="stylesheet">
+<style>@font-face{font-family:'Onest'; src:url('../../assets/fonts/Onest-VariableFont_wght.ttf') format('truetype'); font-weight:100 900; font-style:normal; font-display:swap}</style>
+<style>html{scroll-behavior:smooth} body{margin:0; background:#F6F2EE}</style>
+</head>
+<body>
+<!--
+  D'AMORE · КУРСОР-СЕРЦЕ НА ВСЬОМУ САЙТІ
+  ─────────────────────────────────────────────────────────────────────────────
+  ЯК ПІДКЛЮЧИТИ (один раз на весь сайт):
+  Tilda → Налаштування сайту → «Ще» → «HTML-код для вставки в HEAD» → «Редагувати код» → вставити весь цей код → Зберегти → Опублікувати ВСІ сторінки.
+  (Тоді курсор з'являється на всіх сторінках. Вставка коду в HEAD потребує платного тарифу Tilda; на Free – інакше, див. нижче.)
+  На Free-тарифі: вставити цей код блоком T123 «HTML-код» на кожну сторінку або в спільний хедер сторінок.
+  Цей код сумісний із курсором у hero: якщо вони обидва на сторінці, працює лише один (дублів не буде).
+  Працює тільки з мишею/тачпадом (на телефоні не показується). Гострий кінець серця = точка кліку.
+-->
+<style>
+  html.dm-nocur, html.dm-nocur *{cursor:none!important}
+  .dm-cur{
+    position:fixed; left:0; top:0; width:16px; height:24px; z-index:1000000; pointer-events:none; opacity:0;
+    background:center/contain no-repeat; will-change:transform; transition:opacity .25s ease;
+    transform-origin:50% 100%;
+    filter:drop-shadow(0 3px 5px rgba(120,25,15,.28));
+  }
+</style>
+<script>
+(function(){
+  'use strict';
+  /* ═══════════ CONFIG ═══════════ */
+  var CURSOR_IMG = '../../assets/img/cursor.png';   // картинка курсора (серце, гострий кінець вниз)
+  var CUR_ANGLE  = 135;                                                              // кут: 135° = гострий кінець дивиться вгору-вліво, як у стрілки
+
+  if (window.__dmCursor) return;                                                     // вже запущено (наприклад, у hero)
+  if (!window.matchMedia || !matchMedia('(hover:hover) and (pointer:fine)').matches) return;
+  window.__dmCursor = 1;
+
+  var root = document.documentElement;
+  function start(){
+    var im = new Image();
+    im.onload = function(){
+      var el = document.createElement('div');
+      el.className = 'dm-cur';
+      el.style.backgroundImage = 'url("' + CURSOR_IMG + '")';
+      document.body.appendChild(el);
+      var x=-100,y=-100,tx=-100,ty=-100,sc=1,tsc=1,rot=0,shown=false;
+      window.addEventListener('mousemove', function(e){
+        tx = e.clientX; ty = e.clientY;
+        if (!shown){ shown = true; x = tx; y = ty; root.classList.add('dm-nocur'); el.style.opacity = 1; }
+        var t = e.target;
+        tsc = (t && t.closest && t.closest('a,button,input,textarea,select,label,summary,[role=button],[role=tab],.t-btn')) ? 1.45 : 1;
+      }, {passive:true});
+      window.addEventListener('mousedown', function(){ tsc *= .82; });
+      window.addEventListener('mouseup',   function(){ tsc = Math.max(1, tsc / .82); });
+      document.addEventListener('mouseleave', function(){ el.style.opacity = 0; });
+      document.addEventListener('mouseenter', function(){ if (shown) el.style.opacity = 1; });
+      (function loop(){
+        var dx = tx - x;
+        x += dx * .28; y += (ty - y) * .28; sc += (tsc - sc) * .18;
+        rot += (Math.max(-16, Math.min(16, dx * .6)) - rot) * .2;
+        el.style.transform = 'translate3d('+x+'px,'+y+'px,0) translate(-50%,-100%) rotate('+(CUR_ANGLE + rot)+'deg) scale('+sc+')';
+        requestAnimationFrame(loop);
+      })();
+    };
+    im.src = CURSOR_IMG;
+  }
+  if (document.body) start(); else document.addEventListener('DOMContentLoaded', start);
+})();
+</script>
+<!--
+  D'AMORE · ВЕРХНІЙ БІГУЧИЙ РЯДОК (Tilda → T123 «HTML-код», ставиться у Шапку над меню)
+  Тексти й швидкість змінюються у блоці CONFIG унизу в <script>.
+-->
+<style>
+  .dm-top{
+    --c1:#7A1D14; --c2:#B4422F; --c3:#8E271B; --c4:#CF6A55;     /* відтінки «шовку» (ті самі, що в кнопки) */
+    --dm-top-fg:#FFF4EC;
+    position:relative; width:100%; height:38px; overflow:hidden; isolation:isolate;
+    background:var(--c1); color:var(--dm-top-fg);
+    font:500 12.5px/1 'Onest','Helvetica Neue',Arial,sans-serif; letter-spacing:.14em; text-transform:uppercase;
+    box-shadow:inset 0 1px 0 rgba(255,225,215,.28), inset 0 -7px 12px rgba(50,6,4,.28);
+    -webkit-user-select:none; user-select:none;
+  }
+  .dm-top-silk{                            /* тканина, що повільно переливається */
+    position:absolute; inset:-70% -10%; z-index:0; pointer-events:none;
+    background:
+      radial-gradient(38% 130% at 18% 45%, rgba(255,205,190,.55), transparent 62%),
+      radial-gradient(34% 120% at 66% 60%, rgba(255,190,175,.42), transparent 64%),
+      radial-gradient(30% 110% at 96% 30%, rgba(255,205,190,.36), transparent 62%),
+      linear-gradient(100deg,var(--c1) 0%,var(--c2) 14%,var(--c3) 27%,var(--c4) 40%,var(--c3) 54%,var(--c2) 68%,var(--c4) 82%,var(--c1) 100%);
+    background-size:200% 200%,220% 200%,240% 200%,300% 100%;
+    animation:dmTopSilk 14s ease-in-out infinite alternate;
+  }
+  @keyframes dmTopSilk{
+    0%  {background-position:0% 0%,100% 100%,0% 100%,0% 0%}
+    100%{background-position:100% 100%,0% 0%,100% 0%,100% 0%}
+  }
+  .dm-top-sheen{                           /* відблиск, що пробігає смугою */
+    position:absolute; inset:0; z-index:1; pointer-events:none;
+    background:linear-gradient(105deg,transparent 36%,rgba(255,236,226,0) 41%,rgba(255,236,226,.42) 50%,rgba(255,236,226,0) 59%,transparent 64%);
+    transform:translateX(-120%) skewX(-12deg);
+    animation:dmTopSheen 8s cubic-bezier(.5,0,.3,1) 1s infinite;
+  }
+  @keyframes dmTopSheen{0%{transform:translateX(-120%) skewX(-12deg)} 60%,100%{transform:translateX(120%) skewX(-12deg)}}
+  .dm-top-clip{                            /* текст + м'яке згасання по краях */
+    position:absolute; inset:0; z-index:2; display:flex; align-items:center; overflow:hidden;
+    -webkit-mask-image:linear-gradient(90deg,transparent,#000 clamp(24px,8vw,120px),#000 calc(100% - clamp(24px,8vw,120px)),transparent);
+            mask-image:linear-gradient(90deg,transparent,#000 clamp(24px,8vw,120px),#000 calc(100% - clamp(24px,8vw,120px)),transparent);
+  }
+  .dm-top-track{
+    display:flex; flex:none; width:max-content; will-change:transform;
+    animation:dmTick var(--dm-d,40s) linear infinite;
+  }
+  .dm-top:hover .dm-top-track{animation-play-state:paused}
+  @keyframes dmTick{to{transform:translate3d(calc(var(--dm-w,1000px) * -1),0,0)}}
+  .dm-top-group{display:flex; flex:none; align-items:center}
+  .dm-top-item{display:inline-flex; align-items:center; white-space:nowrap; padding:0 clamp(18px,2.4vw,40px)}
+  .dm-top-item:last-child{padding-right:clamp(18px,2.4vw,40px)}
+  .dm-top-item svg{width:13px; height:13px; margin-left:clamp(36px,4.8vw,80px); flex:none; fill:currentColor}
+  @media (max-width:767px){
+    .dm-top{height:34px; font-size:11px; letter-spacing:.11em}
+  }
+</style>
+
+<div class="dm-top" id="dm-top" role="region" aria-label="Переваги">
+  <i class="dm-top-silk"></i>
+  <i class="dm-top-sheen"></i>
+  <div class="dm-top-clip"><div class="dm-top-track" id="dm-top-track"></div></div>
+</div>
+
+<script>
+(function(){
+  'use strict';
+
+  /* ═══════════ CONFIG ═══════════ */
+  var ITEMS = [
+    'Безкоштовна доставка',
+    'Подарунки до замовлення',
+    'Пробники в подарунок',
+    'Миттєва відправка'
+  ];
+  var SPEED = 38;                       // px/с — швидкість руху (менше = повільніше)
+  var SEP   = 'heart';                  // роздільник: 'heart' (серце) · 'spark' (іскорка) · 'dot' (крапка) · 'none' (без)
+
+  var track = document.getElementById('dm-top-track');
+  var SEPS = {
+    heart: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>',
+    spark: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.5c.9 5.9 4.6 9.6 10.5 10.5-5.9.9-9.6 4.6-10.5 10.5C11.1 16.6 7.4 12.9 1.5 12 7.4 11.1 11.1 7.4 12 1.5z"/></svg>',
+    dot:   '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="5"/></svg>',
+    none:  ''
+  };
+  var HEART = SEPS[SEP] || SEPS.heart;
+
+  function group(hidden){
+    var g = document.createElement('div');
+    g.className = 'dm-top-group';
+    if (hidden) g.setAttribute('aria-hidden','true');
+    g.innerHTML = ITEMS.map(function(t){ return '<span class="dm-top-item">'+t+HEART+'</span>'; }).join('');
+    return g;
+  }
+
+  function build(){
+    track.innerHTML = '';
+    track.style.animation = 'none';
+    var first = group(false);
+    track.appendChild(first);
+    var one = first.getBoundingClientRect().width;
+    if (!one) return;
+    var need = Math.ceil((window.innerWidth * 1.1) / one);       // скільки груп потрібно, щоб заповнити екран
+    for (var i=1;i<need;i++) track.appendChild(group(true));
+    var setW = one * need;                                       // ширина одного повного «набору»
+    for (var j=0;j<need;j++) track.appendChild(group(true));     // другий такий самий набір – для безшовного кола
+    track.style.setProperty('--dm-w', setW+'px');
+    track.style.setProperty('--dm-d', (setW / SPEED)+'s');
+    void track.offsetWidth;
+    track.style.animation = '';
+  }
+
+  var go = function(){ build(); };
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(go); else go();
+  var rz; window.addEventListener('resize', function(){ clearTimeout(rz); rz = setTimeout(build, 200); });
+})();
+</script>
+
+<!--
+  D'AMORE · МЕНЮ (шапка) — Tilda → T123 «HTML-код»
+  Ставиться у Шапку ПІД рядком переваг (topbar) і над першим екраном.
+  ───────────────────────────────────────────────────────────────
+  Пункти, посилання й тексти змінюються у блоці CONFIG унизу в <script>.
+    logo – посилання на логотип (Cloudinary). Порожньо = використовується вбудований логотип
+    cart – куди веде іконка кошика. У Tilda «#order» відкриває кошик магазину
+-->
+<style>
+  .dmh-wrap{
+    --h:58px; --red:#AB3724; --burg:#5B1210; --graph:#433d3c; --cream:#F6F2EE;
+    position:relative; width:100%; height:var(--h); font-family:'Onest','Helvetica Neue',Arial,sans-serif; color:var(--graph);
+  }
+  .dmh{
+    position:relative; z-index:9000; height:var(--h); width:100%;
+    background:rgba(246,242,238,.98); border-bottom:1px solid rgba(67,61,60,.09);
+    transition:box-shadow .4s ease, background .4s ease;
+  }
+  .dmh.stuck{
+    position:fixed; top:0; left:0; right:0;
+    background:rgba(246,242,238,.88); -webkit-backdrop-filter:saturate(1.3) blur(14px); backdrop-filter:saturate(1.3) blur(14px);
+    box-shadow:0 14px 34px -22px rgba(67,40,30,.45);
+  }
+  .dmh-in{
+    height:100%; display:grid; grid-template-columns:1fr auto 1fr; align-items:center; column-gap:28px;
+    padding:0 clamp(20px,4vw,64px); max-width:1760px; margin:0 auto; box-sizing:border-box;
+  }
+  .dmh-side{display:flex; align-items:center; height:100%; gap:clamp(18px,2vw,30px)}
+  .dmh-side.l{justify-content:flex-start}
+  .dmh-side.r{justify-content:flex-end}
+  .dmh-logo{display:flex; align-items:center; height:100%; line-height:0}
+  .dmh-logotxt{font:700 24px/1 'Onest',sans-serif; letter-spacing:.01em; color:#17110f}
+  .dmh-logo img{display:block; height:26px; width:auto}
+
+  /* пункти */
+  .dmh-link{
+    position:relative; display:inline-flex; align-items:center; gap:7px; padding:8px 0;
+    font:500 14.5px/1 'Onest',sans-serif; letter-spacing:.012em; color:var(--graph); text-decoration:none; white-space:nowrap;
+    background:none; border:0; cursor:pointer; transition:color .3s ease;
+  }
+  .dmh-link::after{
+    content:''; position:absolute; left:0; right:0; bottom:1px; height:1.5px; background:var(--red);
+    transform:scaleX(0); transform-origin:left center; transition:transform .5s cubic-bezier(.6,0,.2,1);
+  }
+  .dmh-link:hover::after,.dmh-link.on::after,.dmh-dd:hover>.dmh-link::after,.dmh-dd.open>.dmh-link::after{transform:scaleX(1)}
+  .dmh-link.on,.dmh-link:hover{color:var(--red)}
+  .dmh-dd:hover>.dmh-link,.dmh-dd.open>.dmh-link{color:var(--red)}
+  .dmh-chev{width:10px; height:10px; stroke:currentColor; fill:none; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; transition:transform .4s cubic-bezier(.2,.8,.2,1)}
+  .dmh-dd:hover .dmh-chev,.dmh-dd.open .dmh-chev{transform:rotate(180deg)}
+  .dmh-link:focus-visible,.dmh-sub-i:focus-visible,.dmh-cart:focus-visible,.dmh-cta:focus-visible,.dmh-burger:focus-visible{outline:2px solid var(--red); outline-offset:4px; border-radius:4px}
+
+  /* меню 2-го рівня */
+  .dmh-dd{position:relative; display:flex; align-items:center; height:100%}
+  .dmh-sub{
+    position:absolute; left:-26px; top:100%; min-width:340px; padding:10px; z-index:9100;
+    background:rgba(250,247,243,.98); border:1px solid rgba(67,61,60,.08); border-radius:20px;
+    box-shadow:0 30px 60px -24px rgba(67,40,30,.38), 0 2px 8px rgba(67,40,30,.06);
+    opacity:0; visibility:hidden; pointer-events:none; transform:translateY(8px);
+    transition:opacity .35s ease, transform .45s cubic-bezier(.2,.8,.2,1), visibility 0s linear .35s;
+  }
+  .dmh-sub::before{content:''; position:absolute; left:0; right:0; top:-14px; height:14px}
+  .dmh-dd:hover .dmh-sub,.dmh-dd:focus-within .dmh-sub,.dmh-dd.open .dmh-sub{
+    opacity:1; visibility:visible; pointer-events:auto; transform:none; transition-delay:0s;
+  }
+  .dmh-sub-i{
+    display:flex; align-items:center; justify-content:space-between; gap:16px; padding:14px 16px; border-radius:12px;
+    font:400 15px/1.2 'Onest',sans-serif; color:var(--graph); text-decoration:none; transition:background .3s ease, color .3s ease;
+  }
+  .dmh-sub-i:hover{background:rgba(171,55,36,.07); color:var(--red)}
+  .dmh-sub-i .t{display:inline-flex; align-items:center; gap:10px}
+  .dmh-sub-i.hot{font-weight:500; color:var(--red)}
+  .dmh-sub-i.hot svg{width:13px; height:13px; fill:var(--red)}
+  .dmh-sub-i .b{font:400 11.5px/1 'Onest',sans-serif; letter-spacing:.06em; color:rgba(67,61,60,.55); background:rgba(67,61,60,.07); padding:5px 10px; border-radius:99px}
+  .dmh-sub-i.soon{color:rgba(67,61,60,.72)}
+
+  /* кнопка та кошик */
+  .dmh-cta{
+    --c1:#7A1D14; --c2:#B4422F; --c3:#8E271B; --c4:#CF6A55;
+    position:relative; display:inline-flex; align-items:center; padding:10px 21px; border-radius:99px; overflow:hidden; isolation:isolate;
+    font:500 13px/1 'Onest',sans-serif; letter-spacing:.06em; color:#FFF4EC; text-decoration:none; white-space:nowrap; background:var(--c1);
+    box-shadow:0 12px 24px -12px rgba(122,29,20,.75), inset 0 1px 0 rgba(255,225,215,.38), inset 0 -8px 14px rgba(50,6,4,.26);
+    transition:transform .45s cubic-bezier(.2,.8,.2,1), box-shadow .45s ease;
+  }
+  .dmh-cta span{position:relative; z-index:2; text-shadow:0 1px 2px rgba(60,8,4,.35)}
+  .dmh-cta::before{
+    content:''; position:absolute; inset:-60% -25%; z-index:-2;
+    background:
+      radial-gradient(60% 90% at 25% 30%, rgba(255,205,190,.55), transparent 60%),
+      radial-gradient(55% 80% at 75% 70%, rgba(255,190,175,.40), transparent 62%),
+      linear-gradient(100deg,var(--c1) 0%,var(--c2) 22%,var(--c3) 38%,var(--c4) 55%,var(--c3) 72%,var(--c2) 88%,var(--c1) 100%);
+    background-size:180% 180%,200% 200%,240% 100%; animation:dmhSilk 7s ease-in-out infinite alternate;
+  }
+  @keyframes dmhSilk{0%{background-position:0% 0%,100% 100%,0% 0%} 100%{background-position:100% 100%,0% 0%,100% 0%}}
+  .dmh-cta::after{
+    content:''; position:absolute; inset:0; z-index:-1;
+    background:linear-gradient(105deg,transparent 34%,rgba(255,236,226,0) 40%,rgba(255,236,226,.55) 50%,rgba(255,236,226,0) 60%,transparent 66%);
+    transform:translateX(-130%) skewX(-12deg); animation:dmhSheen 5s cubic-bezier(.5,0,.3,1) 1.4s infinite;
+  }
+  @keyframes dmhSheen{0%{transform:translateX(-130%) skewX(-12deg)} 55%,100%{transform:translateX(130%) skewX(-12deg)}}
+  .dmh-cta:hover{transform:translateY(-2px)}
+  .dmh-cart{
+    position:relative; width:38px; height:38px; display:grid; place-items:center; border-radius:50%; color:var(--graph); text-decoration:none;
+    transition:background .3s ease, color .3s ease;
+  }
+  .dmh-cart svg{width:20px; height:20px; stroke:currentColor; fill:none; stroke-width:1.6; stroke-linecap:round; stroke-linejoin:round}
+  .dmh-cart:hover{background:rgba(171,55,36,.08); color:var(--red)}
+  .dmh-badge{                                    /* лічильник товарів у корзині */
+    position:absolute; top:0; right:-1px; min-width:17px; height:17px; padding:0 4px; box-sizing:border-box; border-radius:99px;
+    display:none; align-items:center; justify-content:center; background:var(--red); color:#FFF4EC;
+    font:500 10.5px/1 'Onest',sans-serif; letter-spacing:0; box-shadow:0 0 0 2px var(--cream);
+  }
+  .dmh-badge.on{display:inline-flex}
+  .dmh-ig{width:38px; height:38px; display:grid; place-items:center; border-radius:50%; color:var(--graph); text-decoration:none; transition:background .3s ease, color .3s ease}
+  .dmh-ig svg{width:20px; height:20px; stroke:currentColor; fill:none; stroke-width:1.6; stroke-linecap:round; stroke-linejoin:round}
+  .dmh-ig:hover{background:rgba(171,55,36,.08); color:var(--red)}
+  .dmh-ig:focus-visible{outline:2px solid var(--red); outline-offset:3px}
+  html.dmh-hide-tcart .t706__carticon{display:none!important}          /* ховаємо власну плаваючу іконку кошика Tilda (CONFIG.hideTildaCartIcon) */
+  .dmh-badge.pop{animation:dmhPop .5s cubic-bezier(.2,.8,.2,1)}
+  @keyframes dmhPop{0%{transform:scale(.4)} 55%{transform:scale(1.35)} 100%{transform:scale(1)}}
+
+  /* бургер + мобільна панель */
+  .dmh-burger{display:none; width:42px; height:42px; position:relative; background:none; border:0; padding:0; cursor:pointer; margin-left:-10px}
+  .dmh-burger i{position:absolute; left:10px; right:10px; height:1.6px; background:var(--graph); border-radius:2px; transition:transform .45s cubic-bezier(.2,.8,.2,1), top .45s cubic-bezier(.2,.8,.2,1)}
+  .dmh-burger i:nth-child(1){top:16px} .dmh-burger i:nth-child(2){top:25px}
+  .dmh-burger[aria-expanded="true"] i:nth-child(1){top:20.5px; transform:rotate(45deg)}
+  .dmh-burger[aria-expanded="true"] i:nth-child(2){top:20.5px; transform:rotate(-45deg)}
+  .dmh-mob{
+    position:fixed; left:0; right:0; top:var(--h); bottom:0; z-index:8990; overflow:auto; -webkit-overflow-scrolling:touch;
+    background:var(--cream); padding:10px clamp(20px,6vw,40px) 40px; box-sizing:border-box;
+    opacity:0; visibility:hidden; transform:translateY(-10px); transition:opacity .4s ease, transform .5s cubic-bezier(.2,.8,.2,1), visibility 0s linear .4s;
+  }
+  .dmh-mob.open{opacity:1; visibility:visible; transform:none; transition-delay:0s}
+  .dmh-mob a,.dmh-mob button{font-family:'Onest',sans-serif}
+  .dmh-m-i{
+    display:flex; align-items:center; justify-content:space-between; width:100%; padding:18px 0; border:0; border-bottom:1px solid rgba(67,61,60,.1);
+    background:none; font:500 22px/1.2 'Onest',sans-serif; color:var(--graph); text-decoration:none; cursor:pointer; text-align:left;
+  }
+  .dmh-m-i.on{color:var(--red)}
+  .dmh-m-i .dmh-chev{width:14px; height:14px}
+  .dmh-m-acc.open>.dmh-m-i .dmh-chev{transform:rotate(180deg)}
+  .dmh-m-sub{display:none; padding:4px 0 10px 14px; border-bottom:1px solid rgba(67,61,60,.1)}
+  .dmh-m-acc.open .dmh-m-sub{display:block}
+  .dmh-m-sub a{display:flex; align-items:center; justify-content:space-between; padding:13px 0; font:400 17px/1.2 'Onest',sans-serif; color:var(--graph); text-decoration:none}
+  .dmh-m-sub a.hot{color:var(--red); font-weight:500}
+  .dmh-m-sub a .b{font:400 11.5px/1 'Onest',sans-serif; letter-spacing:.06em; color:rgba(67,61,60,.55); background:rgba(67,61,60,.07); padding:5px 10px; border-radius:99px}
+  .dmh-m-foot{margin-top:26px; display:flex; flex-direction:column; gap:18px; align-items:flex-start}
+  .dmh-m-foot .dmh-cta{width:100%; justify-content:center; padding:17px 26px; font-size:15px}
+  .dmh-m-ig{font:400 15px/1 'Onest',sans-serif; color:rgba(67,61,60,.8); text-decoration:none; border-bottom:1px solid rgba(67,61,60,.3); padding-bottom:3px}
+  html.dmh-lock,html.dmh-lock body{overflow:hidden!important}
+
+  /* ───── режим «накласти на hero» (CONFIG.overlay) ───── */
+  .dmh-wrap.dmh-over{height:0}
+  .dmh-wrap.dmh-over .dmh{position:absolute; top:0; left:0; right:0; background:transparent; border-bottom-color:transparent}
+  .dmh-wrap.dmh-over .dmh.stuck{position:fixed; background:rgba(246,242,238,.88); border-bottom-color:rgba(67,61,60,.09)}
+
+  @media (max-width:1024px){
+    .dmh-wrap{--h:54px}
+    .dmh-in{column-gap:12px}
+    .dmh-side.l .dmh-link,.dmh-side.l .dmh-dd,.dmh-side.r .dmh-link,.dmh-side.r .dmh-dd,.dmh-side.r .dmh-cta,.dmh-side.r .dmh-ig{display:none}
+    .dmh-burger{display:block}
+    .dmh-logo img{height:22px}
+    .dmh-side.l{justify-content:flex-start}
+  }
+  @media (min-width:1025px){ .dmh-mob,.dmh-burger{display:none!important} }
+  @media (prefers-reduced-motion:reduce){ .dmh-sub,.dmh-mob{transition-duration:.01s} }
+</style>
+
+<div class="dmh-wrap" id="dmh-wrap">
+  <header class="dmh" id="dmh">
+    <div class="dmh-in">
+      <div class="dmh-side l" id="dmh-l">
+        <button class="dmh-burger" id="dmh-burger" type="button" aria-label="Відкрити меню" aria-expanded="false" aria-controls="dmh-mob"><i></i><i></i></button>
+      </div>
+      <a class="dmh-logo" id="dmh-logo" href="../../" aria-label="D'AMORE — на головну"><img alt="D'AMORE"></a>
+      <div class="dmh-side r" id="dmh-r"></div>
+    </div>
+  </header>
+  <div class="dmh-mob" id="dmh-mob" aria-hidden="true"></div>
+</div>
+
+<script>
+(function(){
+  'use strict';
+
+  /* ═══════════ CONFIG · пункти меню ═══════════ */
+  var CONFIG = {
+    logo : '../../assets/img/logo_damore.png',   // логотип (Cloudinary). Якщо не завантажиться – з’явиться текст D’AMORE
+    overlay : false,                              // true = шапка прозора й лежить поверх першого екрана; false = окремим рядком над ним
+    home : '../../',                                  // куди веде логотип
+    cart : '#demo-cart',
+    cartCounter : true,                          // значок із кількістю товарів біля кошика (читає кошик Tilda)
+    cartPage : '',    // сторінка з магазином (де є кошик): на інших сторінках іконка веде сюди й відкриває кошик                          // значок із кількістю товарів біля кошика (читає кошик Tilda)                             // іконка кошика (у Tilda #order відкриває кошик)
+    hideTildaCartIcon : true,                     // true = ховати власну плаваючу іконку кошика Tilda (залишається лише наша в меню)
+    instagram : 'https://www.instagram.com/the_trend.studio_storoj/',   // Instagram: іконка в шапці (комп'ютер) і посилання в мобільній панелі
+    cta  : { t:'Обрати догляд', h:'../../catalog/' },
+    left : [
+      { t:'Головна', h:'../../' },
+      { t:'Продукція', h:'../../#dm-ct', sub:[
+        { t:'Холодна реконструкція',    h:'../../catalog/cold-reconstruction/', hot:true },
+        { t:'Домашній догляд',          h:'../../catalog/home-care/',   soon:true },
+        { t:'Догляд за тілом',          h:'../../catalog/body-care/',   soon:true },
+        { t:'Аксесуари',                h:'../../catalog/accessories/', soon:true },
+        { t:'Сертифікати та подарунки', h:'../../catalog/gifts/',       soon:true }
+      ]},
+      { t:'Про бренд', h:'../../about/' }
+    ],
+    right: [
+      { t:'Блог',      h:'../../blog/' }               // «Співпраця» поки без сторінки – прибрано
+    ]
+  };
+
+  /* ═══════════ побудова ═══════════ */
+  var $ = function(id){ return document.getElementById(id); };
+  var wrap = $('dmh-wrap'), hd = $('dmh'), L = $('dmh-l'), R = $('dmh-r'), mob = $('dmh-mob'), burger = $('dmh-burger');
+  var CHEV = '<svg class="dmh-chev" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 4.2l4 4 4-4"/></svg>';
+  var HEART = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>';
+  var A = document.createElement('a');                      // розбір адрес через звичайне посилання
+  function parse(h){ A.href = h; return { host:A.host, path:('/' + A.pathname.replace(/^\/+/, '').replace(/index\.html$/, '')).replace(/\/+$/, '') || '/', hash:A.hash }; }
+  var here = parse(document.URL);
+  /* прелоад на головній показується лише один раз за візит: на будь-якій іншій сторінці позначаємо, що візит уже почався */
+  try { if (here.path !== parse(CONFIG.home).path) window.sessionStorage.setItem('dm_pre_done', '1'); } catch(e){}
+  function isOn(h){ try{ var u = parse(h); return u.host === here.host && !u.hash && u.path === here.path; }catch(e){ return false; } }
+  function esc(s){ return String(s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+
+  if (CONFIG.overlay) wrap.classList.add('dmh-over');
+  var logoA = $('dmh-logo'), logoImg = logoA.querySelector('img');
+  function logoFallback(){ logoA.innerHTML = '<span class="dmh-logotxt">D’AMORE</span>'; }
+  logoImg.addEventListener('error', logoFallback);
+  if (CONFIG.logo) logoImg.src = CONFIG.logo; else logoFallback();
+  $('dmh-logo').setAttribute('href', CONFIG.home);
+
+  function desk(it){
+    if (!it.sub) return '<a class="dmh-link' + (isOn(it.h) ? ' on' : '') + '" href="' + esc(it.h) + '">' + esc(it.t) + '</a>';
+    return '<div class="dmh-dd"><a class="dmh-link" href="' + esc(it.h) + '" aria-haspopup="true" aria-expanded="false">' + esc(it.t) + CHEV + '</a>' +
+           '<div class="dmh-sub" role="menu">' + it.sub.map(function(s){
+             return '<a class="dmh-sub-i' + (s.hot ? ' hot' : '') + (s.soon ? ' soon' : '') + '" role="menuitem" href="' + esc(s.h) + '"><span class="t">' +
+                    (s.hot ? HEART : '') + esc(s.t) + '</span>' + (s.soon ? '<span class="b">скоро</span>' : '') + '</a>';
+           }).join('') + '</div></div>';
+  }
+  var IG_SVG = '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.2" y="3.2" width="17.6" height="17.6" rx="5"/><circle cx="12" cy="12" r="4.1"/><circle cx="17.3" cy="6.7" r=".9" fill="currentColor" stroke="none"/></svg>';
+  var IG = CONFIG.instagram ? '<a class="dmh-ig" href="' + esc(CONFIG.instagram) + '" target="_blank" rel="noopener" aria-label="Instagram">' + IG_SVG + '</a>' : '';
+  L.insertAdjacentHTML('beforeend', CONFIG.left.map(desk).join(''));
+  R.insertAdjacentHTML('beforeend',
+    CONFIG.right.map(desk).join('') + IG +
+    '<a class="dmh-cta" href="' + esc(CONFIG.cta.h) + '"><span>' + esc(CONFIG.cta.t) + '</span></a>' +
+    '<a class="dmh-cart" href="' + esc(CONFIG.cart) + '" aria-label="Кошик"><svg viewBox="0 0 24 24"><path d="M5.5 8h13l-1 11.2a1.5 1.5 0 0 1-1.5 1.3H8a1.5 1.5 0 0 1-1.5-1.3L5.5 8z"/><path d="M9 8V7a3 3 0 0 1 6 0v1"/></svg><span class="dmh-badge" aria-hidden="true"></span></a>');
+
+  /* мобільна панель */
+  mob.innerHTML = CONFIG.left.concat(CONFIG.right).map(function(it){
+    if (!it.sub) return '<a class="dmh-m-i' + (isOn(it.h) ? ' on' : '') + '" href="' + esc(it.h) + '">' + esc(it.t) + '</a>';
+    return '<div class="dmh-m-acc"><button class="dmh-m-i" type="button" aria-expanded="false">' + esc(it.t) + CHEV + '</button><div class="dmh-m-sub">' +
+           it.sub.map(function(s){ return '<a' + (s.hot ? ' class="hot"' : '') + ' href="' + esc(s.h) + '">' + esc(s.t) + (s.soon ? '<span class="b">скоро</span>' : '') + '</a>'; }).join('') + '</div></div>';
+  }).join('') +
+  '<div class="dmh-m-foot"><a class="dmh-cta" href="' + esc(CONFIG.cta.h) + '"><span>' + esc(CONFIG.cta.t) + '</span></a>' +
+  '<a class="dmh-m-ig" href="' + esc(CONFIG.instagram) + '" target="_blank" rel="noopener">Instagram</a></div>';
+
+  if (CONFIG.hideTildaCartIcon) document.documentElement.classList.add('dmh-hide-tcart');
+
+  /* ═══════════ лічильник корзини Tilda ═══════════ */
+  var cartEl = (R.querySelector ? R : document).querySelector('.dmh-cart');
+  var badge  = cartEl ? cartEl.querySelector('.dmh-badge') : null;
+  function sumQty(arr){ var n = 0; for (var i = 0; i < arr.length; i++){ var q = parseInt(arr[i] && arr[i].quantity, 10); n += isNaN(q) ? 1 : q; } return n; }
+  function cartCount(){
+    try {
+      var c = window.tcart;
+      if (c && c.products && c.products.length) return sumQty(c.products);
+      var raw = window.localStorage.getItem('tcart');
+      if (raw){ var o = JSON.parse(raw); if (o && o.products && o.products.length) return sumQty(o.products); }
+    } catch(e){}
+    return 0;
+  }
+  var lastCnt = -1;
+  function updateBadge(){
+    if (!badge) return;
+    var n = cartCount();
+    if (n === lastCnt) return;
+    var grew = lastCnt >= 0 && n > lastCnt; lastCnt = n;
+    badge.textContent = n > 99 ? '99+' : String(n);
+    badge.classList.toggle('on', n > 0);
+    cartEl.setAttribute('aria-label', n > 0 ? 'Кошик, товарів: ' + n : 'Кошик');
+    if (grew){ badge.classList.remove('pop'); void badge.offsetWidth; badge.classList.add('pop'); }
+  }
+  if (CONFIG.cartCounter && badge){
+    updateBadge();
+    setInterval(function(){ if (!document.hidden) updateBadge(); }, 700);          // Tilda не повідомляє про зміни – перевіряємо кошик
+    window.addEventListener('storage', updateBadge);
+    document.addEventListener('visibilitychange', updateBadge);
+    document.addEventListener('click', function(){ setTimeout(updateBadge, 350); setTimeout(updateBadge, 1200); }, true);   // після «У кошик»
+  }
+
+  /* ═══════════ відкриття кошика Tilda (запасний механізм) ═══════════ */
+  /* Tilda сама відкриває кошик за посиланням #order. Якщо за 0,3 с вікно не відкрилось – відкриваємо через функцію або значок Tilda. */
+  if (cartEl && CONFIG.cart === '#order'){
+    cartEl.addEventListener('click', function(){
+      setTimeout(function(){
+        var win = document.querySelector('.t706__cartwin');
+        if (win && win.classList.contains('t706__cartwin_showed')) return;        // Tilda вже відкрила
+        if (!win && CONFIG.cartPage && parse(CONFIG.cartPage).path !== here.path){                // на цій сторінці кошика немає – відкриваємо сторінку магазину з кошиком
+          var go = document.createElement('a'); go.href = CONFIG.cartPage + '#order'; document.body.appendChild(go); go.click(); return;
+        }
+        try { if (typeof window.tcart__openCart === 'function'){ window.tcart__openCart(); return; } } catch(e){}
+        var ic = document.querySelector('.t706__carticon, .t706__carticon-wrapper');
+        if (ic) ic.click();
+      }, 300);
+    });
+  }
+
+  /* ═══════════ поведінка ═══════════ */
+  // меню 2-го рівня: клавіатура/дотик
+  var dd = L.querySelector('.dmh-dd');
+  if (dd){
+    var tr = dd.querySelector('.dmh-link');
+    tr.addEventListener('click', function(e){
+      if (window.matchMedia('(hover:none)').matches){ e.preventDefault(); dd.classList.toggle('open'); tr.setAttribute('aria-expanded', dd.classList.contains('open')); }
+    });
+    document.addEventListener('click', function(e){ if (!dd.contains(e.target)) dd.classList.remove('open'); });
+    dd.addEventListener('keydown', function(e){ if (e.key === 'Escape'){ dd.classList.remove('open'); tr.focus(); } });
+  }
+  // прилипання до верху при прокрутці (працює і всередині блоку Tilda)
+  var ticking = false;
+  function onScroll(){
+    if (ticking) return; ticking = true;
+    requestAnimationFrame(function(){
+      ticking = false;
+      hd.classList.toggle('stuck', wrap.getBoundingClientRect().top <= 0 || burger.getAttribute('aria-expanded') === 'true');
+    });
+  }
+  window.addEventListener('scroll', onScroll, {passive:true}); window.addEventListener('resize', onScroll);
+  // мобільна панель
+  function setMenu(open){
+    burger.setAttribute('aria-expanded', open); burger.setAttribute('aria-label', open ? 'Закрити меню' : 'Відкрити меню');
+    mob.classList.toggle('open', open); mob.setAttribute('aria-hidden', !open);
+    document.documentElement.classList.toggle('dmh-lock', open);
+    onScroll(); if (open) hd.classList.add('stuck');
+  }
+  burger.addEventListener('click', function(){ setMenu(burger.getAttribute('aria-expanded') !== 'true'); });
+  mob.addEventListener('click', function(e){
+    var acc = e.target.closest('.dmh-m-acc > .dmh-m-i');
+    if (acc){ var p = acc.parentNode; p.classList.toggle('open'); acc.setAttribute('aria-expanded', p.classList.contains('open')); return; }
+    if (e.target.closest('a')) setMenu(false);
+  });
+  document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && mob.classList.contains('open')) setMenu(false); });
+  window.addEventListener('resize', function(){ if (window.innerWidth > 1024 && mob.classList.contains('open')) setMenu(false); });
+  onScroll();
+})();
+</script>
+
+<!--
+  D'AMORE · СТОРІНКА «ХОЛОДНА РЕКОНСТРУКЦІЯ» · БЛОК 1 — HERO (Tilda → T123 «HTML-код», перший блок сторінки /catalog/cold-reconstruction)
+  ─────────────────────────────────────────────────────────────────────────────
+  Квадратне відео 1:1 (зациклене, без звуку) на мокко-підложці справа, зліва текст, ціна і кнопка «Додати до кошика».
+  Відео, ціна, посилання — у CONFIG унизу в <script>. Тексти — прямо в HTML.
+  Кнопка відкриває кошик (#order) — працює, якщо на сторінці є блок Магазину (штатна картка товару).
+-->
+<style>
+  .dm-ch{
+    --red:#AB3724; --burg:#5B1210; --graph:#433d3c; --cream:#F6F2EE; --script:#c06c5e;
+    position:relative; overflow:hidden; isolation:isolate; background:var(--cream) center/cover no-repeat; color:var(--graph);
+    display:flex; align-items:center; font-family:'Onest','Helvetica Neue',Arial,sans-serif;
+    padding:clamp(80px,10vh,120px) 0 clamp(40px,6vh,80px);
+  }
+  .dm-ch::before{content:''; position:absolute; inset:0; z-index:-1; pointer-events:none; background:radial-gradient(60% 70% at 25% 50%, rgba(255,255,255,.6), transparent 72%), linear-gradient(180deg,rgba(246,242,238,.8) 0%,rgba(246,242,238,0) 16%,rgba(246,242,238,0) 86%,rgba(246,242,238,.9) 100%)}
+  .dm-ch-in{width:100%; max-width:1360px; margin:0 auto; padding:0 clamp(24px,6vw,110px); display:grid; grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr); align-items:center; gap:clamp(34px,6vw,100px)}
+
+  /* відео 1:1 на мокко-підложці */
+  .dm-ch-vid{position:relative; width:100%; max-width:600px; margin-left:auto}
+  .dm-ch-vid::before{content:''; position:absolute; inset:0; border-radius:clamp(26px,3vw,40px); transform:translate(clamp(12px,1.6vw,24px),clamp(12px,1.6vw,24px)) rotate(2.2deg); background:linear-gradient(160deg,#B3A094 0%,#CDBFB3 50%,#EFE9E3 100%)}
+  .dm-ch-box{position:relative; aspect-ratio:1/1; border-radius:clamp(26px,3vw,40px); overflow:hidden; background:linear-gradient(160deg,#C7B8AD,#EFE9E3);
+    box-shadow:0 46px 70px -34px rgba(67,40,30,.6), 0 8px 22px -12px rgba(67,40,30,.25), inset 0 0 0 1px rgba(255,255,255,.55)}
+  .dm-ch-box video{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block}
+  .dm-rch{opacity:0; transform:translate3d(0,22px,0); filter:blur(6px); transition:opacity .9s cubic-bezier(.2,.7,.2,1) var(--d,0s), transform .9s cubic-bezier(.2,.7,.2,1) var(--d,0s), filter .9s ease var(--d,0s)}
+  .dm-ch.in .dm-rch{opacity:1; transform:none; filter:none}
+
+  .dm-ch-eyebrow{display:inline-flex; align-items:center; gap:10px; margin:0 0 clamp(12px,1.6vw,20px); font:500 12.5px/1 'Onest',sans-serif; letter-spacing:.14em; text-transform:uppercase; color:var(--red)}
+  .dm-ch-eyebrow::before{content:''; width:30px; height:1.5px; background:var(--red)}
+  .dm-ch-h{margin:0 0 .3em; font:500 clamp(34px,3.9vw,64px)/1.03 'Onest',sans-serif; letter-spacing:-.028em; color:var(--burg)}
+  .dm-ch-h em{display:block; font-style:normal; color:var(--red)}
+  .dm-ch-sig{display:block; width:clamp(240px,27vw,420px); height:auto; margin:0 0 clamp(14px,2vw,24px) -.4vw; overflow:visible;
+    -webkit-mask-image:linear-gradient(90deg,#000 40%,transparent 60%); mask-image:linear-gradient(90deg,#000 40%,transparent 60%);
+    -webkit-mask-size:260% 100%; mask-size:260% 100%; -webkit-mask-position:100% 0; mask-position:100% 0; -webkit-mask-repeat:no-repeat; mask-repeat:no-repeat;
+    transition:-webkit-mask-position 2s cubic-bezier(.5,0,.2,1) .9s, mask-position 2s cubic-bezier(.5,0,.2,1) .9s}
+  .dm-ch.in .dm-ch-sig{-webkit-mask-position:0 0; mask-position:0 0}
+  .dm-ch-sig path{fill:var(--script)}
+  .dm-ch-p{margin:0 0 clamp(18px,2.2vw,28px); max-width:26em; font:300 clamp(17px,1.5vw,22px)/1.5 'Onest',sans-serif; letter-spacing:-.012em}
+  .dm-ch-chips{display:flex; flex-wrap:wrap; gap:10px; margin:0 0 clamp(22px,3vw,36px); padding:0; list-style:none}
+  .dm-ch-chips li{display:inline-flex; align-items:center; gap:9px; padding:10px 16px 10px 12px; border-radius:99px; font:500 13.5px/1.2 'Onest',sans-serif; color:var(--graph); background:rgba(255,255,255,.72); -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px); box-shadow:inset 0 0 0 1px rgba(67,61,60,.1)}
+  .dm-ch-chips svg{flex:none; width:17px; height:17px; fill:none; stroke:var(--red); stroke-width:1.7; stroke-linecap:round; stroke-linejoin:round}
+
+  .dm-ch-buy{display:flex; flex-wrap:wrap; align-items:center; gap:16px 26px}
+  .dm-ch-price{font:500 clamp(24px,2.2vw,32px)/1 'Onest',sans-serif; letter-spacing:-.01em; color:var(--red)}
+  .dm-ch-btn{
+    --c1:#7A1D14; --c2:#B4422F; --c3:#8E271B; --c4:#CF6A55;
+    position:relative; display:inline-flex; align-items:center; gap:12px; padding:17px 38px; border-radius:99px; overflow:hidden; isolation:isolate; box-sizing:border-box;
+    font:500 15.5px/1 'Onest',sans-serif; letter-spacing:.06em; color:#FFF4EC; text-decoration:none; background:var(--c1); -webkit-tap-highlight-color:transparent;
+    box-shadow:0 16px 30px -14px rgba(122,29,20,.75), inset 0 1px 0 rgba(255,225,215,.38), inset 0 -8px 14px rgba(50,6,4,.26);
+    transition:transform .45s cubic-bezier(.2,.8,.2,1);
+  }
+  .dm-ch-btn span,.dm-ch-btn svg{position:relative; z-index:2; text-shadow:0 1px 2px rgba(60,8,4,.35)}
+  .dm-ch-btn svg{width:18px; height:18px; stroke:currentColor; fill:none; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; transition:transform .45s cubic-bezier(.2,.8,.2,1)}
+  .dm-ch-btn:hover{transform:translateY(-3px)} .dm-ch-btn:hover svg{transform:translateX(5px)}
+  .dm-ch-btn::before{content:''; position:absolute; inset:-60% -25%; z-index:-2;
+    background:radial-gradient(60% 90% at 25% 30%, rgba(255,205,190,.55), transparent 60%), radial-gradient(55% 80% at 75% 70%, rgba(255,190,175,.40), transparent 62%), linear-gradient(100deg,var(--c1) 0%,var(--c2) 22%,var(--c3) 38%,var(--c4) 55%,var(--c3) 72%,var(--c2) 88%,var(--c1) 100%);
+    background-size:180% 180%,200% 200%,240% 100%; animation:dmchSilk 7s ease-in-out infinite alternate}
+  @keyframes dmchSilk{0%{background-position:0% 0%,100% 100%,0% 0%} 100%{background-position:100% 100%,0% 0%,100% 0%}}
+  .dm-ch-btn::after{content:''; position:absolute; inset:0; z-index:-1; background:linear-gradient(105deg,transparent 34%,rgba(255,236,226,0) 40%,rgba(255,236,226,.55) 50%,rgba(255,236,226,0) 60%,transparent 66%); transform:translateX(-130%) skewX(-12deg); animation:dmchSheen 5s cubic-bezier(.5,0,.3,1) 1.4s infinite}
+  @keyframes dmchSheen{0%{transform:translateX(-130%) skewX(-12deg)} 55%,100%{transform:translateX(130%) skewX(-12deg)}}
+  .dm-ch-more{position:relative; display:inline-flex; align-items:center; gap:8px; margin-top:clamp(18px,2.4vw,28px); padding:6px 0; font:500 15px/1 'Onest',sans-serif; letter-spacing:.04em; color:var(--red); text-decoration:none}
+  .dm-ch-more::after{content:''; position:absolute; left:0; right:0; bottom:0; height:1.5px; background:currentColor; transform-origin:left; transition:transform .5s cubic-bezier(.2,.8,.2,1)}
+  .dm-ch-more:hover::after{transform:scaleX(.35)}
+  .dm-ch-more svg{width:16px; height:16px; stroke:currentColor; fill:none; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; transition:transform .45s cubic-bezier(.2,.8,.2,1)}
+  .dm-ch-more:hover svg{transform:translateY(3px)}
+  .dm-ch-btn:focus-visible,.dm-ch-more:focus-visible{outline:2px solid var(--red); outline-offset:4px}
+
+  @media (max-width:900px){
+    .dm-ch{display:block; padding:70px 0 40px}
+    .dm-ch-in{grid-template-columns:1fr; gap:42px; padding:0 clamp(22px,6vw,40px)}
+    .dm-ch-vid{order:-1; max-width:440px; margin:0 auto}
+    .dm-ch-vid::before{transform:translate(10px,12px) rotate(2deg)}
+    .dm-ch-sig{width:min(74vw,360px)}
+    .dm-ch-buy{flex-direction:column; align-items:flex-start}
+    .dm-ch-btn{width:100%; justify-content:center}
+  }
+  @media (prefers-reduced-motion:reduce){ .dm-ch-btn::before,.dm-ch-btn::after{animation:none} }
+</style>
+
+<section id="dm-ch" class="dm-ch" aria-label="Холодна реконструкція D’AMORE">
+  <div class="dm-ch-in">
+    <div class="dm-ch-text">
+      <span class="dm-ch-eyebrow dm-rch" style="--d:.1s">Набір · 5 кроків</span>
+      <h1 class="dm-ch-h dm-rch" style="--d:.25s">Холодна реконструкція <em>D’AMORE</em></h1>
+      <svg class="dm-ch-sig" viewBox="-5 -142 1328 217" role="img" aria-label="Салон — у твоїй ванній."><path d="M150-137L150-137Q150-131 147-125L147-125Q139-107 109-87L109-87Q81-69 60-65L60-65Q37-34 37-19L37-19Q37-8 45-4L45-4Q49-2 55-2L55-2Q60-2 67-5L67-5Q87-14 99-36L99-36Q103-43 103-48L103-48Q103-53 100-57Q97-61 92-61L92-61Q89-61 86-59L86-59Q73-53 63-40L63-40Q52-25 52-12L52-12Q52-11 51-11L51-11Q47-11 47-14L47-14Q47-28 62-46L62-46Q78-64 92-64L92-64Q99-64 103-60Q107-55 107-48L107-48Q107-44 106-39L106-39Q100-24 85-12L85-12Q69 2 54 2L54 2Q43 2 37-4Q30-10 30-21L30-21Q30-36 50-63L50-63Q41-62 33-62L33-62Q15-62 2-73L2-73Q-5-79-5-89L-5-89Q-5-108 15-118L15-118Q37-129 65-129L65-129Q76-129 83-127L83-127Q85-126 85-126L85-126Q85-125 83-125L83-125Q83-125 82-125L82-125Q77-126 69-126L69-126Q44-126 20-115L20-115Q2-106 2-91L2-91Q2-77 11-71L11-71Q18-67 32-65L32-65Q36-65 38-65L38-65Q44-65 52-66L52-66Q65-84 74-94L74-94Q105-128 133-140L133-140Q139-142 144-142L144-142Q150-142 150-137ZM146-134L146-134Q146-138 142-138L142-138Q136-138 127-132L127-132Q98-115 62-68L62-68Q74-71 88-79L88-79Q106-88 121-100L121-100Q141-116 145-129L145-129Q146-132 146-134ZM178-20L178-20Q178-19 168-10L168-10Q156 1 149 1L149 1Q142 1 142-6L142-6Q142-9 144-13L144-13Q139-8 132-4L132-4Q123 1 118 1L118 1Q111 1 111-7L111-7Q111-16 117-25L117-25Q109-19 108-19L108-19Q107-19 107-20L107-20Q107-21 108-22L108-22Q116-30 131-37L131-37Q135-39 145-44L145-44Q150-46 154-46L154-46Q158-46 161-44L161-44Q165-41 165-38L165-38Q168-40 169-40L169-40Q170-40 172-39Q173-38 173-38L173-38Q173-36 163-25L163-25Q156-18 150-11L150-11Q147-8 147-5L147-5Q147-3 150-3L150-3Q154-3 165-12Q176-22 176-22L176-22Q178-22 178-20ZM163-37L163-37Q163-39 160-41L160-41Q158-42 155-42L155-42Q152-42 146-39L146-39Q125-28 116-11L116-11Q114-7 114-5L114-5Q114-1 118-1L118-1Q121-1 126-3L126-3Q144-11 160-31L160-31Q161-33 163-35L163-35Q163-36 163-37ZM238-20L238-20Q238-19 237-18L237-18Q232-12 225-6L225-6Q215 1 210 1L210 1Q203 1 203-5L203-5Q203-12 211-22L211-22Q214-25 225-36L225-36Q213-30 204-18L204-18Q194-6 186-1L186-1Q183 1 179 1L179 1Q174 1 174-4L174-4Q174-8 177-12L177-12Q180-17 184-17L184-17Q189-17 189-12L189-12Q189-10 187-8L187-8Q186-7 186-6L186-6Q186-5 187-5L187-5Q188-5 205-23L205-23Q217-36 228-41L228-41Q228-42 231-44L231-44Q234-46 235-46L235-46Q236-46 237-45Q238-44 238-43L238-43Q238-42 223-26Q208-10 208-5L208-5Q208-2 211-2L211-2Q215-2 226-12Q236-21 237-21L237-21Q238-21 238-20ZM289-21L289-20Q289-18 285-15Q280-13 277-13L277-13Q275-13 273-14L273-14Q259 1 249 1L249 1Q242 1 242-9L242-9Q242-17 248-26L248-26Q246-25 243-22L243-22Q241-21 238-19L238-19Q237-18 237-18L237-18Q235-18 235-20L235-20Q235-21 236-22L236-22Q240-24 246-29L246-29Q250-32 257-37L257-37Q258-38 260-39L260-39Q264-41 271-45L271-45Q274-46 278-46L278-46Q285-46 285-39L285-39Q285-33 282-25L282-25Q281-24 278-20L278-20Q276-17 276-15L276-15Q276-14 277-14L277-14Q280-14 282-17L282-17Q287-21 288-21L288-21Q288-21 289-21L289-21ZM283-38L283-38Q283-43 279-43L279-43Q276-43 271-40L271-40Q259-33 252-21L252-21Q245-11 245-5L245-5Q245-1 250-1L250-1Q255-1 262-6L262-6Q268-11 272-16L272-16Q272-17 272-17L272-17Q272-18 272-18Q272-19 272-19L272-19Q272-21 276-27Q279-33 281-33L281-33Q281-33 281-33L281-33Q283-33 283-38ZM364-21L364-21Q364-19 353-10L353-10Q340 2 332 2L332 2Q325 2 325-4L325-4Q325-10 334-21L334-21Q331-20 329-20L329-20Q326-20 324-21Q321-22 320-22L320-22Q317-22 313-21L313-21Q301-8 293 0L293 0Q292 2 290 2L290 2Q290 2 287 0L287 0Q287-1 287-1L287-1Q287-2 287-2L287-2Q288-4 294-10L294-10Q302-18 315-33L315-33Q319-37 319-39L319-39Q319-42 316-42L316-42Q309-42 298-30Q288-19 287-19L287-19Q285-19 285-20L285-20Q285-21 287-22L287-22Q297-34 300-37L300-37Q309-45 317-45L317-45Q325-45 325-39L325-39Q325-34 317-25L317-25Q321-26 323-26L323-26Q325-26 328-25Q331-23 333-23L333-23Q334-23 336-24L336-24Q342-31 355-43L355-43Q356-45 358-45L358-45Q358-45 360-44Q362-43 362-42L362-42Q362-41 344-22L344-22Q338-16 333-11L333-11Q330-7 330-5L330-5Q330-2 334-2L334-2Q339-2 350-12Q361-22 362-22L362-22Q364-22 364-21ZM436-21L436-21Q432-18 424-18L424-18Q421-18 418-20Q414-22 412-22L412-22Q410-22 406-20Q401-17 400-16L400-16Q400-18 400-21L400-21Q407-25 415-25L415-25Q417-25 421-23Q425-21 426-21L426-21Q432-21 437-25L437-25Q437-23 436-21ZM545-20L545-20Q545-19 528-7L528-7Q509 5 507 7L507 7Q507 8 502 13L502 13Q496 23 492 29L492 29Q483 42 471 56L471 56Q453 75 445 75L445 75Q437 75 437 66L437 66Q437 58 454 41L454 41Q467 29 479 20L479 20Q488 13 503 4L503 4Q507-2 523-23L523-23Q518-19 512-14L512-14Q495 1 488 1L488 1Q482 1 482-6L482-6Q482-11 487-17L487-17Q491-22 496-27L496-27L504-36Q507-38 507-40L507-40Q507-42 504-42L504-42Q499-42 487-30Q476-19 475-19L475-19Q473-19 473-20L473-20Q473-21 474-22L474-22Q477-25 483-31L483-31Q486-33 493-40L493-40Q496-43 499-44L499-44Q502-46 505-46L505-46Q511-46 511-39L511-39Q511-34 507-28L507-28Q503-24 498-20L498-20Q495-16 488-9L488-9Q486-7 486-5L486-5Q486-2 489-2L489-2Q491-2 495-5L495-5Q497-6 512-18L512-18Q522-27 526-30L526-30Q534-37 538-44L538-44Q540-46 541-46L541-46Q543-46 543-41L543-41Q543-41 543-40Q542-39 538-34L538-34L521-11Q518-8 513-1L513-1Q517-5 525-9L525-9Q531-13 543-22L543-22Q543-22 544-22L544-22Q545-22 545-20ZM493 15L493 15Q482 23 475 28L475 28Q443 55 443 65L443 65Q443 69 446 69L446 69Q448 69 451 66L451 66Q463 57 474 42L474 42Q484 29 493 15ZM690-20L690-20Q690-19 689-19L689-19Q686-16 675-7L675-7Q669-1 664 1Q660 3 657 3L657 3Q651 3 651-4L651-4Q651-10 655-15L655-15Q660-19 664-24L664-24Q668-27 674-34L674-34Q676-36 676-39L676-39Q676-41 674-41L674-41Q671-41 668-39Q664-37 658-31L658-31Q650-25 642-18L642-18Q634-12 618 1L618 1Q617 3 616 3L616 3Q615 3 614 2Q612 0 612-0L612-0Q612-1 628-18Q643-34 643-38L643-38Q643-41 640-41L640-41Q638-41 634-39L634-39Q623-32 611-20L611-20Q600-10 589 1L589 1Q588 3 587 3L587 3Q586 3 584 1Q583 0 583-0L583-0Q583-1 598-18Q614-34 614-38L614-38Q614-41 611-41L611-41Q606-41 594-30Q581-19 581-19L581-19Q579-19 579-20L579-20Q579-22 591-32L591-32Q599-39 605-42L605-42Q609-44 612-44L612-44Q618-44 618-38L618-38Q618-32 615-27L615-27Q632-44 641-44L641-44Q647-44 647-38L647-38Q647-30 637-18L637-18Q642-23 649-28L649-28Q668-44 674-44L674-44Q681-44 681-38L681-38Q681-34 680-32L680-32Q678-29 674-24L674-24Q666-17 658-7L658-7Q656-6 656-4L656-4Q656-1 659-1L659-1Q663-1 675-11Q687-22 688-22L688-22Q690-22 690-20ZM796-119L796-119Q796-117 795-116L795-116Q794-111 786-100L786-100Q778-91 773-86L773-86Q756-70 734-53L734-53Q731-51 726-47L726-47Q726-47 723-43L723-43Q729-46 735-46L735-46Q743-46 743-39L743-39Q743-37 743-35Q742-33 742-31L742-31Q742-30 740-25L740-25Q740-24 737-20L737-20Q735-18 735-15L735-15Q735-14 736-14L736-14Q739-14 742-17L742-17Q743-18 744-20L744-20Q745-21 746-21L746-21Q747-21 748-21L748-21Q748-20 748-20L748-20Q748-17 743-15L743-15Q740-13 736-13L736-13Q734-13 732-14L732-14Q719 1 708 1L708 1Q700 1 700-10L700-10Q700-18 704-25L704-25Q709-31 713-37L713-37Q689-18 688-18L688-18Q687-18 687-20L687-20Q687-21 687-22Q688-22 692-25L692-25L714-42Q716-43 719-46L719-46Q721-48 725-54L725-54Q736-68 761-98L761-98Q783-124 792-124L792-124Q796-124 796-119ZM793-118L793-118Q793-120 792-120L792-120Q786-120 765-95L765-95Q750-79 740-65L740-65Q737-62 733-56L733-56Q757-75 772-88L772-88Q781-97 790-111L790-111Q793-116 793-118ZM741-38L741-38Q741-43 736-43L736-43Q728-43 721-37L721-37Q715-31 709-23L709-23Q703-13 703-6L703-6Q703-1 708-1L708-1Q713-1 721-6L721-6Q727-11 730-16L730-16Q731-17 731-17L731-17Q731-18 731-18Q731-19 731-19L731-19Q731-21 734-27Q737-33 739-33L739-33L739-33Q741-33 741-38ZM799-21L799-20Q799-18 795-15Q790-13 787-13L787-13Q784-13 783-14L783-14Q769 1 759 1L759 1Q752 1 752-9L752-9Q752-17 758-26L758-26Q756-25 753-22L753-22Q751-21 748-19L748-19Q747-18 747-18L747-18Q745-18 745-20L745-20Q745-21 746-22L746-22Q750-24 756-29L756-29Q760-32 767-37L767-37Q768-38 770-39L770-39Q774-41 781-45L781-45Q784-46 788-46L788-46Q795-46 795-39L795-39Q795-33 792-25L792-25Q791-24 788-20L788-20Q786-17 786-15L786-15Q786-14 787-14L787-14Q790-14 792-17L792-17Q797-21 798-21L798-21Q798-21 799-21L799-21ZM793-38L793-38Q793-43 789-43L789-43Q786-43 780-40L780-40Q769-33 762-21L762-21Q755-11 755-5L755-5Q755-1 760-1L760-1Q765-1 772-6L772-6Q778-11 782-16L782-16Q782-17 782-17L782-17Q782-18 782-18Q782-19 782-19L782-19Q782-21 786-27Q789-33 791-33L791-33Q791-33 791-33L791-33Q793-33 793-38ZM833-21L833-21Q833-20 832-19L832-19Q830-17 826-14L826-14Q811 0 803 0L803 0Q797 0 797-6L797-6Q797-12 802-19L802-19Q804-22 811-30L811-30Q797-19 798-19L798-19Q796-19 796-21L796-21Q796-21 797-22L797-22Q798-23 801-26L801-26L811-34Q816-38 825-44L825-44Q827-46 828-46L828-46Q829-46 831-45Q832-44 832-43L832-43Q832-43 819-29L819-29Q805-13 804-12L804-12Q801-8 801-6L801-6Q801-3 804-3L804-3Q809-3 820-12L820-12Q824-16 831-22L831-22Q833-22 833-21ZM829-62L829-62Q829-56 824-56L824-56Q818-56 818-62L818-62Q818-67 824-67L824-67Q829-67 829-62ZM851-58L851-58Q851-52 846-52L846-52Q840-52 840-58L840-58Q840-63 846-63L846-63Q851-63 851-58ZM902-71L902-71Q902-68 895-63L895-63Q886-56 877-56L877-56Q872-56 869-58L869-58Q865-61 865-66L865-66Q865-68 866-71Q868-73 870-73L870-73Q875-73 875-69L875-69Q875-67 872-65Q870-62 870-62L870-62Q870-58 877-58L877-58Q887-58 896-68L896-68Q897-70 897-71L897-71Q899-73 900-73L900-73Q902-73 902-71ZM897-21L897-21Q897-20 896-19L896-19Q879 0 869 0L869 0Q862 0 862-6L862-6Q862-12 867-19L867-19Q854-8 853-7L853-7Q843 0 838 0L838 0Q831 0 831-6L831-6Q831-12 836-19L836-19Q838-21 846-30L846-30Q831-19 831-19L831-19Q829-19 829-21L829-21Q829-21 830-22L830-22Q830-22 833-25L833-25Q837-28 844-33L844-33Q850-37 861-46L861-46Q862-46 863-46L863-46Q863-46 866-45L866-45Q867-44 867-43L867-43Q867-43 854-29L854-29Q839-13 838-12L838-12Q835-8 835-6L835-6Q835-3 838-3L838-3Q841-3 844-5L844-5Q848-8 854-12L854-12Q864-21 885-39L885-39Q887-41 891-45L891-45Q892-46 894-46L894-46Q894-46 897-45L897-45Q898-44 898-43L898-43Q898-42 882-26Q866-10 866-6L866-6Q866-3 869-3L869-3Q874-3 884-12Q895-22 895-22L895-22Q897-22 897-21ZM1041-119L1041-119Q1041-117 1041-116L1041-116Q1040-111 1031-100L1031-100Q1024-91 1018-86L1018-86Q1001-70 979-53L979-53Q976-51 971-47L971-47Q971-47 969-43L969-43Q975-46 980-46L980-46Q988-46 988-39L988-39Q988-37 988-35Q988-33 988-31L988-31Q988-30 985-25L985-25Q985-24 983-20L983-20Q981-18 981-15L981-15Q981-14 982-14L982-14Q984-14 987-17L987-17Q988-18 989-20L989-20Q991-21 992-21L992-21Q992-21 993-21L993-21Q993-20 993-20L993-20Q993-17 989-15L989-15Q985-13 982-13L982-13Q979-13 977-14L977-14Q964 1 953 1L953 1Q945 1 945-10L945-10Q945-18 949-25L949-25Q954-31 958-37L958-37Q934-18 933-18L933-18Q932-18 932-20L932-20Q932-21 933-22Q933-22 938-25L938-25L960-42Q961-43 964-46L964-46Q967-48 971-54L971-54Q981-68 1007-98L1007-98Q1029-124 1037-124L1037-124Q1041-124 1041-119ZM1038-118L1038-118Q1038-120 1037-120L1037-120Q1031-120 1010-95L1010-95Q995-79 985-65L985-65Q983-62 979-56L979-56Q1003-75 1017-88L1017-88Q1026-97 1035-111L1035-111Q1038-116 1038-118ZM986-38L986-38Q986-43 981-43L981-43Q973-43 966-37L966-37Q960-31 955-23L955-23Q948-13 948-6L948-6Q948-1 954-1L954-1Q959-1 966-6L966-6Q972-11 976-16L976-16Q976-17 976-17L976-17Q976-18 976-18Q976-19 976-19L976-19Q976-21 979-27Q983-33 984-33L984-33L985-33Q986-33 986-38ZM1062-20L1062-20Q1062-19 1052-10L1052-10Q1040 1 1032 1L1032 1Q1026 1 1026-6L1026-6Q1026-9 1028-13L1028-13Q1023-8 1015-4L1015-4Q1007 1 1001 1L1001 1Q995 1 995-7L995-7Q995-16 1001-25L1001-25Q993-19 992-19L992-19Q991-19 991-20L991-20Q991-21 992-22L992-22Q1000-30 1015-37L1015-37Q1019-39 1029-44L1029-44Q1034-46 1037-46L1037-46Q1041-46 1045-44L1045-44Q1048-41 1049-38L1049-38Q1052-40 1053-40L1053-40Q1054-40 1055-39Q1057-38 1057-38L1057-38Q1057-36 1046-25L1046-25Q1040-18 1034-11L1034-11Q1030-8 1030-5L1030-5Q1030-3 1033-3L1033-3Q1038-3 1049-12Q1060-22 1060-22L1060-22Q1062-22 1062-20ZM1047-37L1047-37Q1047-39 1044-41L1044-41Q1042-42 1039-42L1039-42Q1035-42 1029-39L1029-39Q1009-28 1000-11L1000-11Q998-7 998-5L998-5Q998-1 1002-1L1002-1Q1005-1 1010-3L1010-3Q1028-11 1043-31L1043-31Q1045-33 1046-35L1046-35Q1047-36 1047-37ZM1136-21L1136-21Q1136-19 1126-10L1126-10Q1112 2 1105 2L1105 2Q1098 2 1098-4L1098-4Q1098-10 1106-21L1106-21Q1104-20 1101-20L1101-20Q1099-20 1096-21Q1094-22 1092-22L1092-22Q1090-22 1086-21L1086-21Q1074-8 1066 0L1066 0Q1064 2 1063 2L1063 2Q1063 2 1060 0L1060 0Q1059-1 1059-1L1059-1Q1059-2 1060-2L1060-2Q1061-4 1067-10L1067-10Q1075-18 1088-33L1088-33Q1092-37 1092-39L1092-39Q1092-42 1089-42L1089-42Q1082-42 1071-30Q1061-19 1060-19L1060-19Q1058-19 1058-20L1058-20Q1058-21 1059-22L1059-22Q1070-34 1073-37L1073-37Q1082-45 1090-45L1090-45Q1097-45 1097-39L1097-39Q1097-34 1089-25L1089-25Q1094-26 1096-26L1096-26Q1098-26 1101-25Q1104-23 1105-23L1105-23Q1107-23 1109-24L1109-24Q1115-31 1128-43L1128-43Q1129-45 1130-45L1130-45Q1131-45 1133-44Q1134-43 1134-42L1134-42Q1134-41 1117-22L1117-22Q1111-16 1106-11L1106-11Q1103-7 1103-5L1103-5Q1103-2 1106-2L1106-2Q1111-2 1123-12Q1134-22 1135-22L1135-22Q1136-22 1136-21ZM1210-21L1210-21Q1210-19 1200-10L1200-10Q1186 2 1179 2L1179 2Q1172 2 1172-4L1172-4Q1172-10 1180-21L1180-21Q1178-20 1175-20L1175-20Q1173-20 1170-21Q1168-22 1166-22L1166-22Q1164-22 1160-21L1160-21Q1148-8 1140 0L1140 0Q1138 2 1137 2L1137 2Q1137 2 1134 0L1134 0Q1133-1 1133-1L1133-1Q1133-2 1134-2L1134-2Q1135-4 1141-10L1141-10Q1149-18 1162-33L1162-33Q1166-37 1166-39L1166-39Q1166-42 1163-42L1163-42Q1156-42 1145-30Q1135-19 1134-19L1134-19Q1132-19 1132-20L1132-20Q1132-21 1133-22L1133-22Q1144-34 1147-37L1147-37Q1156-45 1164-45L1164-45Q1171-45 1171-39L1171-39Q1171-34 1163-25L1163-25Q1168-26 1170-26L1170-26Q1172-26 1175-25Q1178-23 1179-23L1179-23Q1181-23 1183-24L1183-24Q1189-31 1202-43L1202-43Q1203-45 1204-45L1204-45Q1205-45 1207-44Q1208-43 1208-42L1208-42Q1208-41 1191-22L1191-22Q1185-16 1180-11L1180-11Q1177-7 1177-5L1177-5Q1177-2 1180-2L1180-2Q1185-2 1197-12Q1208-22 1209-22L1209-22Q1210-22 1210-21ZM1244-21L1244-21Q1244-20 1243-19L1243-19Q1241-17 1237-14L1237-14Q1221 0 1214 0L1214 0Q1208 0 1208-6L1208-6Q1208-12 1213-19L1213-19Q1215-22 1222-30L1222-30Q1208-19 1208-19L1208-19Q1207-19 1207-21L1207-21Q1207-22 1208-22L1208-22Q1208-23 1212-26L1212-26L1222-34Q1227-38 1236-44L1236-44Q1238-46 1239-46L1239-46Q1240-46 1242-45Q1243-44 1243-43L1243-43Q1243-43 1230-29L1230-29Q1216-13 1215-12L1215-12Q1212-8 1212-6L1212-6Q1212-3 1215-3L1215-3Q1219-3 1230-12L1230-12Q1234-16 1242-22L1242-22Q1244-22 1244-21ZM1259-62L1259-62Q1259-56 1254-56L1254-56Q1248-56 1248-62L1248-62Q1248-67 1254-67L1254-67Q1259-67 1259-62ZM1313-71L1313-71Q1313-68 1306-63L1306-63Q1297-56 1288-56L1288-56Q1283-56 1280-58L1280-58Q1276-61 1276-66L1276-66Q1276-68 1277-71Q1279-73 1281-73L1281-73Q1286-73 1286-69L1286-69Q1286-67 1283-65Q1281-62 1281-62L1281-62Q1281-58 1288-58L1288-58Q1298-58 1306-68L1306-68Q1307-70 1308-71L1308-71Q1310-73 1311-73L1311-73Q1313-73 1313-71ZM1308-21L1308-21Q1308-20 1307-19L1307-19Q1290 0 1279 0L1279 0Q1273 0 1273-6L1273-6Q1273-12 1278-19L1278-19Q1265-8 1264-7L1264-7Q1254 0 1248 0L1248 0Q1242 0 1242-6L1242-6Q1242-12 1247-19L1247-19Q1249-21 1256-30L1256-30Q1242-19 1242-19L1242-19Q1240-19 1240-21L1240-21Q1240-21 1241-22L1241-22Q1241-22 1244-25L1244-25Q1248-28 1255-33L1255-33Q1260-37 1271-46L1271-46Q1273-46 1273-46L1273-46Q1274-46 1277-45L1277-45Q1277-44 1277-43L1277-43Q1277-43 1265-29L1265-29Q1250-13 1249-12L1249-12Q1246-8 1246-6L1246-6Q1246-3 1249-3L1249-3Q1251-3 1255-5L1255-5Q1259-8 1265-12L1265-12Q1275-21 1296-39L1296-39Q1298-41 1302-45L1302-45Q1303-46 1304-46L1304-46Q1305-46 1308-45L1308-45Q1308-44 1308-43L1308-43Q1308-42 1293-26Q1277-10 1277-6L1277-6Q1277-3 1280-3L1280-3Q1285-3 1295-12Q1306-22 1306-22L1306-22Q1308-22 1308-21ZM1323-5L1323-5Q1323 0 1317 0L1317 0Q1312 0 1312-5L1312-5Q1312-11 1317-11L1317-11Q1323-11 1323-5Z"/></svg>
+      <p class="dm-ch-p dm-rch" style="--d:.55s">П’ять засобів, які підсилюють один одного. Гладке, блискуче волосся — без запису в салон.</p>
+      <ul class="dm-ch-chips dm-rch" style="--d:.7s">
+        <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 7.5L12 3l8.5 4.5v9L12 21l-8.5-4.5z"/><path d="M3.5 7.5L12 12l8.5-4.5M12 12v9"/></svg>5 засобів у наборі</li>
+        <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7.5 3v5.5c0 4.3-3 7.8-7.5 9.5-4.5-1.7-7.5-5.2-7.5-9.5V6z"/><path d="M8.8 12.2l2.2 2.2 4.2-4.4"/></svg>Зроблено в Україні</li>
+        <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.2 4.2L19 7"/></svg>Для догляду вдома</li>
+      </ul>
+      <div class="dm-ch-buy dm-rch" style="--d:.85s">
+        <span class="dm-ch-price" id="dm-ch-price">2000 ₴</span>
+        <a class="dm-ch-btn" href="#order"><span>Додати до кошика</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </div>
+      <a class="dm-ch-more dm-rch" style="--d:1s" href="#dm-pd"><span>Етапи, склад і відповіді</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6"/></svg></a>
+    </div>
+    <div class="dm-ch-vid dm-rch" style="--d:.2s"><div class="dm-ch-box"><video muted loop playsinline preload="auto" aria-hidden="true" tabindex="-1"></video></div></div>
+  </div>
+</section>
+
+<script>
+(function(){
+  'use strict';
+
+  /* ═══════════ CONFIG ═══════════ */
+  var CFG = {
+    video: '../../assets/video/cold-hero.mp4',     // квадратне відео 1:1 (зациклене, без звуку)
+    poster: '../../assets/img/poster-cold.jpg',   // кадр, поки вантажиться відео
+    bg   : '../../assets/img/bg3video.jpg',   // фон секції ('' = просто кремовий)
+    price: '2000 ₴',                       // ← ЦІНА (має збігатися з ціною товару)
+    rec  : 'rec4537654003',                // ← id блоку зі штатною карткою товару (Магазин): кнопка натискає його «Купити»
+    btn  : '#order',                       // ← «Додати до кошика»: '#order' відкриває кошик; або посилання на блок з товаром (#rec…)
+    more : '#dm-pd'                        // ← куди веде «Етапи, склад і відповіді» (id блоку з вкладками)
+  };
+
+  var root = document.getElementById('dm-ch');
+  var vid = root.querySelector('video');
+  root.querySelector('.dm-ch-btn').setAttribute('href', CFG.btn);
+  root.querySelector('.dm-ch-more').setAttribute('href', CFG.more);
+  document.getElementById('dm-ch-price').textContent = CFG.price;
+  /* «Додати до кошика»: натискаємо штатну кнопку «Купити» у блоці товару (CFG.rec), потім за потреби відкриваємо кошик.
+     Якщо блок чи кнопку не знайдено – просто відкриється кошик (#order). */
+  function addToCart(e){
+    var rec = CFG.rec && document.getElementById(CFG.rec);
+    var b = rec && rec.querySelector('.js-store-prod-btn, .t-store__prod-popup__btn, .t-store__prod-snippet__btn, .t-store__card__btn, .t-btn');
+    if (!b) return;
+    e.preventDefault();
+    b.click();
+    setTimeout(function(){
+      var shown = document.querySelector('.t706__cartwin_showed');
+      if (!shown && typeof window.tcart__openCart === 'function'){ try{ window.tcart__openCart(); }catch(_){} }
+    }, 700);
+  }
+  root.querySelector('.dm-ch-btn').addEventListener('click', addToCart);
+  vid.muted = true; vid.setAttribute('muted', '');
+  if (CFG.poster) vid.poster = CFG.poster;
+  if (CFG.bg) root.style.backgroundImage = 'url("' + CFG.bg + '")';
+  vid.src = CFG.video;
+
+  /* «Етапи, склад…» – плавний скрол до блоку вкладок */
+  root.querySelector('.dm-ch-more').addEventListener('click', function(e){
+    var id = (CFG.more || '').replace('#', ''), t = id && document.getElementById(id);
+    if (!t) return;
+    e.preventDefault();
+    window.scrollTo({ top: t.getBoundingClientRect().top + window.pageYOffset - 10, behavior:'smooth' });
+  });
+
+  /* відео грає, лише коли блок видно і вкладка активна */
+  var vis = false;
+  function sync(){ if (vis && !document.hidden){ var p = vid.play(); if (p && p.catch) p.catch(function(){}); } else { vid.pause(); } }
+  document.addEventListener('visibilitychange', sync);
+  var shown = false;
+  function show(){ if (shown) return; shown = true; requestAnimationFrame(function(){ root.classList.add('in'); }); }
+  if ('IntersectionObserver' in window){
+    new IntersectionObserver(function(es){ vis = es[0].isIntersecting; sync(); }, { threshold:.1 }).observe(root);
+  } else { vis = true; sync(); }
+  show(); setTimeout(show, 600);
+})();
+</script>
+<!--
+  D'AMORE · КАРТКА ТОВАРУ (статична заглушка для портфоліо; у живому сайті це штатний блок «Магазин» Tilda)
+  Id блоку rec4537654003 і клас js-store-prod-btn потрібні, щоб кнопки «Додати до кошика» в hero й вкладках його натискали.
+-->
+<style>
+  .dm-sc{
+    --red:#AB3724; --burg:#5B1210; --graph:#433d3c; --cream:#F6F2EE;
+    background:var(--cream); color:var(--graph); font-family:'Onest','Helvetica Neue',Arial,sans-serif;
+    padding:clamp(40px,5vw,80px) clamp(18px,4vw,60px);
+  }
+  .dm-sc-in{max-width:1100px; margin:0 auto; display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:clamp(24px,4vw,64px); align-items:center}
+  .dm-sc-img{aspect-ratio:1/1; border-radius:clamp(22px,2.4vw,30px); background:#d8cdc2 center/cover no-repeat; box-shadow:0 36px 60px -36px rgba(67,40,30,.55)}
+  .dm-sc-h{margin:0 0 8px; font:500 clamp(28px,3vw,44px)/1.1 'Onest',sans-serif; letter-spacing:-.024em; color:var(--burg)}
+  .dm-sc-h em{font-style:normal; color:var(--red)}
+  .dm-sc-s{margin:0 0 18px; font:300 clamp(18px,1.6vw,22px)/1.3 'Onest',sans-serif}
+  .dm-sc-p{margin:0 0 20px; font:500 clamp(22px,2vw,28px)/1 'Onest',sans-serif; color:var(--red)}
+  .dm-sc-d{margin:0 0 24px; max-width:30em; font:300 17px/1.55 'Onest',sans-serif}
+  .dm-sc-btn{
+    --c1:#7A1D14; --c2:#B4422F; --c3:#8E271B; --c4:#CF6A55;
+    position:relative; display:inline-flex; align-items:center; padding:16px 36px; border:0; border-radius:99px; cursor:pointer; overflow:hidden; isolation:isolate;
+    font:500 15px/1 'Onest',sans-serif; letter-spacing:.06em; color:#FFF4EC; background:var(--c1); -webkit-tap-highlight-color:transparent;
+    box-shadow:0 14px 28px -14px rgba(122,29,20,.75), inset 0 1px 0 rgba(255,225,215,.38), inset 0 -8px 14px rgba(50,6,4,.26); transition:transform .4s cubic-bezier(.2,.8,.2,1);
+  }
+  .dm-sc-btn::before{content:''; position:absolute; inset:-60% -25%; z-index:-1;
+    background:radial-gradient(60% 90% at 25% 30%, rgba(255,205,190,.55), transparent 60%), linear-gradient(100deg,var(--c1) 0%,var(--c2) 22%,var(--c3) 40%,var(--c4) 56%,var(--c3) 74%,var(--c1) 100%);
+    background-size:180% 180%,240% 100%; animation:dmscSilk 7s ease-in-out infinite alternate}
+  @keyframes dmscSilk{0%{background-position:0% 0%,0% 0%} 100%{background-position:100% 100%,100% 0%}}
+  .dm-sc-btn:hover{transform:translateY(-3px)}
+  .dm-sc-btn:focus-visible{outline:2px solid var(--red); outline-offset:4px}
+  @media (max-width:800px){ .dm-sc-in{grid-template-columns:1fr} .dm-sc-btn{width:100%; justify-content:center} }
+  @media (prefers-reduced-motion:reduce){ .dm-sc-btn::before{animation:none} }
+</style>
+
+<section id="rec4537654003" class="dm-sc" aria-label="Товар">
+  <div class="dm-sc-in">
+    <div class="dm-sc-img" style="background-image:url('../../assets/img/1cold.jpg')"></div>
+    <div>
+      <h2 class="dm-sc-h">Холодна реконструкція <em>D’AMORE</em></h2>
+      <p class="dm-sc-s">5-етапний догляд</p>
+      <p class="dm-sc-p">2000 ₴</p>
+      <p class="dm-sc-d">Салонний догляд, який не потребує салону. 5 засобів, 5 кроків — і волосся знову гладке, блискуче й слухняне. Без поспіху. Без запису «на потім». Просто твій Moment for me.</p>
+      <button class="dm-sc-btn t-btn js-store-prod-btn" type="button">Додати до кошика</button>
+    </div>
+  </div>
+</section>
+
+<!--
+  D'AMORE · ДЕТАЛІ НАБОРУ — ВКЛАДКИ (Tilda → T123 «HTML-код»)
+  ─────────────────────────────────────────────────────────────────────────────
+  Ставиться на сторінку /catalog/cold-reconstruction, під блоком із фото й кнопками (або під Магазином).
+  Вкладки: Етапи використання · Склад (INCI) · Для кого / результат · Питання й відповіді.
+  У відповідях FAQ є два пункти «[ВЛАСНИЦЯ: …]» – їх потрібно підтвердити й дописати перед запуском.
+  Усі тексти — прямо в HTML нижче (комп'ютер: вкладки-пілюлі, телефон: ті самі, з прокруткою вбік).
+  Кнопка внизу веде туди, куди вказано в CONFIG (за замовчуванням — до кошика/покупки #order).
+-->
+<style>
+  .dm-pd{
+    --red:#AB3724; --burg:#5B1210; --graph:#433d3c; --cream:#F6F2EE;
+    position:relative; overflow:hidden; isolation:isolate; background:var(--cream); color:var(--graph);
+    padding:clamp(56px,8vw,110px) 0; font-family:'Onest','Helvetica Neue',Arial,sans-serif;
+  }
+  .dm-pd-in{max-width:1100px; margin:0 auto; padding:0 clamp(18px,4vw,48px)}
+  .dm-pd-head{text-align:center; margin:0 0 clamp(24px,3.4vw,44px)}
+  .dm-pd-eyebrow{display:inline-flex; align-items:center; gap:10px; margin:0 0 14px; font:500 12.5px/1 'Onest',sans-serif; letter-spacing:.14em; text-transform:uppercase; color:var(--red)}
+  .dm-pd-eyebrow::before,.dm-pd-eyebrow::after{content:''; width:28px; height:1.5px; background:var(--red)}
+  .dm-pd-h{margin:0; font:500 clamp(30px,3.8vw,56px)/1.06 'Onest',sans-serif; letter-spacing:-.026em; color:var(--burg)}
+  .dm-pd-h em{font-style:normal; color:var(--red)}
+
+  /* ───── вкладки ───── */
+  .dm-pd-tabs{display:flex; justify-content:center; gap:10px; margin:0 0 clamp(20px,2.6vw,32px); padding:4px 2px 10px; overflow-x:auto; scrollbar-width:none; -webkit-overflow-scrolling:touch}
+  .dm-pd-tabs::-webkit-scrollbar{display:none}
+  .dm-pd-tab{
+    flex:none; position:relative; padding:14px 26px; border:0; border-radius:99px; cursor:pointer; overflow:hidden; isolation:isolate;
+    font:500 15px/1 'Onest',sans-serif; letter-spacing:.03em; color:var(--graph); background:rgba(255,255,255,.7);
+    box-shadow:inset 0 0 0 1px rgba(67,61,60,.14); -webkit-tap-highlight-color:transparent;
+    transition:color .35s ease, box-shadow .35s ease, transform .35s cubic-bezier(.2,.8,.2,1);
+  }
+  .dm-pd-tab:hover{transform:translateY(-2px); box-shadow:inset 0 0 0 1px rgba(171,55,36,.45)}
+  .dm-pd-tab:focus-visible{outline:2px solid var(--red); outline-offset:3px}
+  .dm-pd-tab[aria-selected="true"]{
+    --c1:#7A1D14; --c2:#B4422F; --c3:#8E271B; --c4:#CF6A55;
+    color:#FFF4EC; background:var(--c1); text-shadow:0 1px 2px rgba(60,8,4,.35);
+    box-shadow:0 12px 24px -12px rgba(122,29,20,.75), inset 0 1px 0 rgba(255,225,215,.38), inset 0 -7px 12px rgba(50,6,4,.26);
+  }
+  .dm-pd-tab[aria-selected="true"]::before{
+    content:''; position:absolute; inset:-60% -25%; z-index:-1;
+    background:radial-gradient(60% 90% at 25% 30%, rgba(255,205,190,.55), transparent 60%), linear-gradient(100deg,var(--c1) 0%,var(--c2) 22%,var(--c3) 40%,var(--c4) 56%,var(--c3) 74%,var(--c1) 100%);
+    background-size:180% 180%,240% 100%; animation:dmpdSilk 7s ease-in-out infinite alternate;
+  }
+  @keyframes dmpdSilk{0%{background-position:0% 0%,0% 0%} 100%{background-position:100% 100%,100% 0%}}
+
+  /* ───── панелі ───── */
+  .dm-pd-card{
+    position:relative; border-radius:clamp(24px,2.8vw,36px); padding:clamp(24px,4vw,54px);
+    background:linear-gradient(160deg,rgba(255,255,255,.9),rgba(255,255,255,.62)); box-shadow:0 36px 70px -40px rgba(67,40,30,.5), inset 0 0 0 1px rgba(67,61,60,.07);
+  }
+  .dm-pd-panel[hidden]{display:none}
+  .dm-pd-panel{animation:dmpdIn .6s cubic-bezier(.2,.7,.2,1)}
+  @keyframes dmpdIn{from{opacity:0; transform:translateY(14px)} to{opacity:1; transform:none}}
+  .dm-pd-lead{margin:0 0 clamp(20px,2.6vw,32px); max-width:36em; font:300 clamp(17px,1.5vw,20px)/1.55 'Onest',sans-serif; letter-spacing:-.012em}
+
+  /* що входить */
+  .dm-pd-set{list-style:none; margin:0; padding:0; display:grid; gap:0}
+  .dm-pd-set li{display:grid; grid-template-columns:clamp(54px,7vw,92px) 1fr auto; align-items:center; gap:0 clamp(14px,2.4vw,32px); padding:clamp(16px,2vw,24px) 0; border-top:1px solid rgba(67,61,60,.12)}
+  .dm-pd-set li:first-child{border-top:0; padding-top:0}
+  .dm-pd-n{font:500 clamp(40px,5vw,70px)/1 'Onest',sans-serif; color:transparent; -webkit-text-stroke:1.2px rgba(171,55,36,.55); letter-spacing:-.02em}
+  .dm-pd-nm{margin:0 0 4px; font:500 clamp(18px,1.7vw,24px)/1.2 'Onest',sans-serif; letter-spacing:-.016em; color:var(--burg)}
+  .dm-pd-ds{margin:0; font:300 clamp(14.5px,1.2vw,17px)/1.45 'Onest',sans-serif}
+  .dm-pd-vol{padding:8px 14px; border-radius:99px; font:500 12.5px/1 'Onest',sans-serif; letter-spacing:.08em; white-space:nowrap; color:var(--red); background:rgba(171,55,36,.08)}
+
+  /* як користуватися */
+  .dm-pd-how{list-style:none; margin:0; padding:0; display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:clamp(12px,1.6vw,20px)}
+  .dm-pd-how li{position:relative; padding:clamp(18px,2vw,26px) clamp(18px,2vw,26px) clamp(18px,2vw,26px) clamp(64px,6vw,84px); border-radius:22px; background:rgba(246,242,238,.8); box-shadow:inset 0 0 0 1px rgba(67,61,60,.08)}
+  .dm-pd-how li:last-child:nth-child(odd){grid-column:1/-1}
+  .dm-pd-how .s{position:absolute; left:clamp(16px,1.8vw,24px); top:clamp(14px,1.6vw,20px); font:500 clamp(34px,3.6vw,50px)/1 'Onest',sans-serif; color:transparent; -webkit-text-stroke:1.1px rgba(171,55,36,.55)}
+  .dm-pd-how b{display:block; margin:0 0 5px; font:500 clamp(17px,1.5vw,20px)/1.2 'Onest',sans-serif; color:var(--burg)}
+  .dm-pd-how p{margin:0; font:300 clamp(14.5px,1.2vw,16.5px)/1.5 'Onest',sans-serif}
+  .dm-pd-how em{font-style:normal; font-weight:500; color:var(--red)}
+
+  /* склад */
+  .dm-pd-inci{display:grid; gap:10px}
+  .dm-pd-inci details{border-radius:20px; background:rgba(246,242,238,.8); box-shadow:inset 0 0 0 1px rgba(67,61,60,.08); overflow:hidden}
+  .dm-pd-inci summary{list-style:none; cursor:pointer; display:flex; align-items:center; justify-content:space-between; gap:16px; padding:18px clamp(18px,2vw,26px); font:500 clamp(16px,1.4vw,19px)/1.25 'Onest',sans-serif; color:var(--burg); -webkit-tap-highlight-color:transparent}
+  .dm-pd-inci summary::-webkit-details-marker{display:none}
+  .dm-pd-inci summary:focus-visible{outline:2px solid var(--red); outline-offset:-2px; border-radius:20px}
+  .dm-pd-inci summary i{flex:none; position:relative; width:22px; height:22px; border-radius:50%; background:rgba(171,55,36,.1)}
+  .dm-pd-inci summary i::before,.dm-pd-inci summary i::after{content:''; position:absolute; left:50%; top:50%; width:10px; height:1.6px; margin:-.8px 0 0 -5px; background:var(--red); transition:transform .4s cubic-bezier(.2,.8,.2,1)}
+  .dm-pd-inci summary i::after{transform:rotate(90deg)}
+  .dm-pd-inci details[open] summary i::after{transform:rotate(0)}
+  .dm-pd-inci p{margin:0; padding:0 clamp(18px,2vw,26px) 20px; font:300 14.5px/1.6 'Onest',sans-serif; color:rgba(67,61,60,.88)}
+
+  /* характеристики */
+  .dm-pd-spec{margin:0; display:grid; gap:0}
+  .dm-pd-spec div{display:grid; grid-template-columns:minmax(150px,.38fr) 1fr; gap:6px 24px; padding:15px 0; border-top:1px solid rgba(67,61,60,.12)}
+  .dm-pd-spec div:first-child{border-top:0; padding-top:0}
+  .dm-pd-spec dt{font:500 12.5px/1.5 'Onest',sans-serif; letter-spacing:.12em; text-transform:uppercase; color:var(--red)}
+  .dm-pd-spec dd{margin:0; font:300 clamp(15.5px,1.3vw,18px)/1.5 'Onest',sans-serif}
+
+  /* етапи: відео + кроки */
+  .dm-pd-use{display:grid; grid-template-columns:minmax(0,.62fr) minmax(0,1fr); gap:clamp(22px,3.4vw,52px); align-items:start}
+  .dm-pd-use .dm-pd-how{grid-template-columns:1fr}
+  .dm-pd-vid{position:sticky; top:24px; width:100%; max-width:400px; margin:0 auto}
+  .dm-pd-vid::before{content:''; position:absolute; inset:0; border-radius:26px; transform:translate(10px,12px) rotate(2deg); background:linear-gradient(160deg,#B3A094 0%,#CDBFB3 55%,#EFE9E3 100%)}
+  .dm-pd-vbox{position:relative; aspect-ratio:4/5; border-radius:26px; overflow:hidden; background:linear-gradient(160deg,#C7B8AD,#EFE9E3); box-shadow:0 34px 56px -32px rgba(67,40,30,.6), inset 0 0 0 1px rgba(255,255,255,.55)}
+  .dm-pd-poster{position:absolute; inset:0; background:center/cover no-repeat}
+  .dm-pd-vbox video{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; background:#000}
+  .dm-pd-vbox::after{content:''; position:absolute; inset:0; background:linear-gradient(180deg,rgba(46,31,26,0) 55%,rgba(46,31,26,.4) 100%); pointer-events:none; transition:opacity .4s ease}
+  .dm-pd-vbox.playing::after{opacity:0}
+  .dm-pd-play{
+    --c1:#7A1D14; --c2:#B4422F; --c3:#8E271B; --c4:#CF6A55;
+    position:absolute; left:50%; top:50%; z-index:3; width:84px; height:84px; margin:-42px 0 0 -42px; border:0; border-radius:50%; padding:0; cursor:pointer; overflow:hidden; isolation:isolate; color:#FFF4EC; background:var(--c1); display:grid; place-items:center; -webkit-tap-highlight-color:transparent;
+    box-shadow:0 18px 34px -12px rgba(122,29,20,.8), inset 0 1px 0 rgba(255,225,215,.4), inset 0 -8px 14px rgba(50,6,4,.28); transition:transform .45s cubic-bezier(.2,.8,.2,1);
+  }
+  .dm-pd-play::before{content:''; position:absolute; inset:-60%; z-index:-1; background:radial-gradient(60% 90% at 25% 30%, rgba(255,205,190,.55), transparent 60%), linear-gradient(100deg,var(--c1) 0%,var(--c2) 24%,var(--c3) 40%,var(--c4) 56%,var(--c3) 74%,var(--c1) 100%); background-size:180% 180%,240% 100%; animation:dmpdSilk 7s ease-in-out infinite alternate}
+  .dm-pd-play::after{content:''; position:absolute; inset:-12px; border-radius:50%; border:1.5px solid rgba(255,244,236,.55); animation:dmpdRing 2.4s ease-out infinite; pointer-events:none}
+  @keyframes dmpdRing{0%{transform:scale(.78); opacity:.9} 100%{transform:scale(1.28); opacity:0}}
+  .dm-pd-play svg{width:34%; height:34%; margin-left:6%; fill:currentColor; filter:drop-shadow(0 1px 2px rgba(60,8,4,.4))}
+  .dm-pd-play:hover{transform:scale(1.07)}
+  .dm-pd-play:focus-visible{outline:2px solid #fff; outline-offset:5px}
+  .dm-pd-vbox.playing .dm-pd-play,.dm-pd-vbox.playing .dm-pd-vcap{display:none}
+  .dm-pd-vcap{position:absolute; left:16px; bottom:16px; z-index:2; display:inline-flex; align-items:center; gap:8px; padding:9px 14px; border-radius:99px; font:500 11px/1 'Onest',sans-serif; letter-spacing:.12em; text-transform:uppercase; color:var(--graph); background:rgba(246,242,238,.9); -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px)}
+  .dm-pd-vcap svg{width:11px; height:11px; fill:var(--red)}
+  /* етапи: підпис об'єму */
+  .dm-pd-how b small{margin-left:8px; padding:3px 9px; border-radius:99px; font:500 11px/1 'Onest',sans-serif; letter-spacing:.08em; color:var(--red); background:rgba(171,55,36,.08); vertical-align:2px}
+  /* інформація про продукт під складами */
+  .dm-pd-info{margin-top:clamp(20px,2.6vw,32px); padding-top:clamp(18px,2.2vw,26px); border-top:1px solid rgba(67,61,60,.12)}
+  /* для кого / результат */
+  .dm-pd-two{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:clamp(12px,1.6vw,20px)}
+  .dm-pd-box{padding:clamp(20px,2.4vw,32px); border-radius:22px; background:rgba(246,242,238,.8); box-shadow:inset 0 0 0 1px rgba(67,61,60,.08)}
+  .dm-pd-box h3{margin:0 0 16px; font:500 clamp(19px,1.7vw,24px)/1.2 'Onest',sans-serif; letter-spacing:-.014em; color:var(--burg)}
+  .dm-pd-list{list-style:none; margin:0; padding:0; display:grid; gap:12px}
+  .dm-pd-list li{display:flex; gap:12px; align-items:flex-start; font:300 clamp(15.5px,1.3vw,18px)/1.45 'Onest',sans-serif}
+  .dm-pd-list svg{flex:none; width:19px; height:19px; margin-top:2px; fill:none; stroke:var(--red); stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round}
+  .dm-pd-note{margin:clamp(16px,2vw,24px) 0 0; font:300 13.5px/1.5 'Onest',sans-serif; color:rgba(67,61,60,.7)}
+  .dm-pd-inci a{color:var(--red); text-decoration:underline; text-underline-offset:3px}
+  /* кнопка */
+  .dm-pd-act{display:flex; justify-content:center; margin-top:clamp(26px,3.4vw,44px)}
+  .dm-pd-btn{
+    --c1:#7A1D14; --c2:#B4422F; --c3:#8E271B; --c4:#CF6A55;
+    position:relative; display:inline-flex; align-items:center; gap:12px; padding:17px 40px; border-radius:99px; overflow:hidden; isolation:isolate; box-sizing:border-box;
+    font:500 15.5px/1 'Onest',sans-serif; letter-spacing:.06em; color:#FFF4EC; text-decoration:none; background:var(--c1); -webkit-tap-highlight-color:transparent;
+    box-shadow:0 16px 30px -14px rgba(122,29,20,.75), inset 0 1px 0 rgba(255,225,215,.38), inset 0 -8px 14px rgba(50,6,4,.26);
+    transition:transform .45s cubic-bezier(.2,.8,.2,1);
+  }
+  .dm-pd-btn span,.dm-pd-btn svg{position:relative; z-index:2; text-shadow:0 1px 2px rgba(60,8,4,.35)}
+  .dm-pd-btn svg{width:18px; height:18px; stroke:currentColor; fill:none; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; transition:transform .45s cubic-bezier(.2,.8,.2,1)}
+  .dm-pd-btn:hover svg{transform:translateX(5px)}
+  .dm-pd-btn::before{
+    content:''; position:absolute; inset:-60% -25%; z-index:-2;
+    background:radial-gradient(60% 90% at 25% 30%, rgba(255,205,190,.55), transparent 60%), radial-gradient(55% 80% at 75% 70%, rgba(255,190,175,.40), transparent 62%), linear-gradient(100deg,var(--c1) 0%,var(--c2) 22%,var(--c3) 38%,var(--c4) 55%,var(--c3) 72%,var(--c2) 88%,var(--c1) 100%);
+    background-size:180% 180%,200% 200%,240% 100%; animation:dmpdSilk2 7s ease-in-out infinite alternate;
+  }
+  @keyframes dmpdSilk2{0%{background-position:0% 0%,100% 100%,0% 0%} 100%{background-position:100% 100%,0% 0%,100% 0%}}
+  .dm-pd-btn::after{content:''; position:absolute; inset:0; z-index:-1; background:linear-gradient(105deg,transparent 34%,rgba(255,236,226,0) 40%,rgba(255,236,226,.55) 50%,rgba(255,236,226,0) 60%,transparent 66%); transform:translateX(-130%) skewX(-12deg); animation:dmpdSheen 5s cubic-bezier(.5,0,.3,1) 1.4s infinite}
+  @keyframes dmpdSheen{0%{transform:translateX(-130%) skewX(-12deg)} 55%,100%{transform:translateX(130%) skewX(-12deg)}}
+  .dm-pd-btn:hover{transform:translateY(-3px)}
+  .dm-pd-btn:focus-visible{outline:2px solid var(--red); outline-offset:4px}
+
+  @media (max-width:780px){
+    .dm-pd-tabs{justify-content:flex-start; margin-left:calc(clamp(18px,4vw,48px) * -1); margin-right:calc(clamp(18px,4vw,48px) * -1); padding-left:clamp(18px,4vw,48px); padding-right:clamp(18px,4vw,48px)}
+    .dm-pd-tab{padding:13px 20px; font-size:14.5px}
+    .dm-pd-set li{grid-template-columns:48px 1fr; gap:0 14px}
+    .dm-pd-vol{grid-column:2; justify-self:start; margin-top:10px}
+    .dm-pd-how{grid-template-columns:1fr}
+    .dm-pd-two{grid-template-columns:1fr}
+    .dm-pd-use{grid-template-columns:1fr}
+    .dm-pd-vid{position:relative; top:auto; max-width:360px}
+    .dm-pd-spec div{grid-template-columns:1fr}
+    .dm-pd-btn{width:100%; justify-content:center}
+  }
+  @media (prefers-reduced-motion:reduce){ .dm-pd-panel{animation:none} .dm-pd-tab[aria-selected="true"]::before,.dm-pd-btn::before,.dm-pd-btn::after,.dm-pd-play::before,.dm-pd-play::after{animation:none} }
+</style>
+
+<section id="dm-pd" class="dm-pd" aria-label="Деталі набору Холодна реконструкція">
+  <div class="dm-pd-in">
+    <div class="dm-pd-head">
+      <span class="dm-pd-eyebrow">Деталі набору</span>
+      <h2 class="dm-pd-h">Усе про <em>Холодну реконструкцію</em></h2>
+    </div>
+
+    <div class="dm-pd-tabs" role="tablist" aria-label="Деталі набору">
+      <button class="dm-pd-tab" role="tab" id="dm-pd-t1" aria-controls="dm-pd-p1" aria-selected="true" type="button">Етапи використання</button>
+      <button class="dm-pd-tab" role="tab" id="dm-pd-t2" aria-controls="dm-pd-p2" aria-selected="false" tabindex="-1" type="button">Склад (INCI)</button>
+      <button class="dm-pd-tab" role="tab" id="dm-pd-t3" aria-controls="dm-pd-p3" aria-selected="false" tabindex="-1" type="button">Для кого / результат</button>
+      <button class="dm-pd-tab" role="tab" id="dm-pd-t4" aria-controls="dm-pd-p4" aria-selected="false" tabindex="-1" type="button">Питання й відповіді</button>
+    </div>
+
+    <div class="dm-pd-card">
+      <!-- ═══ 1 · ЕТАПИ ВИКОРИСТАННЯ ═══ -->
+      <div class="dm-pd-panel" id="dm-pd-p1" role="tabpanel" aria-labelledby="dm-pd-t1">
+        <div class="dm-pd-use">
+          <div class="dm-pd-vid">
+            <div class="dm-pd-vbox" id="dm-pd-vbox">
+              <i class="dm-pd-poster" id="dm-pd-poster"></i>
+              <button class="dm-pd-play" type="button" id="dm-pd-play" aria-label="Дивитися відео: як користуватись"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5v15a1 1 0 0 0 1.52.85l12.2-7.5a1 1 0 0 0 0-1.7L8.52 3.65A1 1 0 0 0 7 4.5z"/></svg></button>
+              <span class="dm-pd-vcap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>Покажу, як користуватись</span>
+            </div>
+          </div>
+          <div class="dm-pd-steps">
+        <p class="dm-pd-lead">П’ять кроків, які підсилюють один одного. Кожен — кілька хвилин для себе.</p>
+        <ol class="dm-pd-how">
+          <li><span class="s" aria-hidden="true">1</span><b>Зволожуючий шампунь <small>400 мл</small></b><p>Розмилити в руках, нанести на шкіру голови, ретельно масажувати й змити теплою водою. За потреби повторити.</p></li>
+          <li><span class="s" aria-hidden="true">2</span><b>Маска для волосся <small>500 мл</small></b><p>Нанести на вологе волосся лише по довжині. Витримати <em>5–10 хвилин</em>, змити теплою водою. Рекомендовано двічі на тиждень.</p></li>
+          <li><span class="s" aria-hidden="true">3</span><b>Кондиціонер <small>400 мл</small></b><p>Рівномірно розподілити по довжині після миття, не наносити на корені. Залишити на <em>2–3 хвилини</em>, змити проточною водою.</p></li>
+          <li><span class="s" aria-hidden="true">4</span><b>Молочко для блиску <small>200 мл</small></b><p>Розтерти в руках, розподілити від середини довжини до кінчиків і прочесати гребінцем. На чисте волосся — сухе або вологе.</p></li>
+          <li><span class="s" aria-hidden="true">5</span><b>Спрей-термозахист <small>250 мл</small></b><p>Невелику кількість розподілити від середини довжини до кінчиків щіткою для вологого розчісування — і приступати до укладки. На чисте волосся.</p></li>
+        </ol>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ 2 · СКЛАД ═══ -->
+      <div class="dm-pd-panel" id="dm-pd-p2" role="tabpanel" aria-labelledby="dm-pd-t2" hidden>
+        <p class="dm-pd-lead">Повні склади (INCI) кожного засобу — відкрий потрібний.</p>
+<div class="dm-pd-inci">
+          <details><summary>1 · Зволожуючий шампунь<i aria-hidden="true"></i></summary><p>Aqua (Water), Sodium Coco-Sulfate, Cocamidopropyl Betaine, Coco-Glucoside, Glycerin, PEG-7 Glyceryl Cocoate, Polyquaternium-39, Propylene Glycol, Aloe Barbadensis Leaf Extract, Sorbitol, Lactic Acid, Chamomilla Recutita (Matricaria) Flower Extract, Amodimethicone, Trideceth-12, Cetrimonium Chloride, Gluconolactone, Sodium Benzoate, Calcium Gluconate, Parfum, Calendula Officinalis Flower Extract, Tetrasodium EDTA.</p></details>
+          <details><summary>2 · Маска для волосся<i aria-hidden="true"></i></summary><p>Aqua (Water), Caprylic/Capric Triglyceride, Cetearyl Alcohol, Glycerin, Behentrimonium Methosulfate, Hydrolyzed Sweet Almond Protein, Phenyl Trimethicone, Pentylene Glycol, Phospholipids, Sphingolipids, Amodimethicone, Trideceth-12, Cetrimonium Chloride, Hydrolyzed Keratin, Hydrolyzed Wheat Protein, Silk Amino Acids, Sodium Benzoate, Potassium Sorbate, Benzyl Alcohol, Benzoic Acid, Dehydroacetic Acid, Panthenol, Dimethicone, Allantoin, Behentrimonium Chloride, Parfum, Arginine.</p></details>
+          <details><summary>3 · Кондиціонер<i aria-hidden="true"></i></summary><p>Aqua (Water), Caprylic/Capric Triglyceride, Behentrimonium Methosulfate, Cetearyl Alcohol, Hydrolyzed Collagen, Panthenol, Propylene Glycol, Glycerin, Hydrolyzed Silk, Cetrimonium Chloride, Simmondsia Chinensis (Jojoba) Seed Oil, Prunus Armeniaca (Apricot) Kernel Oil, Amodimethicone, Trideceth-12, Parfum, Benzyl Alcohol, Benzoic Acid, Dehydroacetic Acid, Guar Hydroxypropyltrimonium Chloride, Arginine.</p></details>
+          <details><summary>4 · Молочко для блиску<i aria-hidden="true"></i></summary><p>Aqua (Water), Cyclopentasiloxane, Glycerin, Polyquaternium-7, Cetearyl Alcohol, Dipalmitoylethyl Hydroxyethylmonium Methosulfate, Ceteareth-20, Dimethicone, Amodimethicone, Trideceth-12, Cetrimonium Chloride, Benzyl Alcohol, Benzoic Acid, Dehydroacetic Acid, Argania Spinosa Kernel Oil, Crambe Abyssinica Seed Oil, Phytosterols, Oleyl Alcohol, Arginine, Parfum.</p></details>
+          <details><summary>5 · Спрей-термозахист двофазний<i aria-hidden="true"></i></summary><p>Aqua (Water), Cyclopentasiloxane, Hydrolyzed Silk, Hydrolyzed Keratin, Phenyl Trimethicone, Dimethicone, Cetrimonium Chloride, Amodimethicone, Trideceth-12, Sodium PCA, Sodium Lactate, Arginine, Aspartic Acid, PCA, Glycine, Alanine, Serine, Valine, Proline, Threonine, Isoleucine, Histidine, Phenylalanine, Propylene Glycol, Sodium Benzoate, Polyquaternium-7, Tocopheryl Acetate, Parfum, Gluconolactone, Calcium Gluconate.</p></details>
+        </div>
+        <dl class="dm-pd-spec dm-pd-info">
+          <div><dt>Країна виробництва</dt><dd>Україна. Виготовлено за вимогами ISO 22716 (GMP)</dd></div>
+          <div><dt>Термін придатності</dt><dd>12 місяців з дати виготовлення (дата вказана на упаковці)</dd></div>
+          <div><dt>Зберігання</dt><dd>від +5 до +25 °C, відносна вологість 55–70%, без прямих сонячних променів</dd></div>
+          <div><dt>Виробник</dt><dd>ФОП «Сташкова А.Б.», м. Мостиська, Львівська область · Замовник: Damore</dd></div>
+        </dl>
+      </div>
+
+      <!-- ═══ 3 · ДЛЯ КОГО / РЕЗУЛЬТАТ ═══ -->
+      <div class="dm-pd-panel" id="dm-pd-p3" role="tabpanel" aria-labelledby="dm-pd-t3" hidden>
+        <p class="dm-pd-lead">Догляд для жінок, які хочуть професійного результату, але не хочуть ставити життя на pause.</p>
+        <div class="dm-pd-two">
+          <div class="dm-pd-box">
+            <h3>Підійде, якщо</h3>
+            <ul class="dm-pd-list">
+              <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.2 4.2L19 7"/></svg> волосся втратило блиск і виглядає тьмяним</li>
+              <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.2 4.2L19 7"/></svg> воно пухнастить і погано розчісується</li>
+              <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.2 4.2L19 7"/></svg> ти часто користуєшся феном, праскою чи плойкою</li>
+              <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.2 4.2L19 7"/></svg> хочеш салонного ефекту вдома, у власному ритмі</li>
+            </ul>
+          </div>
+          <div class="dm-pd-box">
+            <h3>Що ти відчуєш</h3>
+            <ul class="dm-pd-list">
+              <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.2 4.2L19 7"/></svg> ніжне очищення та зволоження після шампуню</li>
+              <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.2 4.2L19 7"/></svg> гладкість і м’якість по довжині після маски й кондиціонера</li>
+              <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.2 4.2L19 7"/></svg> блиск від молочка для кінчиків</li>
+              <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.2 4.2L19 7"/></svg> захист волосся під час гарячої укладки</li>
+            </ul>
+          </div>
+        </div>
+        <p class="dm-pd-note">Результат індивідуальний і залежить від стану волосся та регулярності догляду.</p>
+      </div>
+
+      <!-- ═══ 4 · ПИТАННЯ Й ВІДПОВІДІ ═══ -->
+      <div class="dm-pd-panel" id="dm-pd-p4" role="tabpanel" aria-labelledby="dm-pd-t4" hidden>
+        <div class="dm-pd-inci">
+          <details><summary>Чи потрібно використовувати всі п’ять засобів?<i aria-hidden="true"></i></summary><p>Набір створений як система: кожен крок доповнює попередній. Для найкращого ефекту рекомендуємо користуватися всіма п’ятьма.</p></details>
+          <details><summary>Як часто робити маску?<i aria-hidden="true"></i></summary><p>Маску рекомендовано застосовувати двічі на тиждень: нанести на вологе волосся по довжині на 5–10 хвилин і змити теплою водою. Кондиціонер — після миття, молочко й термозахист — перед укладкою.</p></details>
+          <details><summary>Чи є сульфати в складі?<i aria-hidden="true"></i></summary><p>У шампуні є Sodium Coco-Sulfate (ПАР кокосового походження). Повні склади всіх засобів — у вкладці «Склад (INCI)».</p></details>
+          <details><summary>Чи підходить набір для фарбованого волосся?<i aria-hidden="true"></i></summary><p>[ВЛАСНИЦЯ: підтвердити й дописати відповідь]</p></details>
+          <details><summary>Чи можна купити засоби окремо?<i aria-hidden="true"></i></summary><p>[ВЛАСНИЦЯ: підтвердити й дописати відповідь]</p></details>
+          <details><summary>Який термін придатності й як зберігати?<i aria-hidden="true"></i></summary><p>Термін придатності — 12 місяців з дати виготовлення. Зберігати при температурі від +5 до +25 °C, уникаючи прямих сонячних променів.</p></details>
+          <details><summary>Як відбувається доставка й повернення?<i aria-hidden="true"></i></summary><p>Умови доставки й оплати — на сторінці <a href="#demo">«Доставка й оплата»</a>, повернення й обмін — на сторінці <a href="#demo">«Повернення й обмін»</a>.</p></details>
+        </div>
+      </div>
+    </div>
+
+    <div class="dm-pd-act"><a class="dm-pd-btn" href="#order"><span>Додати до кошика</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
+  </div>
+</section>
+
+<script>
+(function(){
+  'use strict';
+
+  /* ═══════════ CONFIG ═══════════ */
+  var CFG = {
+    video : '../../assets/video/howuse.mp4',   // відео «як користуватись» (вертикальне 4:5, зі звуком, запускається по кліку)
+    poster: '../../assets/img/poster-howuse.jpg',   // обкладинка (so_2 = кадр з 2-ї секунди)
+    rec  : 'rec4537654003',                // ← id блоку зі штатною карткою товару (Магазин): кнопка натискає його «Купити»
+    btn: '#order'          // ← куди веде кнопка внизу: '#order' = відкрити кошик, або посилання на блок із товаром (наприклад '#rec123456789')
+  };
+
+  var root = document.getElementById('dm-pd');
+
+  /* відео «як користуватись»: вантажиться лише після кліку */
+  var vbox = document.getElementById('dm-pd-vbox'), vplay = document.getElementById('dm-pd-play');
+  if (CFG.poster){ var pim = new Image(); pim.onload = function(){ document.getElementById('dm-pd-poster').style.backgroundImage = 'url("' + CFG.poster + '")'; }; pim.src = CFG.poster; }
+  vplay.addEventListener('click', function(){
+    var v = document.createElement('video');
+    v.src = CFG.video; v.controls = true; v.playsInline = true; v.autoplay = true; if (CFG.poster) v.poster = CFG.poster;
+    vbox.appendChild(v); vbox.classList.add('playing');
+  });
+  /* перемикаємо вкладку – відео ставимо на паузу */
+  function pauseVid(){ var v = vbox.querySelector('video'); if (v) v.pause(); }
+  root.querySelector('.dm-pd-btn').setAttribute('href', CFG.btn);
+  /* «Додати до кошика»: натискаємо штатну кнопку «Купити» у блоці товару (CFG.rec), потім за потреби відкриваємо кошик.
+     Якщо блок чи кнопку не знайдено – просто відкриється кошик (#order). */
+  function addToCart(e){
+    var rec = CFG.rec && document.getElementById(CFG.rec);
+    var b = rec && rec.querySelector('.js-store-prod-btn, .t-store__prod-popup__btn, .t-store__prod-snippet__btn, .t-store__card__btn, .t-btn');
+    if (!b) return;
+    e.preventDefault();
+    b.click();
+    setTimeout(function(){
+      var shown = document.querySelector('.t706__cartwin_showed');
+      if (!shown && typeof window.tcart__openCart === 'function'){ try{ window.tcart__openCart(); }catch(_){} }
+    }, 700);
+  }
+  root.querySelector('.dm-pd-btn').addEventListener('click', addToCart);
+  var tabs = [].slice.call(root.querySelectorAll('.dm-pd-tab'));
+  var panels = tabs.map(function(t){ return document.getElementById(t.getAttribute('aria-controls')); });
+
+  function select(i, focus, scroll){
+    tabs.forEach(function(t, k){
+      var on = k === i;
+      t.setAttribute('aria-selected', on ? 'true' : 'false'); t.tabIndex = on ? 0 : -1;
+      if (!on && k === 0) pauseVid();
+      if (on){ panels[k].removeAttribute('hidden'); } else { panels[k].setAttribute('hidden', ''); }
+    });
+    if (focus) tabs[i].focus();
+    if (scroll) try{ tabs[i].parentNode.scrollTo({ left: tabs[i].offsetLeft - (tabs[i].parentNode.clientWidth - tabs[i].offsetWidth) / 2, behavior:'smooth' }); }catch(_){}
+  }
+  tabs.forEach(function(t, i){
+    t.addEventListener('click', function(){ select(i, false, true); });
+    t.addEventListener('keydown', function(e){
+      var n = tabs.length, k = -1;
+      if (e.key === 'ArrowRight') k = (i + 1) % n;
+      else if (e.key === 'ArrowLeft') k = (i - 1 + n) % n;
+      else if (e.key === 'Home') k = 0;
+      else if (e.key === 'End') k = n - 1;
+      if (k > -1){ e.preventDefault(); select(k, true, true); }
+    });
+  });
+
+  /* пряме посилання: сторінка#dm-pd-p3 відкриє вкладку «Склад» */
+  var h = (document.URL.split('#')[1] || '');
+  for (var j = 0; j < panels.length; j++) if (panels[j].id === h) { select(j); break; }
+})();
+</script>
+
+<!--
+  D'AMORE · ПЕРЕВАГИ / ГАРАНТІЇ (Tilda → T123 «HTML-код», над футером на Головній або під кнопкою на сторінці товару)
+  ─────────────────────────────────────────────────────────────────────────────
+  4 пункти з тонкими лінійними іконками. Тексти — у CONFIG унизу.
+  Маленька позначка «уточнити» стоїть біля пунктів, умови яких треба підтвердити.
+  Підтвердила → у CONFIG поставити  note:false  (або NOTES:false вимкне всі позначки одразу).
+-->
+<style>
+  .dm-pf{
+    --red:#AB3724; --burg:#5B1210; --graph:#433d3c; --cream:#F6F2EE;
+    background:var(--cream); font-family:'Onest','Helvetica Neue',Arial,sans-serif; color:var(--graph);
+    padding:clamp(28px,4vw,56px) clamp(14px,3vw,48px);
+  }
+  .dm-pf-card{
+    max-width:1240px; margin:0 auto; border-radius:clamp(22px,2.6vw,34px); padding:clamp(22px,3vw,44px) clamp(18px,3vw,48px);
+    background:linear-gradient(160deg,rgba(255,255,255,.92),rgba(255,255,255,.66)); box-shadow:0 30px 60px -40px rgba(67,40,30,.5), inset 0 0 0 1px rgba(67,61,60,.08);
+    display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:clamp(18px,2.4vw,36px);
+  }
+  .dm-rf{opacity:0; transform:translate3d(0,16px,0); transition:opacity .8s ease var(--d,0s), transform .9s cubic-bezier(.2,.7,.2,1) var(--d,0s)}
+  .dm-pf.in .dm-rf{opacity:1; transform:none}
+  .dm-pf-it{position:relative; display:flex; flex-direction:column; align-items:center; text-align:center; padding:0 6px}
+  .dm-pf-it + .dm-pf-it::before{content:''; position:absolute; left:calc(clamp(18px,2.4vw,36px) / -2); top:8%; bottom:8%; width:1px; background:rgba(67,61,60,.12)}
+  .dm-pf-ic{width:54px; height:54px; margin:0 0 14px; display:grid; place-items:center; border-radius:50%; background:rgba(171,55,36,.07); transition:transform .5s cubic-bezier(.2,.8,.2,1), background .4s ease}
+  .dm-pf-it:hover .dm-pf-ic{transform:translateY(-3px) scale(1.06); background:rgba(171,55,36,.12)}
+  .dm-pf-ic svg{width:28px; height:28px; fill:none; stroke:var(--red); stroke-width:1.6; stroke-linecap:round; stroke-linejoin:round}
+  .dm-pf-t{margin:0 0 6px; font:500 clamp(15px,1.25vw,17.5px)/1.25 'Onest',sans-serif; letter-spacing:-.005em; color:var(--burg)}
+  .dm-pf-d{margin:0; font:300 clamp(14px,1.1vw,15.5px)/1.45 'Onest',sans-serif; color:rgba(67,61,60,.9)}
+  .dm-pf-n{display:inline-block; margin-top:8px; padding:3px 8px; border-radius:99px; font:400 10.5px/1 'Onest',sans-serif; letter-spacing:.08em; text-transform:lowercase; color:rgba(67,61,60,.6); box-shadow:inset 0 0 0 1px rgba(67,61,60,.22)}
+
+  @media (max-width:900px){
+    .dm-pf-card{grid-template-columns:1fr 1fr; gap:28px 16px}
+    .dm-pf-it + .dm-pf-it::before{display:none}
+  }
+  @media (max-width:440px){
+    .dm-pf-card{padding:22px 14px}
+    .dm-pf-ic{width:48px; height:48px} .dm-pf-ic svg{width:25px; height:25px}
+  }
+  @media (prefers-reduced-motion:reduce){ .dm-rf{transition:none} }
+</style>
+
+<section id="dm-pf" class="dm-pf" aria-label="Наші гарантії">
+  <div class="dm-pf-card" id="dm-pf-card"></div>
+</section>
+
+<script>
+(function(){
+  'use strict';
+
+  /* ═══════════ CONFIG ═══════════ */
+  var NOTES = true;                       // true = показувати маленьку позначку «уточнити» (де note:true); false = прибрати всі
+  var ITEMS = [
+    { icon:'box',   t:'Відправка в день замовлення', d:'Замовлення до 14:00 їде того ж дня.', note:true },
+    { icon:'cash',  t:'Накладений платіж',           d:'Оплата при отриманні на пошті.',      note:true },
+    { icon:'chat',  t:'Підтримка щодня',             d:'Допоможемо з вибором і замовленням.', note:true },
+    { icon:'shield',t:'Зроблено в Україні',          d:'За стандартом якості ISO 22716 (GMP).' }
+  ];
+
+  var ICONS = {
+    box:    '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 7.5L12 3l8.5 4.5v9L12 21l-8.5-4.5z"/><path d="M3.5 7.5L12 12l8.5-4.5M12 12v9"/></svg>',
+    cash:   '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="6" width="18" height="12" rx="2.5"/><circle cx="12" cy="12" r="2.6"/><path d="M6.5 9.5v.01M17.5 14.5v.01"/></svg>',
+    chat:   '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5h16v10H12l-4.5 3.5V15.5H4z"/><path d="M8 10h8"/></svg>',
+    shield: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7.5 3v5.5c0 4.3-3 7.8-7.5 9.5-4.5-1.7-7.5-5.2-7.5-9.5V6z"/><path d="M8.8 12.2l2.2 2.2 4.2-4.4"/></svg>'
+  };
+  function esc(s){ return String(s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+
+  var root = document.getElementById('dm-pf');
+  document.getElementById('dm-pf-card').innerHTML = ITEMS.map(function(x, i){
+    return '<div class="dm-pf-it dm-rf" style="--d:' + (i * .12).toFixed(2) + 's"><span class="dm-pf-ic">' + (ICONS[x.icon] || '') + '</span>' +
+      '<h3 class="dm-pf-t">' + esc(x.t) + '</h3><p class="dm-pf-d">' + esc(x.d) + '</p>' +
+      (NOTES && x.note ? '<span class="dm-pf-n">уточнити</span>' : '') + '</div>';
+  }).join('');
+
+  if ('IntersectionObserver' in window){
+    var io = new IntersectionObserver(function(es){ if (es[0].isIntersecting){ root.classList.add('in'); io.disconnect(); } }, { threshold:.2 });
+    io.observe(root);
+  } else root.classList.add('in');
+})();
+</script>
+<!--
+  D'AMORE · ФУТЕР (Tilda → T123 «HTML-код», у самому низу сторінок; на Tilda краще додати як «Футер» і поставити на всі сторінки)
+  ─────────────────────────────────────────────────────────────────────────────
+  Темний шоколад, коралові заголовки, 4 колонки: бренд · Магазин · Інформація · Контакти, нижній рядок з юр. даними.
+  Усі посилання, телефон, пошта й соцмережі — у CONFIG унизу в <script>. Порожнє поле = пункт зникає.
+  Сторінки, яких ще немає, позначені  soon:true  – вони стають неактивними (сірі, без переходу).
+-->
+<style>
+  .dm-ft{
+    --coral:#E0705F; --cream:#F6F2EE; --choc:#3a2c26;
+    position:relative; overflow:hidden; isolation:isolate; background:var(--choc); color:var(--cream);
+    padding:clamp(56px,7vw,100px) 0 0; font-family:'Onest','Helvetica Neue',Arial,sans-serif;
+  }
+  .dm-ft::before{content:''; position:absolute; inset:0; z-index:-1; pointer-events:none;
+    background:radial-gradient(60% 80% at 12% 0%, rgba(180,66,47,.28), transparent 62%), radial-gradient(50% 70% at 100% 100%, rgba(122,29,20,.3), transparent 64%)}
+  .dm-ft-in{max-width:1300px; margin:0 auto; padding:0 clamp(22px,5vw,80px)}
+
+  .dm-ft-top{display:grid; grid-template-columns:1.25fr repeat(3,minmax(0,1fr)); gap:clamp(30px,4vw,64px); padding-bottom:clamp(36px,5vw,64px)}
+  .dm-ft-logo{display:inline-block; margin:0 0 18px; text-decoration:none}
+  .dm-ft-logo img{display:block; height:44px; width:auto; filter:brightness(0) invert(1) sepia(.15)}
+  .dm-ft-logotxt{font:500 28px/1 'Onest',sans-serif; letter-spacing:.08em; color:var(--cream)}
+  .dm-ft-script{margin:0 0 14px; font:400 clamp(30px,2.8vw,42px)/1.05 'Pinyon Script','Snell Roundhand',cursive; color:var(--coral)}
+  .dm-ft-about{margin:0 0 22px; max-width:21em; font:300 15.5px/1.55 'Onest',sans-serif; color:rgba(246,242,238,.78)}
+
+  .dm-ft-h{margin:0 0 18px; font:500 14px/1 'Onest',sans-serif; letter-spacing:.1em; text-transform:uppercase; color:var(--coral)}
+  .dm-ft ul{list-style:none; margin:0; padding:0; display:grid; gap:13px}
+  .dm-ft a{color:inherit; text-decoration:none; -webkit-tap-highlight-color:transparent}
+  .dm-ft-l{position:relative; display:inline-block; font:300 16px/1.3 'Onest',sans-serif; color:rgba(246,242,238,.88); transition:color .3s ease}
+  .dm-ft-l::after{content:''; position:absolute; left:0; right:0; bottom:-3px; height:1px; background:var(--coral); transform:scaleX(0); transform-origin:left; transition:transform .45s cubic-bezier(.2,.8,.2,1)}
+  .dm-ft-l:hover{color:var(--coral)} .dm-ft-l:hover::after{transform:scaleX(1)}
+  .dm-ft a:focus-visible{outline:2px solid var(--coral); outline-offset:4px; border-radius:4px}
+  .dm-ft-l.soon{color:rgba(246,242,238,.38); pointer-events:none; cursor:default}
+  .dm-ft-l.soon i{font-style:normal; margin-left:8px; padding:3px 8px; border-radius:99px; font:500 10px/1 'Onest',sans-serif; letter-spacing:.1em; text-transform:uppercase; color:rgba(246,242,238,.5); box-shadow:inset 0 0 0 1px rgba(246,242,238,.25)}
+
+  .dm-ft-contact{display:grid; gap:12px; margin:0 0 22px; font:300 16px/1.4 'Onest',sans-serif}
+  .dm-ft-contact span{display:block; margin-bottom:3px; font:500 11.5px/1 'Onest',sans-serif; letter-spacing:.12em; text-transform:uppercase; color:rgba(246,242,238,.5)}
+  .dm-ft-soc{display:flex; flex-wrap:wrap; gap:10px}
+  .dm-ft-soc a{width:44px; height:44px; display:grid; place-items:center; border-radius:50%; box-shadow:inset 0 0 0 1px rgba(246,242,238,.28); color:var(--cream); transition:background .35s ease, color .35s ease, box-shadow .35s ease, transform .35s cubic-bezier(.2,.8,.2,1)}
+  .dm-ft-soc a:hover{background:var(--coral); color:#2b1712; box-shadow:none; transform:translateY(-3px)}
+  .dm-ft-soc svg{width:20px; height:20px; fill:none; stroke:currentColor; stroke-width:1.6; stroke-linecap:round; stroke-linejoin:round}
+  .dm-ft-soc svg .f{fill:currentColor; stroke:none}
+
+  .dm-ft-cta{
+    --c1:#7A1D14; --c2:#B4422F; --c3:#8E271B; --c4:#CF6A55;
+    position:relative; display:inline-flex; align-items:center; gap:12px; padding:15px 32px; border-radius:99px; overflow:hidden; isolation:isolate; box-sizing:border-box;
+    font:500 14.5px/1 'Onest',sans-serif; letter-spacing:.06em; color:#FFF4EC; background:var(--c1);
+    box-shadow:0 14px 28px -14px rgba(0,0,0,.6), inset 0 1px 0 rgba(255,225,215,.38), inset 0 -8px 14px rgba(50,6,4,.26); transition:transform .45s cubic-bezier(.2,.8,.2,1);
+  }
+  .dm-ft-cta span,.dm-ft-cta svg{position:relative; z-index:2}
+  .dm-ft-cta svg{width:17px; height:17px; stroke:currentColor; fill:none; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; transition:transform .45s cubic-bezier(.2,.8,.2,1)}
+  .dm-ft-cta:hover{transform:translateY(-3px)} .dm-ft-cta:hover svg{transform:translateX(5px)}
+  .dm-ft-cta::before{content:''; position:absolute; inset:-60% -25%; z-index:-1;
+    background:radial-gradient(60% 90% at 25% 30%, rgba(255,205,190,.55), transparent 60%), linear-gradient(100deg,var(--c1) 0%,var(--c2) 22%,var(--c3) 40%,var(--c4) 56%,var(--c3) 74%,var(--c1) 100%);
+    background-size:180% 180%,240% 100%; animation:dmftSilk 7s ease-in-out infinite alternate}
+  @keyframes dmftSilk{0%{background-position:0% 0%,0% 0%} 100%{background-position:100% 100%,100% 0%}}
+
+  .dm-ft-bot{display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:12px 28px; padding:22px 0 26px; border-top:1px solid rgba(246,242,238,.14); font:300 13px/1.5 'Onest',sans-serif; color:rgba(246,242,238,.55)}
+  .dm-ft-bot a{color:rgba(246,242,238,.55); transition:color .3s ease} .dm-ft-bot a:hover{color:var(--coral)}
+  .dm-ft-legal{display:flex; flex-wrap:wrap; gap:6px 22px}
+  .dm-ft-up{display:inline-flex; align-items:center; gap:8px; cursor:pointer; background:none; border:0; padding:0; font:inherit; color:rgba(246,242,238,.75); transition:color .3s ease}
+  .dm-ft-up:hover{color:var(--coral)}
+  .dm-ft-up svg{width:15px; height:15px; stroke:currentColor; fill:none; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round}
+
+  @media (max-width:980px){
+    .dm-ft-top{grid-template-columns:1fr 1fr}
+    .dm-ft-brand{grid-column:1/-1}
+  }
+  @media (max-width:560px){
+    .dm-ft-top{grid-template-columns:1fr 1fr; gap:34px 20px}
+    .dm-ft-contact-col{grid-column:1/-1}
+    .dm-ft-bot{flex-direction:column; align-items:flex-start}
+  }
+  @media (prefers-reduced-motion:reduce){ .dm-ft-cta::before{animation:none} }
+</style>
+
+<footer id="dm-ft" class="dm-ft" aria-label="Футер">
+  <div class="dm-ft-in">
+    <div class="dm-ft-top">
+      <div class="dm-ft-brand">
+        <a class="dm-ft-logo" href="../../" aria-label="D’AMORE"><span class="dm-ft-logotxt">D’AMORE</span></a>
+        <p class="dm-ft-script">Because you deserve it.</p>
+        <p class="dm-ft-about">Професійний догляд за волоссям для жінок, які не хочуть ставити життя на pause.</p>
+        <a class="dm-ft-cta" href="../../catalog/"><span>Обрати догляд</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </div>
+      <nav aria-label="Магазин"><h3 class="dm-ft-h">Магазин</h3><ul id="dm-ft-shop"></ul></nav>
+      <nav aria-label="Інформація"><h3 class="dm-ft-h">Інформація</h3><ul id="dm-ft-info"></ul></nav>
+      <div class="dm-ft-contact-col"><h3 class="dm-ft-h">Контакти</h3><div class="dm-ft-contact" id="dm-ft-contact"></div><div class="dm-ft-soc" id="dm-ft-soc"></div></div>
+    </div>
+    <div class="dm-ft-bot">
+      <span id="dm-ft-copy"></span>
+      <span class="dm-ft-legal" id="dm-ft-legal"></span>
+      <button class="dm-ft-up" type="button" id="dm-ft-up">Нагору <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6"/></svg></button>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  'use strict';
+
+  /* ═══════════ CONFIG ═══════════ */
+  var CFG = {
+    /* логотип: якщо файл світлий/прозорий – вказати його посилання. Порожньо = текст D’AMORE */
+    logo : '../../assets/img/logo_damore.png',
+
+    shop : [                                         // колонка «Магазин»
+      { t:'Холодна реконструкція',    h:'../../catalog/cold-reconstruction/' },
+      { t:'Усі розділи',              h:'../../catalog/' },
+      { t:'Домашній догляд',          h:'../../catalog/home-care/',   soon:true },
+      { t:'Догляд за тілом',          h:'../../catalog/body-care/',   soon:true },
+      { t:'Аксесуари',                h:'../../catalog/accessories/', soon:true },
+      { t:'Сертифікати та подарунки', h:'../../catalog/gifts/',       soon:true }
+    ],
+    info : [                                         // колонка «Інформація»
+      { t:'Про бренд',          h:'../../about/' },
+      { t:'Блог',               h:'../../blog/' },
+      { t:'Доставка й оплата',  h:'#demo' },        // ← створити сторінку або змінити адресу
+      { t:'Повернення й обмін', h:'#demo' },         // ← те саме
+      { t:'Питання й відповіді', h:'#demo' }             // ← те саме
+    ],
+    contact : [                                      // порожнє значення – рядок зникне
+      { l:'Телефон',  t:'+38 0__ ___ __ __', h:'tel:+380000000000' },   // ← ВПИСАТИ СВІЙ НОМЕР (в обох полях)
+      { l:'Пошта',    t:'hello@damore.ua',  h:'mailto:hello@damore.ua' }, // ← ВПИСАТИ СВОЮ ПОШТУ
+      { l:'Графік',   t:'Пн–Пт, 10:00–18:00' }                             // ← або прибрати
+    ],
+    social : {                                       // порожнє = іконки не буде
+      instagram: 'https://www.instagram.com/the_trend.studio_storoj/',
+      tiktok   : '',
+      telegram : '',
+      facebook : ''
+    },
+    legal : [                                        // нижній рядок
+      { t:'Публічна оферта',          h:'#demo' },          // ← потрібні сторінки для магазину в Україні
+      { t:'Політика конфіденційності', h:'#demo' }
+    ],
+    copy : 'D’AMORE · Trend Studio'                  // після © і року
+  };
+
+  function esc(s){ return String(s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+  function $(id){ return document.getElementById(id); }
+
+  if (CFG.logo){
+    var im = new Image(); im.alt = 'D’AMORE';
+    im.onload = function(){ var a = document.querySelector('.dm-ft-logo'); a.innerHTML = ''; a.appendChild(im); };
+    im.src = CFG.logo;
+  }
+  function links(list){
+    return list.map(function(x){
+      if (x.soon) return '<li><span class="dm-ft-l soon">' + esc(x.t) + '<i>скоро</i></span></li>';
+      return '<li><a class="dm-ft-l" href="' + esc(x.h) + '">' + esc(x.t) + '</a></li>';
+    }).join('');
+  }
+  $('dm-ft-shop').innerHTML = links(CFG.shop);
+  $('dm-ft-info').innerHTML = links(CFG.info);
+  $('dm-ft-contact').innerHTML = CFG.contact.filter(function(c){ return c.t; }).map(function(c){
+    return '<div><span>' + esc(c.l) + '</span>' + (c.h ? '<a class="dm-ft-l" href="' + esc(c.h) + '">' + esc(c.t) + '</a>' : esc(c.t)) + '</div>';
+  }).join('');
+
+  var ICON = {
+    instagram: '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.2" y="3.2" width="17.6" height="17.6" rx="5"/><circle cx="12" cy="12" r="4.1"/><circle class="f" cx="17.3" cy="6.7" r=".9"/></svg>',
+    tiktok:    '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3v11.2a3.7 3.7 0 1 1-3.7-3.7"/><path d="M14 3c.3 2.6 2 4.4 4.6 4.6"/></svg>',
+    telegram:  '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 4L3 11l6 2.3L11.5 20l3-4.2L19 19.5z"/><path d="M9 13.3l9-6.8"/></svg>',
+    facebook:  '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 8.5h2.5V5H14c-2.2 0-3.5 1.4-3.5 3.5V11H8v3.5h2.5V21H14v-6.5h2.4l.6-3.5H14V9.2c0-.5.2-.7 1-.7z"/></svg>'
+  };
+  $('dm-ft-soc').innerHTML = Object.keys(CFG.social).filter(function(k){ return CFG.social[k]; }).map(function(k){
+    return '<a href="' + esc(CFG.social[k]) + '" target="_blank" rel="noopener" aria-label="' + k + '">' + ICON[k] + '</a>';
+  }).join('');
+
+  $('dm-ft-copy').textContent = '© ' + new Date().getFullYear() + ' ' + CFG.copy;
+  $('dm-ft-legal').innerHTML = CFG.legal.map(function(x){ return '<a href="' + esc(x.h) + '">' + esc(x.t) + '</a>'; }).join('');
+  $('dm-ft-up').addEventListener('click', function(){ window.scrollTo({ top:0, behavior:'smooth' }); });
+})();
+</script>
+
+<script src="../../assets/demo.js"></script>
+</body>
+</html>
