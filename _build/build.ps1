@@ -17,6 +17,7 @@ function Conv([string]$t, [string]$name){
     @(("https://res\.cloudinary\.com/$Q" + 'bg3video\.jpg'), '@@/assets/img/bg3video.jpg'),
     @(("https://res\.cloudinary\.com/$Q" + 'logo_damore\.png'), '@@/assets/img/logo_damore.png'),
     @(("https://res\.cloudinary\.com/$Q" + 'video3\.mp4'), '@@/assets/video/hero.mp4'),
+    @(("https://res\.cloudinary\.com/$Q" + 'Video_mob\.mp4'), '@@/assets/video/hero-mobile.mp4'),
     @("https://res\.cloudinary\.com/w9airxdm/image/upload/bg\.jpg", '@@/assets/img/hero-bg.jpg'),
     @(("https://res\.cloudinary\.com/$Q" + 'heart_preload\.png'), '@@/assets/img/heart_preload.png'),
     @(("https://res\.cloudinary\.com/$Q" + 'cursor\.png'), '@@/assets/img/cursor.png'),
