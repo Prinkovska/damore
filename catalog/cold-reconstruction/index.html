@@ -30,7 +30,7 @@
 <style>
   html.dm-nocur, html.dm-nocur *{cursor:none!important}
   .dm-cur{
-    position:fixed; left:0; top:0; width:16px; height:24px; z-index:1000000; pointer-events:none; opacity:0;
+    position:fixed; left:0; top:0; width:16px; height:24px; z-index:2147483647; pointer-events:none; opacity:0;
     background:center/contain no-repeat; will-change:transform; transition:opacity .25s ease;
     transform-origin:50% 100%;
     filter:drop-shadow(0 3px 5px rgba(120,25,15,.28));
@@ -58,6 +58,7 @@
       var x=-100,y=-100,tx=-100,ty=-100,sc=1,tsc=1,rot=0,shown=false;
       window.addEventListener('mousemove', function(e){
         tx = e.clientX; ty = e.clientY;
+        if (el.nextSibling) document.body.appendChild(el);                          // лишатися поверх елементів, що з'являються пізніше (збільшення фото, попапи Tilda)
         if (!shown){ shown = true; x = tx; y = ty; root.classList.add('dm-nocur'); el.style.opacity = 1; }
         var t = e.target;
         tsc = (t && t.closest && t.closest('a,button,input,textarea,select,label,summary,[role=button],[role=tab],.t-btn')) ? 1.45 : 1;
@@ -310,6 +311,9 @@
   .dmh-ig svg{width:20px; height:20px; stroke:currentColor; fill:none; stroke-width:1.6; stroke-linecap:round; stroke-linejoin:round}
   .dmh-ig:hover{background:rgba(171,55,36,.08); color:var(--red)}
   .dmh-ig:focus-visible{outline:2px solid var(--red); outline-offset:3px}
+  /* вікно кошика Tilda: заголовок «Ваше замовлення» не має свого поля кольору в налаштуваннях — фарбуємо тут */
+  .t706__cartwin-heading{color:#5B1210!important; font-weight:500!important; letter-spacing:-.01em}
+  .t706__cartwin .t-input-title{color:#433d3c!important}
   html.dmh-hide-tcart .t706__carticon{display:none!important}          /* ховаємо власну плаваючу іконку кошика Tilda (CONFIG.hideTildaCartIcon) */
   .dmh-badge.pop{animation:dmhPop .5s cubic-bezier(.2,.8,.2,1)}
   @keyframes dmhPop{0%{transform:scale(.4)} 55%{transform:scale(1.35)} 100%{transform:scale(1)}}
@@ -362,7 +366,7 @@
 </style>
 
 <div class="dmh-wrap" id="dmh-wrap">
-  <header class="dmh" id="dmh">
+  <div class="dmh" id="dmh" role="presentation">
     <div class="dmh-in">
       <div class="dmh-side l" id="dmh-l">
         <button class="dmh-burger" id="dmh-burger" type="button" aria-label="Відкрити меню" aria-expanded="false" aria-controls="dmh-mob"><i></i><i></i></button>
@@ -370,7 +374,7 @@
       <a class="dmh-logo" id="dmh-logo" href="../../" aria-label="D'AMORE — на головну"><img alt="D'AMORE"></a>
       <div class="dmh-side r" id="dmh-r"></div>
     </div>
-  </header>
+  </div>
   <div class="dmh-mob" id="dmh-mob" aria-hidden="true"></div>
 </div>
 
@@ -539,6 +543,20 @@
   window.addEventListener('resize', function(){ if (window.innerWidth > 1024 && mob.classList.contains('open')) setMenu(false); });
   onScroll();
 })();
+
+  /* доступність: мова сторінки й підписи до фото у стрічці блогу (Tilda їх не додає) */
+  (function(){
+    var de = document.documentElement; if (!de.getAttribute('lang')) de.setAttribute('lang', 'uk');
+    function lab(){
+      var im = document.querySelectorAll('.t-cms__card__image[role="img"]:not([aria-label]), .t-cms__card__image[role="img"][aria-label=""]');
+      for (var i = 0; i < im.length; i++){
+        var c = im[i].closest('.t-cms__card'), h = c && c.querySelector('[data-style="title_typo"]');
+        im[i].setAttribute('aria-label', (h && h.textContent.trim()) ? h.textContent.trim() : 'Фото до статті блогу D’AMORE');
+      }
+    }
+    lab();
+    if (window.MutationObserver){ var mo = new MutationObserver(function(){ lab(); }); mo.observe(document.body, { childList:true, subtree:true }); setTimeout(function(){ mo.disconnect(); }, 15000); }
+  })();
 </script>
 
 <!--
@@ -556,7 +574,7 @@
     padding:clamp(80px,10vh,120px) 0 clamp(40px,6vh,80px);
   }
   .dm-ch::before{content:''; position:absolute; inset:0; z-index:-1; pointer-events:none; background:radial-gradient(60% 70% at 25% 50%, rgba(255,255,255,.6), transparent 72%), linear-gradient(180deg,rgba(246,242,238,.8) 0%,rgba(246,242,238,0) 16%,rgba(246,242,238,0) 86%,rgba(246,242,238,.9) 100%)}
-  .dm-ch-in{width:100%; max-width:1360px; margin:0 auto; padding:0 clamp(24px,6vw,110px); display:grid; grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr); align-items:center; gap:clamp(34px,6vw,100px)}
+  .dm-ch-in{box-sizing:border-box; width:100%; max-width:1360px; margin:0 auto; padding:0 clamp(24px,6vw,110px); display:grid; grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr); align-items:center; gap:clamp(34px,6vw,100px)}
 
   /* відео 1:1 на мокко-підложці */
   .dm-ch-vid{position:relative; width:100%; max-width:600px; margin-left:auto}
@@ -612,6 +630,21 @@
     .dm-ch-in{grid-template-columns:1fr; gap:42px; padding:0 clamp(22px,6vw,40px)}
     .dm-ch-vid{order:-1; max-width:440px; margin:0 auto}
     .dm-ch-vid::before{transform:translate(10px,12px) rotate(2deg)}
+    /* телефон: вертикальне відео – ФОН усього екрана, текст поверх (угорі заголовок, знизу ціна й кнопка) */
+    .dm-ch-vert{padding:0; min-height:max(620px,calc(100svh - 120px))}
+    .dm-ch-vert::before{display:none}
+    .dm-ch-vert .dm-ch-in{display:flex; flex-direction:column; min-height:inherit; padding:56px clamp(22px,6vw,40px) 12px; gap:0}
+    .dm-ch-vert .dm-ch-text{display:flex; flex-direction:column; flex:1; position:relative; z-index:1; text-shadow:0 0 16px rgba(246,242,238,.95), 0 0 5px rgba(246,242,238,.8)}
+    .dm-ch-vert .dm-ch-vid{position:absolute; inset:0; z-index:0; max-width:none; margin:0}
+    .dm-ch-vert .dm-ch-vid::before{display:none}
+    .dm-ch-vert .dm-ch-box{position:absolute; inset:0; aspect-ratio:auto; border-radius:0; box-shadow:none; background:#D9D9D5}
+    .dm-ch-vert .dm-ch-box video{object-position:50% 0%; transform:translateY(var(--dm-vdown,4%)); -webkit-mask-image:linear-gradient(180deg,transparent 0,#000 14%); mask-image:linear-gradient(180deg,transparent 0,#000 14%)}      /* відео опущене вниз (--dm-vdown): флакон не лягає на напис; верх плавно зливається з фоном */
+    .dm-ch-vert .dm-ch-vid::after{content:''; position:absolute; inset:0; z-index:1; pointer-events:none; background:linear-gradient(180deg,rgba(246,242,238,0) 52%,rgba(246,242,238,.55) 74%,rgba(246,242,238,.92) 100%)}      /* біла димка знизу: ціна й кнопка читаються на будь-якому кадрі */
+    .dm-ch-vert .dm-ch-p,.dm-ch-vert .dm-ch-chips{display:none}      /* щоб не закривати флакони: абзац і плашки на телефоні прибрано */
+    .dm-ch-vert .dm-ch-buy{margin-top:auto}
+    .dm-ch-vert .dm-ch-more{margin-top:12px; align-self:flex-start}      /* підкреслення по ширині тексту, а не на весь рядок */
+    .dm-ch-vert .dm-ch-eyebrow{align-self:flex-start}
+    .dm-ch-vert .dm-ch-btn{text-shadow:none}
     .dm-ch-sig{width:min(74vw,360px)}
     .dm-ch-buy{flex-direction:column; align-items:flex-start}
     .dm-ch-btn{width:100%; justify-content:center}
@@ -649,6 +682,8 @@
   var CFG = {
     video: '../../assets/video/cold-hero.mp4',     // квадратне відео 1:1 (зациклене, без звуку)
     poster: '../../assets/img/poster-cold.jpg',   // кадр, поки вантажиться відео
+    videoMobile : '../../assets/video/cold-hero-mobile.mp4',   // ← ВІДЕО ДЛЯ ТЕЛЕФОНА (≤900 px, вертикальне 9:16). Порожньо = те саме, що на комп'ютері
+    posterMobile: '',   // кадр для телефона, поки вантажиться відео
     bg   : '../../assets/img/bg3video.jpg',   // фон секції ('' = просто кремовий)
     price: '2000 ₴',                       // ← ЦІНА (має збігатися з ціною товару)
     rec  : 'rec4537654003',                // ← id блоку зі штатною карткою товару (Магазин): кнопка натискає його «Купити»
@@ -676,9 +711,19 @@
   }
   root.querySelector('.dm-ch-btn').addEventListener('click', addToCart);
   vid.muted = true; vid.setAttribute('muted', '');
-  if (CFG.poster) vid.poster = CFG.poster;
   if (CFG.bg) root.style.backgroundImage = 'url("' + CFG.bg + '")';
-  vid.src = CFG.video;
+  /* відео за розміром екрана: телефон (≤900 px) – вертикальне, комп'ютер – квадратне */
+  var mq = window.matchMedia ? window.matchMedia('(max-width:900px)') : { matches:false };
+  var curSrc = '';
+  function pickVideo(){
+    var m = mq.matches && CFG.videoMobile, src = m ? CFG.videoMobile : CFG.video;
+    if (src === curSrc) return; curSrc = src;
+    var po = m ? (CFG.posterMobile || CFG.poster) : CFG.poster;
+    if (po) vid.poster = po;
+    vid.src = src;
+    root.classList.toggle('dm-ch-vert', !!m);
+    if (vis && !document.hidden){ var pp = vid.play(); if (pp && pp.catch) pp.catch(function(){}); }
+  }
 
   /* «Етапи, склад…» – плавний скрол до блоку вкладок */
   root.querySelector('.dm-ch-more').addEventListener('click', function(e){
@@ -690,6 +735,7 @@
 
   /* відео грає, лише коли блок видно і вкладка активна */
   var vis = false;
+  pickVideo(); if (mq.addEventListener) mq.addEventListener('change', pickVideo); else if (mq.addListener) mq.addListener(pickVideo);
   function sync(){ if (vis && !document.hidden){ var p = vid.play(); if (p && p.catch) p.catch(function(){}); } else { vid.pause(); } }
   document.addEventListener('visibilitychange', sync);
   var shown = false;
@@ -700,6 +746,151 @@
   show(); setTimeout(show, 600);
 })();
 </script>
+<!--
+  D'AMORE · ДІЄВІ КОМПОНЕНТИ (Tilda → T123 «HTML-код»)
+  ─────────────────────────────────────────────────────────────────────────────
+  Посередині – твоя гіфка / відео / фото, з боків – 6 основних компонентів із складу набору.
+  Ставиться на сторінку «Холодна реконструкція» (напр. між hero і блоком із вкладками).
+  ЩО МІНЯТИ: CONFIG.media (внизу, в <script>) – посилання на гіфку (.gif), відео (.mp4/.webm) або фото. Тексти – прямо в HTML.
+  [ВЛАСНИЦЯ: перевірити формулювання компонентів. Кроки вказані за складом засобів (INCI) і описом набору.]
+-->
+<style>
+  .dm-cp{
+    --red:#AB3724; --burg:#5B1210; --graph:#433d3c; --cream:#F6F2EE;
+    box-sizing:border-box; position:relative; overflow:hidden; background:var(--cream); color:var(--graph);
+    padding:clamp(16px,2vw,28px) clamp(18px,4vw,60px) clamp(48px,7vw,96px); font-family:'Onest','Helvetica Neue',Arial,sans-serif;
+  }
+  .dm-cp-in{box-sizing:border-box; max-width:1240px; margin:0 auto}
+  .dm-cp-head{text-align:center; margin:0 auto clamp(30px,4.4vw,60px)}
+  .dm-cp-tag{margin:0 0 14px; font:500 12.5px/1 'Onest',sans-serif; letter-spacing:.14em; text-transform:uppercase; color:var(--red)}
+  .dm-cp-h{margin:0; font:500 clamp(30px,3.6vw,54px)/1.06 'Onest',sans-serif; letter-spacing:-.024em; color:var(--burg)}
+  .dm-cp-h em{font-style:normal; color:var(--red)}
+
+  .dm-cp-grid{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,.9fr) minmax(0,1fr); gap:clamp(24px,4.4vw,72px); align-items:center}
+  .dm-cp-col{display:grid; gap:clamp(26px,3.6vw,54px)}
+  .dm-cp-l .dm-cp-it{text-align:right; justify-items:end}
+  .dm-cp-r .dm-cp-it{text-align:left; justify-items:start}
+  .dm-cp-it{display:grid; gap:10px; max-width:21em}
+  .dm-cp-l .dm-cp-it{margin-left:auto}
+  .dm-cp-ic{width:58px; height:58px; display:grid; place-items:center; border-radius:50%; background:#FFF4EC; box-shadow:inset 0 0 0 1px rgba(171,55,36,.16), 0 12px 22px -14px rgba(122,29,20,.5)}
+  .dm-cp-ic svg{width:27px; height:27px; fill:none; stroke:var(--red); stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round}
+  .dm-cp-n{margin:0; font:500 clamp(16.5px,1.5vw,20px)/1.2 'Onest',sans-serif; letter-spacing:.01em; text-transform:uppercase; color:var(--burg)}
+  .dm-cp-st{display:inline-block; margin:0; padding:3px 10px; border-radius:99px; font:500 11px/1.4 'Onest',sans-serif; letter-spacing:.08em; color:var(--red); background:rgba(171,55,36,.08)}
+  .dm-cp-p{margin:0; font:300 clamp(14.5px,1.2vw,16.5px)/1.55 'Onest',sans-serif; color:rgba(67,61,60,.92)}
+
+  .dm-cp-media{position:relative; width:100%; aspect-ratio:9/16; border-radius:clamp(22px,2.4vw,32px); overflow:hidden; background:linear-gradient(160deg,#C7B8AD,#EFE9E3);
+    box-shadow:0 44px 70px -36px rgba(67,40,30,.65), inset 0 0 0 1px rgba(255,255,255,.5)}
+  .dm-cp-media img,.dm-cp-media video{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block}
+  .dm-cp-note{margin:clamp(28px,4vw,50px) auto 0; max-width:38em; text-align:center; font:300 13.5px/1.5 'Onest',sans-serif; color:rgba(67,61,60,.7)}
+
+  .dm-cp-r1{opacity:0; transform:translateY(20px); transition:opacity .9s ease var(--d,0s), transform 1s cubic-bezier(.2,.7,.2,1) var(--d,0s)}
+  .dm-cp.in .dm-cp-r1{opacity:1; transform:none}
+
+  @media (max-width:900px){
+    .dm-cp-grid{grid-template-columns:1fr; gap:26px}
+    .dm-cp-media{order:-1; max-width:320px; margin:0 auto}
+    .dm-cp-col{gap:12px}
+    .dm-cp-l .dm-cp-it,.dm-cp-r .dm-cp-it{text-align:left; justify-items:start; margin:0; max-width:none;
+      grid-template-columns:58px 1fr; column-gap:16px; row-gap:6px; padding:16px 18px; border-radius:22px; background:rgba(255,255,255,.7); box-shadow:inset 0 0 0 1px rgba(67,61,60,.08)}
+    .dm-cp-ic{grid-row:1 / span 3; width:52px; height:52px}
+    .dm-cp-ic svg{width:24px; height:24px}
+  }
+  @media (prefers-reduced-motion:reduce){ .dm-cp-r1{transition-duration:.01s} }
+</style>
+
+<section id="dm-cp" class="dm-cp" aria-label="Дієві компоненти">
+  <div class="dm-cp-in">
+    <div class="dm-cp-head dm-cp-r1">
+      <p class="dm-cp-tag">Склад набору</p>
+      <h2 class="dm-cp-h">Дієві <em>компоненти</em></h2>
+    </div>
+
+    <div class="dm-cp-grid">
+      <div class="dm-cp-col dm-cp-l">
+        <div class="dm-cp-it dm-cp-r1" style="--d:.1s">
+          <span class="dm-cp-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3c0 6 8 6 8 12s-8 6-8 6M16 3c0 6-8 6-8 12s8 6 8 6M9 8h6M9 16h6"/></svg></span>
+          <h3 class="dm-cp-n">Гідролізований кератин</h3>
+          <p class="dm-cp-st">Кроки 2 · 5</p>
+          <p class="dm-cp-p">Білок, який допомагає вирівняти поверхню волосини: волосся виглядає гладшим і щільнішим.</p>
+        </div>
+        <div class="dm-cp-it dm-cp-r1" style="--d:.25s">
+          <span class="dm-cp-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 8c3-3 6 3 9 0s6 3 9 0M3 14c3-3 6 3 9 0s6 3 9 0M3 20c3-3 6 3 9 0s6 3 9 0"/></svg></span>
+          <h3 class="dm-cp-n">Шовкові амінокислоти</h3>
+          <p class="dm-cp-st">Кроки 2 · 3 · 5</p>
+          <p class="dm-cp-p">Дають шовковистість і м’який блиск, полегшують розчісування.</p>
+        </div>
+        <div class="dm-cp-it dm-cp-r1" style="--d:.4s">
+          <span class="dm-cp-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3c4 5 6 8 6 11a6 6 0 0 1-12 0c0-3 2-6 6-11zM9.5 14.5a2.6 2.6 0 0 0 2.5 2.5"/></svg></span>
+          <h3 class="dm-cp-n">Пантенол</h3>
+          <p class="dm-cp-st">Кроки 2 · 3</p>
+          <p class="dm-cp-p">Допомагає зволожувати та пом’якшувати волосся по всій довжині.</p>
+        </div>
+      </div>
+
+      <div class="dm-cp-media dm-cp-r1" id="dm-cp-media" style="--d:.15s" role="img" aria-label="Компоненти догляду D’AMORE"></div>
+
+      <div class="dm-cp-col dm-cp-r">
+        <div class="dm-cp-it dm-cp-r1" style="--d:.1s">
+          <span class="dm-cp-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 19c0-8 5-14 14-14 0 9-6 14-14 14zM5 19l8-8"/></svg></span>
+          <h3 class="dm-cp-n">Арганова олія й фітостероли</h3>
+          <p class="dm-cp-st">Крок 4</p>
+          <p class="dm-cp-p">Додають блиску й м’якості кінчикам, роблять волосся приємним на дотик.</p>
+        </div>
+        <div class="dm-cp-it dm-cp-r1" style="--d:.25s">
+          <span class="dm-cp-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="6.5" cy="7" r="2.6"/><circle cx="17.5" cy="7.5" r="2.6"/><circle cx="12" cy="17.5" r="2.6"/><path d="M8.8 8.3l6.4.2M7.7 9.3l3 5.9M16.3 9.8l-3 5.4"/></svg></span>
+          <h3 class="dm-cp-n">Гідролізований колаген</h3>
+          <p class="dm-cp-st">Крок 3</p>
+          <p class="dm-cp-p">Допомагає зробити волосся пружнішим і гладшим на вигляд.</p>
+        </div>
+        <div class="dm-cp-it dm-cp-r1" style="--d:.4s">
+          <span class="dm-cp-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21V9M12 13c-4-1-6-4-6-8 4 0 6 3 6 8zM12 15c4-1 6-4 6-8-4 0-6 3-6 8z"/></svg></span>
+          <h3 class="dm-cp-n">Алое, ромашка й календула</h3>
+          <p class="dm-cp-st">Крок 1</p>
+          <p class="dm-cp-p">Рослинні екстракти шампуню: м’яке очищення й зволоження без відчуття стягнутості.</p>
+        </div>
+      </div>
+    </div>
+
+    <p class="dm-cp-note">Компоненти вибрані зі складу засобів набору. Повний склад (INCI) кожного засобу — у вкладці «Склад» нижче. Результат індивідуальний.</p>
+  </div>
+</section>
+
+<script>
+(function(){
+  'use strict';
+
+  /* ═══════════ CONFIG ═══════════ */
+  var CFG = {
+    /* ← ПОСЕРЕДИНІ: відео Reel1.mp4 (можна замінити на .gif, .webm або фото) */
+    media : '../../assets/video/reel1.mp4',
+    poster: '',      // обкладинка (перший кадр) – видно, поки відео вантажиться
+    alt   : 'Набір «Холодна реконструкція» D’AMORE'      // опис для фото / гіфки
+  };
+
+  var root = document.getElementById('dm-cp'), box = document.getElementById('dm-cp-media');
+
+  /* медіа: відео (mp4/webm) – беззвучно, у циклі; усе інше (gif/jpg/png) – як зображення */
+  if (CFG.media){
+    var isVid = /\.(mp4|webm|mov)(\?|$)/i.test(CFG.media), el;
+    if (isVid){
+      el = document.createElement('video');
+      el.muted = true; el.loop = true; el.autoplay = true; el.playsInline = true; el.setAttribute('playsinline', ''); el.setAttribute('aria-hidden', 'true');
+      if (CFG.poster) el.poster = CFG.poster;
+      el.src = CFG.media;
+      var pl = el.play(); if (pl && pl.catch) pl.catch(function(){});
+    } else {
+      el = document.createElement('img'); el.alt = CFG.alt; el.draggable = false; el.loading = 'lazy'; el.src = CFG.media;
+    }
+    box.appendChild(el);
+  }
+
+  /* поява при прокручуванні */
+  if ('IntersectionObserver' in window){
+    new IntersectionObserver(function(es, ob){ if (es[0].isIntersecting){ root.classList.add('in'); ob.disconnect(); } }, { threshold:.12 }).observe(root);
+  } else { root.classList.add('in'); }
+})();
+</script>
+
 <!--
   D'AMORE · КАРТКА ТОВАРУ (статична заглушка для портфоліо; у живому сайті це штатний блок «Магазин» Tilda)
   Id блоку rec4537654003 і клас js-store-prod-btn потрібні, щоб кнопки «Додати до кошика» в hero й вкладках його натискали.
@@ -759,7 +950,7 @@
   .dm-pd{
     --red:#AB3724; --burg:#5B1210; --graph:#433d3c; --cream:#F6F2EE;
     position:relative; overflow:hidden; isolation:isolate; background:var(--cream); color:var(--graph);
-    padding:clamp(56px,8vw,110px) 0; font-family:'Onest','Helvetica Neue',Arial,sans-serif;
+    padding:clamp(56px,8vw,110px) 0 clamp(36px,4.4vw,60px); font-family:'Onest','Helvetica Neue',Arial,sans-serif;
   }
   .dm-pd-in{max-width:1100px; margin:0 auto; padding:0 clamp(18px,4vw,48px)}
   .dm-pd-head{text-align:center; margin:0 0 clamp(24px,3.4vw,44px)}
@@ -839,9 +1030,13 @@
   .dm-pd-spec dd{margin:0; font:300 clamp(15.5px,1.3vw,18px)/1.5 'Onest',sans-serif}
 
   /* етапи: відео + кроки */
-  .dm-pd-use{display:grid; grid-template-columns:minmax(0,.62fr) minmax(0,1fr); gap:clamp(22px,3.4vw,52px); align-items:start}
-  .dm-pd-use .dm-pd-how{grid-template-columns:1fr}
-  .dm-pd-vid{position:sticky; top:24px; width:100%; max-width:400px; margin:0 auto}
+  .dm-pd-use{display:grid; grid-template-columns:minmax(0,.8fr) minmax(0,1fr); gap:clamp(22px,3vw,44px); align-items:center}
+  .dm-pd-use .dm-pd-how{grid-template-columns:1fr; gap:12px}      /* відео зліва майже такої ж висоти, як стовпчик етапів – без порожнього місця */
+  .dm-pd-use .dm-pd-how li{padding:15px 20px 15px clamp(60px,5.6vw,76px)}
+  .dm-pd-use .dm-pd-how .s{top:12px; font-size:clamp(32px,3.2vw,44px)}
+  .dm-pd-use .dm-pd-how b{margin-bottom:3px}
+  .dm-pd-use .dm-pd-how p{font-size:clamp(14.5px,1.15vw,15.5px); line-height:1.45}
+  .dm-pd-vid{position:relative; width:100%; max-width:460px; margin:0 auto}
   .dm-pd-vid::before{content:''; position:absolute; inset:0; border-radius:26px; transform:translate(10px,12px) rotate(2deg); background:linear-gradient(160deg,#B3A094 0%,#CDBFB3 55%,#EFE9E3 100%)}
   .dm-pd-vbox{position:relative; aspect-ratio:4/5; border-radius:26px; overflow:hidden; background:linear-gradient(160deg,#C7B8AD,#EFE9E3); box-shadow:0 34px 56px -32px rgba(67,40,30,.6), inset 0 0 0 1px rgba(255,255,255,.55)}
   .dm-pd-poster{position:absolute; inset:0; background:center/cover no-repeat}
@@ -863,7 +1058,7 @@
   .dm-pd-vcap{position:absolute; left:16px; bottom:16px; z-index:2; display:inline-flex; align-items:center; gap:8px; padding:9px 14px; border-radius:99px; font:500 11px/1 'Onest',sans-serif; letter-spacing:.12em; text-transform:uppercase; color:var(--graph); background:rgba(246,242,238,.9); -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px)}
   .dm-pd-vcap svg{width:11px; height:11px; fill:var(--red)}
   /* етапи: підпис об'єму */
-  .dm-pd-how b small{margin-left:8px; padding:3px 9px; border-radius:99px; font:500 11px/1 'Onest',sans-serif; letter-spacing:.08em; color:var(--red); background:rgba(171,55,36,.08); vertical-align:2px}
+  .dm-pd-how b small{display:inline-block; white-space:nowrap; margin-left:8px; padding:3px 9px; border-radius:99px; font:500 11px/1 'Onest',sans-serif; letter-spacing:.08em; color:var(--red); background:rgba(171,55,36,.08); vertical-align:2px}
   /* інформація про продукт під складами */
   .dm-pd-info{margin-top:clamp(20px,2.6vw,32px); padding-top:clamp(18px,2.2vw,26px); border-top:1px solid rgba(67,61,60,.12)}
   /* для кого / результат */
@@ -899,8 +1094,9 @@
   .dm-pd-btn:focus-visible{outline:2px solid var(--red); outline-offset:4px}
 
   @media (max-width:780px){
-    .dm-pd-tabs{justify-content:flex-start; margin-left:calc(clamp(18px,4vw,48px) * -1); margin-right:calc(clamp(18px,4vw,48px) * -1); padding-left:clamp(18px,4vw,48px); padding-right:clamp(18px,4vw,48px)}
-    .dm-pd-tab{padding:13px 20px; font-size:14.5px}
+    /* телефон: усі 4 вкладки одразу, у сітці 2×2 (без бокового гортання, яке легко не помітити) */
+    .dm-pd-tabs{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; overflow:visible; padding:6px 2px 30px}
+    .dm-pd-tab{padding:13px 8px; font-size:14px; line-height:1.2; text-align:center; white-space:normal}
     .dm-pd-set li{grid-template-columns:48px 1fr; gap:0 14px}
     .dm-pd-vol{grid-column:2; justify-self:start; margin-top:10px}
     .dm-pd-how{grid-template-columns:1fr}
@@ -911,7 +1107,77 @@
     .dm-pd-btn{width:100%; justify-content:center}
   }
   @media (prefers-reduced-motion:reduce){ .dm-pd-panel{animation:none} .dm-pd-tab[aria-selected="true"]::before,.dm-pd-btn::before,.dm-pd-btn::after,.dm-pd-play::before,.dm-pd-play::after{animation:none} }
-</style>
+
+  /* ───── склад: фото набору з точками й підписами ───── */
+  .dm-pc{position:relative; display:grid; grid-template-columns:minmax(0,.85fr) minmax(0,1.45fr) minmax(0,.85fr); gap:clamp(16px,2.6vw,44px); align-items:stretch; margin-top:clamp(6px,1.2vw,14px)}
+  .dm-pc-lines{position:absolute; inset:0; width:100%; height:100%; pointer-events:none; overflow:visible; z-index:3}
+  .dm-pc-lines path{fill:none; stroke:rgba(67,61,60,.32); stroke-width:1; transition:stroke .3s ease, stroke-width .3s ease}
+  .dm-pc-lines path.on{stroke:#AB3724; stroke-width:1.5}
+  .dm-pc-col{display:flex; flex-direction:column; gap:clamp(14px,2vw,26px); position:relative; z-index:2}
+  .dm-pc-l{justify-content:center}
+  .dm-pc-r{justify-content:space-between}
+  .dm-pc-fig{position:relative; margin:0; align-self:center; width:100%; aspect-ratio:1/1; border-radius:28px; overflow:hidden; background:#e6ddd4;
+    box-shadow:0 40px 66px -34px rgba(67,40,30,.6), inset 0 0 0 1px rgba(255,255,255,.5)}
+  .dm-pc-fig img{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block}
+  .dm-pc-dot{position:absolute; z-index:2; width:30px; height:30px; margin:-15px 0 0 -15px; padding:0; border:0; border-radius:50%; cursor:pointer;
+    font:500 13px/30px 'Onest',sans-serif; text-align:center; color:#AB3724; background:rgba(255,248,242,.94); -webkit-tap-highlight-color:transparent;
+    box-shadow:0 6px 14px -4px rgba(40,16,12,.5), 0 0 0 5px rgba(255,248,242,.35); transition:transform .35s cubic-bezier(.2,.8,.2,1), background .3s ease, color .3s ease}
+  .dm-pc-dot:hover{transform:scale(1.12)}
+  .dm-pc-dot:focus-visible{outline:2px solid #AB3724; outline-offset:3px}
+  .dm-pc-dot.on{background:#AB3724; color:#FFF4EC; transform:scale(1.15); animation:dmpcPulse 1.8s ease-in-out infinite}
+  @keyframes dmpcPulse{0%,100%{box-shadow:0 6px 14px -4px rgba(40,16,12,.5), 0 0 0 5px rgba(171,55,36,.3)} 50%{box-shadow:0 6px 14px -4px rgba(40,16,12,.5), 0 0 0 11px rgba(171,55,36,0)}}
+  .dm-pc-it{cursor:default; transition:opacity .3s ease}
+  .dm-pc-col:hover .dm-pc-it:not(.on){opacity:.62}
+  .dm-pc-pill{display:inline-flex; align-items:center; gap:10px; max-width:100%; padding:6px 14px 6px 6px; border-radius:99px; background:rgba(246,242,238,.96); box-shadow:inset 0 0 0 1px rgba(67,61,60,.1);
+    font:500 15px/1.2 'Onest',sans-serif; letter-spacing:-.01em; color:var(--burg)}
+  .dm-pc-pill b{flex:none; width:28px; height:28px; border-radius:50%; display:grid; place-items:center; font:500 13px/1 'Onest',sans-serif; color:var(--red); background:rgba(171,55,36,.1); transition:background .3s ease, color .3s ease}
+  .dm-pc-it.on .dm-pc-pill b{background:var(--red); color:#FFF4EC}
+  .dm-pc-pill small{flex:none; padding:3px 8px; border-radius:99px; font:500 11px/1 'Onest',sans-serif; letter-spacing:.06em; color:var(--red); background:rgba(171,55,36,.08)}
+  .dm-pc-it p{margin:10px 0 0 8px; max-width:21em; font:300 14.5px/1.5 'Onest',sans-serif; color:rgba(67,61,60,.92)}
+  .dm-pc-it p.dm-pc-inci{margin-top:8px; font-size:12.5px; line-height:1.55; color:rgba(67,61,60,.8)}
+  .dm-pc-more{margin:8px 0 0 8px; padding:0; border:0; background:none; cursor:pointer; font:500 13px/1.3 'Onest',sans-serif; color:var(--red); text-decoration:underline; text-underline-offset:3px; -webkit-tap-highlight-color:transparent}
+  .dm-pc-more:focus-visible{outline:2px solid var(--red); outline-offset:3px; border-radius:4px}
+  @media (max-width:900px){
+    .dm-pc{grid-template-columns:1fr; gap:14px}
+    .dm-pc-lines{display:none}
+    .dm-pc-col{display:contents}
+    .dm-pc-fig{order:0; max-width:440px; margin:0 auto 10px}
+    .dm-pc-it{padding:16px 18px; border-radius:20px; background:rgba(246,242,238,.8); box-shadow:inset 0 0 0 1px rgba(67,61,60,.08); transition:box-shadow .3s ease}
+    .dm-pc-it.on{box-shadow:inset 0 0 0 1.5px rgba(171,55,36,.5)}
+    .dm-pc-col:hover .dm-pc-it:not(.on){opacity:1}
+    .dm-pc-it[data-i="1"]{order:1} .dm-pc-it[data-i="2"]{order:2} .dm-pc-it[data-i="3"]{order:3} .dm-pc-it[data-i="4"]{order:4} .dm-pc-it[data-i="5"]{order:5}
+    .dm-pc-it p{margin-left:4px; max-width:none}
+    .dm-pc-more{margin-left:4px}
+  }
+  @media (prefers-reduced-motion:reduce){ .dm-pc-dot.on{animation:none} }
+  /* ───── «Для кого»: слайдер До/після (3 пари) ліворуч, списки праворуч ───── */
+  .dm-pb-wrap{display:grid; grid-template-columns:minmax(0,.8fr) minmax(0,1fr); gap:clamp(22px,3vw,44px); align-items:center}
+  .dm-pb-wrap .dm-pd-two{grid-template-columns:1fr}
+  .dm-pb{width:100%; max-width:430px; margin:0 auto}
+  .dm-pb-cmp{position:relative; aspect-ratio:3/4; border-radius:26px; overflow:hidden; background:#e6ddd4; cursor:ew-resize; touch-action:pan-y; -webkit-user-select:none; user-select:none; outline:none;
+    box-shadow:0 34px 56px -32px rgba(67,40,30,.6), inset 0 0 0 1px rgba(255,255,255,.55); -webkit-tap-highlight-color:transparent}
+  .dm-pb-cmp:focus-visible{box-shadow:0 0 0 3px #F6F2EE, 0 0 0 5px var(--red)}
+  .dm-pb-cmp img{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block; pointer-events:none; -webkit-user-drag:none; transition:opacity .3s ease}
+  .dm-pb-cmp.sw img{opacity:0}
+  .dm-pb-before{clip-path:inset(0 calc(100% - var(--p,50%)) 0 0)}
+  .dm-pb-lab{position:absolute; top:14px; z-index:3; padding:7px 13px; border-radius:99px; pointer-events:none; font:500 11px/1 'Onest',sans-serif; letter-spacing:.14em; text-transform:uppercase; color:var(--graph);
+    background:rgba(246,242,238,.85); -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px); transition:opacity .3s ease}
+  .dm-pb-lab.l{left:14px} .dm-pb-lab.r{right:14px} .dm-pb-lab.hide{opacity:0}
+  .dm-pb-handle{position:absolute; top:0; bottom:0; left:var(--p,50%); width:0; z-index:4; pointer-events:none}
+  .dm-pb-line{position:absolute; top:0; bottom:0; left:-1px; width:2px; background:rgba(255,248,242,.96); box-shadow:0 0 14px rgba(0,0,0,.28)}
+  .dm-pb-knob{position:absolute; top:50%; left:0; width:50px; height:50px; margin:-25px 0 0 -25px; border-radius:50%; display:grid; place-items:center; background:rgba(255,248,242,.97); box-shadow:0 10px 24px -6px rgba(67,40,30,.55), inset 0 0 0 1px rgba(171,55,36,.14); transition:transform .3s ease}
+  .dm-pb-knob svg{width:20px; height:20px; fill:var(--red); animation:dmpbBeat 1.9s ease-in-out infinite}
+  @keyframes dmpbBeat{0%{transform:scale(1)} 14%{transform:scale(1.14)} 28%{transform:scale(1)} 42%{transform:scale(1.08)} 70%,100%{transform:scale(1)}}
+  .dm-pb-cmp.drag .dm-pb-knob{transform:scale(1.1)}
+  .dm-pb-thumbs{display:flex; justify-content:center; gap:12px; margin-top:18px}
+  .dm-pb-th{position:relative; width:clamp(46px,7vw,60px); aspect-ratio:3/4; padding:0; border:0; border-radius:13px; overflow:hidden; cursor:pointer; background:#e6ddd4; opacity:.62; transform:scale(.94);
+    transition:opacity .3s ease, transform .4s cubic-bezier(.2,.8,.2,1), box-shadow .3s ease; -webkit-tap-highlight-color:transparent}
+  .dm-pb-th img{display:block; width:100%; height:100%; object-fit:cover}
+  .dm-pb-th:hover{opacity:.95}
+  .dm-pb-th.on{opacity:1; transform:scale(1); box-shadow:0 0 0 2px #fff, 0 0 0 4px var(--red)}
+  .dm-pb-th:focus-visible{outline:2px solid var(--red); outline-offset:3px}
+  @media (max-width:900px){ .dm-pb-wrap{grid-template-columns:1fr; gap:26px} .dm-pb{max-width:380px} }
+  @media (prefers-reduced-motion:reduce){ .dm-pb-knob svg{animation:none} }</style>
 
 <section id="dm-pd" class="dm-pd" aria-label="Деталі набору Холодна реконструкція">
   <div class="dm-pd-in">
@@ -939,13 +1205,12 @@
             </div>
           </div>
           <div class="dm-pd-steps">
-        <p class="dm-pd-lead">П’ять кроків, які підсилюють один одного. Кожен — кілька хвилин для себе.</p>
         <ol class="dm-pd-how">
-          <li><span class="s" aria-hidden="true">1</span><b>Зволожуючий шампунь <small>400 мл</small></b><p>Розмилити в руках, нанести на шкіру голови, ретельно масажувати й змити теплою водою. За потреби повторити.</p></li>
-          <li><span class="s" aria-hidden="true">2</span><b>Маска для волосся <small>500 мл</small></b><p>Нанести на вологе волосся лише по довжині. Витримати <em>5–10 хвилин</em>, змити теплою водою. Рекомендовано двічі на тиждень.</p></li>
-          <li><span class="s" aria-hidden="true">3</span><b>Кондиціонер <small>400 мл</small></b><p>Рівномірно розподілити по довжині після миття, не наносити на корені. Залишити на <em>2–3 хвилини</em>, змити проточною водою.</p></li>
-          <li><span class="s" aria-hidden="true">4</span><b>Молочко для блиску <small>200 мл</small></b><p>Розтерти в руках, розподілити від середини довжини до кінчиків і прочесати гребінцем. На чисте волосся — сухе або вологе.</p></li>
-          <li><span class="s" aria-hidden="true">5</span><b>Спрей-термозахист <small>250 мл</small></b><p>Невелику кількість розподілити від середини довжини до кінчиків щіткою для вологого розчісування — і приступати до укладки. На чисте волосся.</p></li>
+          <li><span class="s" aria-hidden="true">1</span><b>Зволожуючий шампунь <small>400 мл</small></b><p>Розмилити в руках, нанести на шкіру голови, ретельно масажувати й змити теплою водою. За потреби повторити.</p></li>
+          <li><span class="s" aria-hidden="true">2</span><b>Маска для волосся <small>500 мл</small></b><p>Нанести на вологе волосся лише по довжині. Витримати <em>5⁠–⁠10 хвилин</em>, змити теплою водою. Рекомендовано двічі на тиждень.</p></li>
+          <li><span class="s" aria-hidden="true">3</span><b>Кондиціонер <small>400 мл</small></b><p>Рівномірно розподілити по довжині після миття, не наносити на корені. Залишити на <em>2⁠–⁠3 хвилини</em>, змити проточною водою.</p></li>
+          <li><span class="s" aria-hidden="true">4</span><b>Молочко для блиску <small>200 мл</small></b><p>Розтерти в руках, розподілити від середини довжини до кінчиків і прочесати гребінцем. На чисте волосся — сухе або вологе.</p></li>
+          <li><span class="s" aria-hidden="true">5</span><b>Спрей-термозахист <small>250 мл</small></b><p>Невелику кількість розподілити від середини довжини до кінчиків щіткою для вологого розчісування — і приступати до укладки. На чисте волосся.</p></li>
         </ol>
           </div>
         </div>
@@ -953,13 +1218,50 @@
 
       <!-- ═══ 2 · СКЛАД ═══ -->
       <div class="dm-pd-panel" id="dm-pd-p2" role="tabpanel" aria-labelledby="dm-pd-t2" hidden>
-        <p class="dm-pd-lead">Повні склади (INCI) кожного засобу — відкрий потрібний.</p>
-<div class="dm-pd-inci">
-          <details><summary>1 · Зволожуючий шампунь<i aria-hidden="true"></i></summary><p>Aqua (Water), Sodium Coco-Sulfate, Cocamidopropyl Betaine, Coco-Glucoside, Glycerin, PEG-7 Glyceryl Cocoate, Polyquaternium-39, Propylene Glycol, Aloe Barbadensis Leaf Extract, Sorbitol, Lactic Acid, Chamomilla Recutita (Matricaria) Flower Extract, Amodimethicone, Trideceth-12, Cetrimonium Chloride, Gluconolactone, Sodium Benzoate, Calcium Gluconate, Parfum, Calendula Officinalis Flower Extract, Tetrasodium EDTA.</p></details>
-          <details><summary>2 · Маска для волосся<i aria-hidden="true"></i></summary><p>Aqua (Water), Caprylic/Capric Triglyceride, Cetearyl Alcohol, Glycerin, Behentrimonium Methosulfate, Hydrolyzed Sweet Almond Protein, Phenyl Trimethicone, Pentylene Glycol, Phospholipids, Sphingolipids, Amodimethicone, Trideceth-12, Cetrimonium Chloride, Hydrolyzed Keratin, Hydrolyzed Wheat Protein, Silk Amino Acids, Sodium Benzoate, Potassium Sorbate, Benzyl Alcohol, Benzoic Acid, Dehydroacetic Acid, Panthenol, Dimethicone, Allantoin, Behentrimonium Chloride, Parfum, Arginine.</p></details>
-          <details><summary>3 · Кондиціонер<i aria-hidden="true"></i></summary><p>Aqua (Water), Caprylic/Capric Triglyceride, Behentrimonium Methosulfate, Cetearyl Alcohol, Hydrolyzed Collagen, Panthenol, Propylene Glycol, Glycerin, Hydrolyzed Silk, Cetrimonium Chloride, Simmondsia Chinensis (Jojoba) Seed Oil, Prunus Armeniaca (Apricot) Kernel Oil, Amodimethicone, Trideceth-12, Parfum, Benzyl Alcohol, Benzoic Acid, Dehydroacetic Acid, Guar Hydroxypropyltrimonium Chloride, Arginine.</p></details>
-          <details><summary>4 · Молочко для блиску<i aria-hidden="true"></i></summary><p>Aqua (Water), Cyclopentasiloxane, Glycerin, Polyquaternium-7, Cetearyl Alcohol, Dipalmitoylethyl Hydroxyethylmonium Methosulfate, Ceteareth-20, Dimethicone, Amodimethicone, Trideceth-12, Cetrimonium Chloride, Benzyl Alcohol, Benzoic Acid, Dehydroacetic Acid, Argania Spinosa Kernel Oil, Crambe Abyssinica Seed Oil, Phytosterols, Oleyl Alcohol, Arginine, Parfum.</p></details>
-          <details><summary>5 · Спрей-термозахист двофазний<i aria-hidden="true"></i></summary><p>Aqua (Water), Cyclopentasiloxane, Hydrolyzed Silk, Hydrolyzed Keratin, Phenyl Trimethicone, Dimethicone, Cetrimonium Chloride, Amodimethicone, Trideceth-12, Sodium PCA, Sodium Lactate, Arginine, Aspartic Acid, PCA, Glycine, Alanine, Serine, Valine, Proline, Threonine, Isoleucine, Histidine, Phenylalanine, Propylene Glycol, Sodium Benzoate, Polyquaternium-7, Tocopheryl Acetate, Parfum, Gluconolactone, Calcium Gluconate.</p></details>
+        <div class="dm-pc" id="dm-pc">
+          <svg class="dm-pc-lines" aria-hidden="true"></svg>
+          <div class="dm-pc-col dm-pc-l">
+          <div class="dm-pc-it" data-i="1">
+            <div class="dm-pc-pill"><b>1</b><span>Зволожуючий шампунь</span><small>400 мл</small></div>
+            <p>М’яко очищає та зволожує. З алое, ромашкою й календулою.</p>
+            <button class="dm-pc-more" type="button" aria-expanded="false">Повний склад (INCI)</button>
+            <p class="dm-pc-inci" hidden>Aqua (Water), Sodium Coco-Sulfate, Cocamidopropyl Betaine, Coco-Glucoside, Glycerin, PEG-7 Glyceryl Cocoate, Polyquaternium-39, Propylene Glycol, Aloe Barbadensis Leaf Extract, Sorbitol, Lactic Acid, Chamomilla Recutita (Matricaria) Flower Extract, Amodimethicone, Trideceth-12, Cetrimonium Chloride, Gluconolactone, Sodium Benzoate, Calcium Gluconate, Parfum, Calendula Officinalis Flower Extract, Tetrasodium EDTA.</p>
+          </div>
+          <div class="dm-pc-it" data-i="2">
+            <div class="dm-pc-pill"><b>2</b><span>Маска для волосся</span><small>500 мл</small></div>
+            <p>Кератин, шовкові амінокислоти й пантенол.</p>
+            <button class="dm-pc-more" type="button" aria-expanded="false">Повний склад (INCI)</button>
+            <p class="dm-pc-inci" hidden>Aqua (Water), Caprylic/Capric Triglyceride, Cetearyl Alcohol, Glycerin, Behentrimonium Methosulfate, Hydrolyzed Sweet Almond Protein, Phenyl Trimethicone, Pentylene Glycol, Phospholipids, Sphingolipids, Amodimethicone, Trideceth-12, Cetrimonium Chloride, Hydrolyzed Keratin, Hydrolyzed Wheat Protein, Silk Amino Acids, Sodium Benzoate, Potassium Sorbate, Benzyl Alcohol, Benzoic Acid, Dehydroacetic Acid, Panthenol, Dimethicone, Allantoin, Behentrimonium Chloride, Parfum, Arginine.</p>
+          </div>
+          </div>
+          <figure class="dm-pc-fig">
+            <img src="https://thb.tildacdn.com/tild6534-3838-4065-a434-343663333461/-/resize/1000x/1_1.jpg" alt="Набір «Холодна реконструкція»: п’ять засобів D’AMORE" loading="lazy" width="896" height="896">
+          <button class="dm-pc-dot" type="button" data-i="1" style="left:21.8%;top:62.5%" aria-label="Зволожуючий шампунь">1</button>
+          <button class="dm-pc-dot" type="button" data-i="2" style="left:44.4%;top:67%" aria-label="Маска для волосся">2</button>
+          <button class="dm-pc-dot" type="button" data-i="3" style="left:66.7%;top:62.5%" aria-label="Кондиціонер">3</button>
+          <button class="dm-pc-dot" type="button" data-i="4" style="left:44.6%;top:41%" aria-label="Молочко для блиску">4</button>
+          <button class="dm-pc-dot" type="button" data-i="5" style="left:84%;top:67%" aria-label="Спрей-термозахист двофазний">5</button>
+          </figure>
+          <div class="dm-pc-col dm-pc-r">
+          <div class="dm-pc-it" data-i="4">
+            <div class="dm-pc-pill"><b>4</b><span>Молочко для блиску</span><small>200 мл</small></div>
+            <p>Арганова олія та фітостероли.</p>
+            <button class="dm-pc-more" type="button" aria-expanded="false">Повний склад (INCI)</button>
+            <p class="dm-pc-inci" hidden>Aqua (Water), Cyclopentasiloxane, Glycerin, Polyquaternium-7, Cetearyl Alcohol, Dipalmitoylethyl Hydroxyethylmonium Methosulfate, Ceteareth-20, Dimethicone, Amodimethicone, Trideceth-12, Cetrimonium Chloride, Benzyl Alcohol, Benzoic Acid, Dehydroacetic Acid, Argania Spinosa Kernel Oil, Crambe Abyssinica Seed Oil, Phytosterols, Oleyl Alcohol, Arginine, Parfum.</p>
+          </div>
+          <div class="dm-pc-it" data-i="3">
+            <div class="dm-pc-pill"><b>3</b><span>Кондиціонер</span><small>400 мл</small></div>
+            <p>Колаген, шовк, олії жожоба й абрикоса.</p>
+            <button class="dm-pc-more" type="button" aria-expanded="false">Повний склад (INCI)</button>
+            <p class="dm-pc-inci" hidden>Aqua (Water), Caprylic/Capric Triglyceride, Behentrimonium Methosulfate, Cetearyl Alcohol, Hydrolyzed Collagen, Panthenol, Propylene Glycol, Glycerin, Hydrolyzed Silk, Cetrimonium Chloride, Simmondsia Chinensis (Jojoba) Seed Oil, Prunus Armeniaca (Apricot) Kernel Oil, Amodimethicone, Trideceth-12, Parfum, Benzyl Alcohol, Benzoic Acid, Dehydroacetic Acid, Guar Hydroxypropyltrimonium Chloride, Arginine.</p>
+          </div>
+          <div class="dm-pc-it" data-i="5">
+            <div class="dm-pc-pill"><b>5</b><span>Спрей-термозахист двофазний</span><small>250 мл</small></div>
+            <p>Шовк, кератин і вітамін E.</p>
+            <button class="dm-pc-more" type="button" aria-expanded="false">Повний склад (INCI)</button>
+            <p class="dm-pc-inci" hidden>Aqua (Water), Cyclopentasiloxane, Hydrolyzed Silk, Hydrolyzed Keratin, Phenyl Trimethicone, Dimethicone, Cetrimonium Chloride, Amodimethicone, Trideceth-12, Sodium PCA, Sodium Lactate, Arginine, Aspartic Acid, PCA, Glycine, Alanine, Serine, Valine, Proline, Threonine, Isoleucine, Histidine, Phenylalanine, Propylene Glycol, Sodium Benzoate, Polyquaternium-7, Tocopheryl Acetate, Parfum, Gluconolactone, Calcium Gluconate.</p>
+          </div>
+          </div>
         </div>
         <dl class="dm-pd-spec dm-pd-info">
           <div><dt>Країна виробництва</dt><dd>Україна. Виготовлено за вимогами ISO 22716 (GMP)</dd></div>
@@ -971,8 +1273,17 @@
 
       <!-- ═══ 3 · ДЛЯ КОГО / РЕЗУЛЬТАТ ═══ -->
       <div class="dm-pd-panel" id="dm-pd-p3" role="tabpanel" aria-labelledby="dm-pd-t3" hidden>
-        <p class="dm-pd-lead">Догляд для жінок, які хочуть професійного результату, але не хочуть ставити життя на pause.</p>
-        <div class="dm-pd-two">
+        <div class="dm-pb-wrap">
+          <div class="dm-pb">
+            <div class="dm-pb-cmp" id="dm-pb-cmp" role="slider" tabindex="0" aria-label="Порівняння волосся до і після" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50">
+              <img class="dm-pb-after" alt="Волосся після" draggable="false">
+              <img class="dm-pb-before" alt="Волосся до" draggable="false">
+              <span class="dm-pb-lab l">До</span><span class="dm-pb-lab r">Після</span>
+              <div class="dm-pb-handle"><i class="dm-pb-line"></i><span class="dm-pb-knob"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></span></div>
+            </div>
+            <div class="dm-pb-thumbs" id="dm-pb-thumbs" role="tablist" aria-label="Приклади"></div>
+          </div>
+          <div class="dm-pd-two">
           <div class="dm-pd-box">
             <h3>Підійде, якщо</h3>
             <ul class="dm-pd-list">
@@ -991,6 +1302,7 @@
               <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.2 4.2L19 7"/></svg> захист волосся під час гарячої укладки</li>
             </ul>
           </div>
+        </div>
         </div>
         <p class="dm-pd-note">Результат індивідуальний і залежить від стану волосся та регулярності догляду.</p>
       </div>
@@ -1020,7 +1332,7 @@
   /* ═══════════ CONFIG ═══════════ */
   var CFG = {
     video : '../../assets/video/howuse.mp4',   // відео «як користуватись» (вертикальне 4:5, зі звуком, запускається по кліку)
-    poster: '../../assets/img/poster-howuse.jpg',   // обкладинка (so_2 = кадр з 2-ї секунди)
+    poster: 'https://thb.tildacdn.com/tild3839-6662-4833-b333-383731303565/-/resize/800x/_-___damoreua_____mp.jpg',   // обкладинка (so_2 = кадр з 2-ї секунди)
     rec  : 'rec4537654003',                // ← id блоку зі штатною карткою товару (Магазин): кнопка натискає його «Купити»
     btn: '#order'          // ← куди веде кнопка внизу: '#order' = відкрити кошик, або посилання на блок із товаром (наприклад '#rec123456789')
   };
@@ -1077,6 +1389,107 @@
     });
   });
 
+
+  /* склад: інтерактивне фото – точки на флаконах + підписи, тонкі лінії між ними (на комп'ютері) */
+  (function(){
+    var box = document.getElementById('dm-pc'); if (!box) return;
+    var its = [].slice.call(box.querySelectorAll('.dm-pc-it')), dots = [].slice.call(box.querySelectorAll('.dm-pc-dot')), svg = box.querySelector('.dm-pc-lines');
+    var ns = 'http://www.w3.org/2000/svg', paths = {};
+    its.forEach(function(it){ var p = document.createElementNS(ns, 'path'); svg.appendChild(p); paths[it.getAttribute('data-i')] = p; });
+    function set(i){
+      its.forEach(function(it){ it.classList.toggle('on', it.getAttribute('data-i') === i); });
+      dots.forEach(function(d){ d.classList.toggle('on', d.getAttribute('data-i') === i); });
+      for (var k in paths) paths[k].setAttribute('class', k === i ? 'on' : '');
+    }
+    function draw(){
+      if (!svg || getComputedStyle(svg).display === 'none') return;
+      var cr = box.getBoundingClientRect(); if (!cr.width) return;
+      svg.setAttribute('viewBox', '0 0 ' + cr.width + ' ' + cr.height);
+      its.forEach(function(it){
+        var i = it.getAttribute('data-i'), d = box.querySelector('.dm-pc-dot[data-i="' + i + '"]'), pr = it.querySelector('.dm-pc-pill').getBoundingClientRect(), dr = d.getBoundingClientRect();
+        var left = !!it.closest('.dm-pc-l');
+        var ax = (left ? pr.right : pr.left) - cr.left, ay = pr.top + pr.height / 2 - cr.top;
+        var dx = dr.left + dr.width / 2 - cr.left, dy = dr.top + dr.height / 2 - cr.top;
+        var vx = dx - ax, vy = dy - ay, len = Math.sqrt(vx * vx + vy * vy) || 1;
+        paths[i].setAttribute('d', 'M' + ax.toFixed(1) + ' ' + ay.toFixed(1) + ' L' + (dx - vx / len * 19).toFixed(1) + ' ' + (dy - vy / len * 19).toFixed(1));
+      });
+    }
+    its.forEach(function(it){
+      var i = it.getAttribute('data-i'), more = it.querySelector('.dm-pc-more'), inci = it.querySelector('.dm-pc-inci');
+      it.addEventListener('mouseenter', function(){ set(i); });
+      it.addEventListener('click', function(){ set(i); });
+      more.addEventListener('click', function(e){
+        e.stopPropagation(); set(i);
+        var open = inci.hasAttribute('hidden');
+        if (open) inci.removeAttribute('hidden'); else inci.setAttribute('hidden', '');
+        more.setAttribute('aria-expanded', open ? 'true' : 'false');
+        more.textContent = open ? 'Сховати склад' : 'Повний склад (INCI)';
+        draw();
+      });
+    });
+    dots.forEach(function(d){
+      var i = d.getAttribute('data-i');
+      d.addEventListener('mouseenter', function(){ set(i); });
+      d.addEventListener('click', function(){
+        set(i);
+        if (svg && getComputedStyle(svg).display === 'none'){
+          var it = box.querySelector('.dm-pc-it[data-i="' + i + '"]');
+          try{ it.scrollIntoView({ behavior:'smooth', block:'nearest' }); }catch(_){}
+        }
+      });
+    });
+    var im = box.querySelector('.dm-pc-fig img'); if (im) im.addEventListener('load', draw);
+    if (window.ResizeObserver) new ResizeObserver(draw).observe(box);
+    window.addEventListener('resize', draw);
+    draw();
+  })();
+
+  /* «Для кого»: слайдер До/після, 3 пари (посилання Tilda → зменшені копії) */
+  (function(){
+    var PAIRS = [
+      ['https://static.tildacdn.com/tild6262-6562-4034-b862-383739353235/1before.jpg', 'https://static.tildacdn.com/tild3238-6431-4130-a564-366233356564/1after.jpg'],
+      ['https://static.tildacdn.com/tild6332-6330-4637-a134-643566316366/2before.jpg', 'https://static.tildacdn.com/tild3433-6265-4036-b066-626436386235/2after.jpg'],
+      ['https://static.tildacdn.com/tild3236-3066-4061-b238-356432313132/3before.jpg', 'https://static.tildacdn.com/tild6162-6363-4536-b865-663739326434/3after.jpg']
+    ];
+    var cmp = document.getElementById('dm-pb-cmp'), thumbs = document.getElementById('dm-pb-thumbs'); if (!cmp) return;
+    var imgB = cmp.querySelector('.dm-pb-before'), imgA = cmp.querySelector('.dm-pb-after'), labL = cmp.querySelector('.dm-pb-lab.l'), labR = cmp.querySelector('.dm-pb-lab.r');
+    function url(u, w){ return u.replace(/^https?:\/\/static\.tildacdn\.(com|net|one|info)\/(tild[\w-]+)\/([^\/]+)$/, 'https://thb.tildacdn.$1/$2/-/resize/' + w + 'x/$3'); }
+    var cur = 0, pos = 50, target = 50, raf = 0, last = 0, ths = [];
+    function apply(){
+      cmp.style.setProperty('--p', pos.toFixed(2) + '%'); cmp.setAttribute('aria-valuenow', Math.round(pos));
+      labL.classList.toggle('hide', pos < 16); labR.classList.toggle('hide', pos > 84);
+    }
+    function tick(t){
+      var dt = Math.min(.05, (t - last) / 1000 || .016); last = t;
+      pos += (target - pos) * (1 - Math.exp(-dt * 12)); if (Math.abs(target - pos) < .02) pos = target;
+      apply(); raf = (pos !== target) ? requestAnimationFrame(tick) : 0;
+    }
+    function move(v, instant){ target = Math.max(0, Math.min(100, v)); if (instant){ pos = target; apply(); return; } if (!raf){ last = performance.now(); raf = requestAnimationFrame(tick); } }
+    function show(i){
+      cur = i; ths.forEach(function(b, k){ b.classList.toggle('on', k === i); b.setAttribute('aria-selected', k === i); });
+      var a = new Image(), b = new Image(), n = 2;
+      function done(){ if (--n) return; if (i !== cur) return; imgA.src = a.src; imgB.src = b.src; imgA.alt = 'Волосся після догляду D’AMORE, приклад ' + (i + 1); imgB.alt = 'Волосся до догляду D’AMORE, приклад ' + (i + 1); requestAnimationFrame(function(){ cmp.classList.remove('sw'); }); move(50, true); }
+      cmp.classList.add('sw'); a.onload = b.onload = a.onerror = b.onerror = done;
+      a.src = url(PAIRS[i][1], 900); b.src = url(PAIRS[i][0], 900);
+    }
+    PAIRS.forEach(function(p, i){
+      var b = document.createElement('button'); b.type = 'button'; b.className = 'dm-pb-th'; b.setAttribute('role', 'tab'); b.setAttribute('aria-label', 'Приклад ' + (i + 1));
+      var im = document.createElement('img'); im.alt = ''; im.loading = 'lazy'; im.draggable = false; im.src = url(p[1], 160); b.appendChild(im); thumbs.appendChild(b);
+      b.addEventListener('click', function(){ show(i); }); ths.push(b);
+    });
+    var drag = false;
+    function xp(e){ var r = cmp.getBoundingClientRect(); return (e.clientX - r.left) / r.width * 100; }
+    cmp.addEventListener('pointerdown', function(e){ if (e.pointerType === 'mouse' && e.button !== 0) return; drag = true; cmp.classList.add('drag'); try{ cmp.setPointerCapture(e.pointerId); }catch(_){} move(xp(e)); });
+    cmp.addEventListener('pointermove', function(e){ if (drag) move(xp(e)); });
+    function end(e){ if (!drag) return; drag = false; cmp.classList.remove('drag'); try{ cmp.releasePointerCapture(e.pointerId); }catch(_){} }
+    cmp.addEventListener('pointerup', end); cmp.addEventListener('pointercancel', end);
+    cmp.addEventListener('keydown', function(e){
+      var st = e.shiftKey ? 15 : 5;
+      if (e.key === 'ArrowLeft'){ move(target - st); e.preventDefault(); } else if (e.key === 'ArrowRight'){ move(target + st); e.preventDefault(); }
+      else if (e.key === 'Home'){ move(0); e.preventDefault(); } else if (e.key === 'End'){ move(100); e.preventDefault(); }
+    });
+    show(0); apply();
+  })();
   /* пряме посилання: сторінка#dm-pd-p3 відкриє вкладку «Склад» */
   var h = (document.URL.split('#')[1] || '');
   for (var j = 0; j < panels.length; j++) if (panels[j].id === h) { select(j); break; }
@@ -1237,7 +1650,7 @@
   @media (prefers-reduced-motion:reduce){ .dm-ft-cta::before{animation:none} }
 </style>
 
-<footer id="dm-ft" class="dm-ft" aria-label="Футер">
+<div id="dm-ft" class="dm-ft" role="presentation" aria-label="Футер">
   <div class="dm-ft-in">
     <div class="dm-ft-top">
       <div class="dm-ft-brand">
@@ -1256,7 +1669,7 @@
       <button class="dm-ft-up" type="button" id="dm-ft-up">Нагору <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6"/></svg></button>
     </div>
   </div>
-</footer>
+</div>
 
 <script>
 (function(){
@@ -1283,8 +1696,8 @@
       { t:'Питання й відповіді', h:'#demo' }             // ← те саме
     ],
     contact : [                                      // порожнє значення – рядок зникне
-      { l:'Телефон',  t:'+38 0__ ___ __ __', h:'tel:+380000000000' },   // ← ВПИСАТИ СВІЙ НОМЕР (в обох полях)
-      { l:'Пошта',    t:'hello@damore.ua',  h:'mailto:hello@damore.ua' }, // ← ВПИСАТИ СВОЮ ПОШТУ
+      { l:'Телефон',  t:'+38 097 508 42 19', h:'tel:+380975084219' },
+      { l:'Пошта',    t:'damoreua@gmail.com',  h:'mailto:damoreua@gmail.com' }, 
       { l:'Графік',   t:'Пн–Пт, 10:00–18:00' }                             // ← або прибрати
     ],
     social : {                                       // порожнє = іконки не буде

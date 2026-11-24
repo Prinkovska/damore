@@ -30,7 +30,7 @@
 <style>
   html.dm-nocur, html.dm-nocur *{cursor:none!important}
   .dm-cur{
-    position:fixed; left:0; top:0; width:16px; height:24px; z-index:1000000; pointer-events:none; opacity:0;
+    position:fixed; left:0; top:0; width:16px; height:24px; z-index:2147483647; pointer-events:none; opacity:0;
     background:center/contain no-repeat; will-change:transform; transition:opacity .25s ease;
     transform-origin:50% 100%;
     filter:drop-shadow(0 3px 5px rgba(120,25,15,.28));
@@ -58,6 +58,7 @@
       var x=-100,y=-100,tx=-100,ty=-100,sc=1,tsc=1,rot=0,shown=false;
       window.addEventListener('mousemove', function(e){
         tx = e.clientX; ty = e.clientY;
+        if (el.nextSibling) document.body.appendChild(el);                          // лишатися поверх елементів, що з'являються пізніше (збільшення фото, попапи Tilda)
         if (!shown){ shown = true; x = tx; y = ty; root.classList.add('dm-nocur'); el.style.opacity = 1; }
         var t = e.target;
         tsc = (t && t.closest && t.closest('a,button,input,textarea,select,label,summary,[role=button],[role=tab],.t-btn')) ? 1.45 : 1;
@@ -310,6 +311,9 @@
   .dmh-ig svg{width:20px; height:20px; stroke:currentColor; fill:none; stroke-width:1.6; stroke-linecap:round; stroke-linejoin:round}
   .dmh-ig:hover{background:rgba(171,55,36,.08); color:var(--red)}
   .dmh-ig:focus-visible{outline:2px solid var(--red); outline-offset:3px}
+  /* вікно кошика Tilda: заголовок «Ваше замовлення» не має свого поля кольору в налаштуваннях — фарбуємо тут */
+  .t706__cartwin-heading{color:#5B1210!important; font-weight:500!important; letter-spacing:-.01em}
+  .t706__cartwin .t-input-title{color:#433d3c!important}
   html.dmh-hide-tcart .t706__carticon{display:none!important}          /* ховаємо власну плаваючу іконку кошика Tilda (CONFIG.hideTildaCartIcon) */
   .dmh-badge.pop{animation:dmhPop .5s cubic-bezier(.2,.8,.2,1)}
   @keyframes dmhPop{0%{transform:scale(.4)} 55%{transform:scale(1.35)} 100%{transform:scale(1)}}
@@ -362,7 +366,7 @@
 </style>
 
 <div class="dmh-wrap" id="dmh-wrap">
-  <header class="dmh" id="dmh">
+  <div class="dmh" id="dmh" role="presentation">
     <div class="dmh-in">
       <div class="dmh-side l" id="dmh-l">
         <button class="dmh-burger" id="dmh-burger" type="button" aria-label="Відкрити меню" aria-expanded="false" aria-controls="dmh-mob"><i></i><i></i></button>
@@ -370,7 +374,7 @@
       <a class="dmh-logo" id="dmh-logo" href="../" aria-label="D'AMORE — на головну"><img alt="D'AMORE"></a>
       <div class="dmh-side r" id="dmh-r"></div>
     </div>
-  </header>
+  </div>
   <div class="dmh-mob" id="dmh-mob" aria-hidden="true"></div>
 </div>
 
@@ -539,6 +543,20 @@
   window.addEventListener('resize', function(){ if (window.innerWidth > 1024 && mob.classList.contains('open')) setMenu(false); });
   onScroll();
 })();
+
+  /* доступність: мова сторінки й підписи до фото у стрічці блогу (Tilda їх не додає) */
+  (function(){
+    var de = document.documentElement; if (!de.getAttribute('lang')) de.setAttribute('lang', 'uk');
+    function lab(){
+      var im = document.querySelectorAll('.t-cms__card__image[role="img"]:not([aria-label]), .t-cms__card__image[role="img"][aria-label=""]');
+      for (var i = 0; i < im.length; i++){
+        var c = im[i].closest('.t-cms__card'), h = c && c.querySelector('[data-style="title_typo"]');
+        im[i].setAttribute('aria-label', (h && h.textContent.trim()) ? h.textContent.trim() : 'Фото до статті блогу D’AMORE');
+      }
+    }
+    lab();
+    if (window.MutationObserver){ var mo = new MutationObserver(function(){ lab(); }); mo.observe(document.body, { childList:true, subtree:true }); setTimeout(function(){ mo.disconnect(); }, 15000); }
+  })();
 </script>
 
 <!--
@@ -730,10 +748,20 @@
   function startAff(root, layer, slots){
     var keys = ['a','b','c'], busy = {}, last = '', timer = 0, live = false;
     var mq = window.matchMedia ? window.matchMedia('(max-width:900px)') : { matches:false };
+    /* телефон: афірмація з'являється праворуч від «Послухати історію» — там завжди вільно й нічого не перекриває */
+    function mobSlots(){
+      try{
+        var lr = layer.getBoundingClientRect(), mr = more.getBoundingClientRect();
+        var room = lr.right - mr.right - 14;
+        if (!lr.width || !mr.width || room < 96) return [];
+        var cx = mr.right + 6 + room / 2, cy = mr.top + mr.height / 2 - 16;
+        return [[ cx - lr.left, cy - lr.top, Math.min(1.35, room * .85 / 118), -3, 1 ]];      // 5-й елемент = координати в px (відсотки «пливуть», коли довантажується фото)
+      }catch(e){ return []; }
+    }
     function spawn(){
       timer = 0;
       if (!live || document.hidden) return;
-      var mob = mq.matches, S = mob ? slots.m : slots.d, max = mob ? 1 : 2;
+      var mob = mq.matches, S = mob ? mobSlots() : slots.d, max = mob ? 1 : 2;
       if (layer.children.length < max){
         var free = [];
         for (var i = 0; i < S.length; i++) if (!busy[i]) free.push(i);
@@ -743,7 +771,7 @@
           last = k;
           var s = S[si], p = PH[k], el = document.createElement('span');
           el.className = 'dm-aff';
-          el.style.left = s[0] + '%'; el.style.top = s[1] + '%';
+          var u = s[4] ? 'px' : '%'; el.style.left = s[0] + u; el.style.top = s[1] + u;
           if (p.t){
             el.style.fontSize = 'calc(var(--aw) * ' + (0.21 * s[2]).toFixed(3) + ')';
             el.innerHTML = '<span class="dm-aff-t" style="rotate:' + s[3] + 'deg">' + p.t + '</span>';
@@ -974,7 +1002,7 @@
   }
   .dm-ab3-bg{position:absolute; inset:0; z-index:-1; background:var(--cream) center/cover no-repeat; opacity:.55}
   .dm-ab3-bg::after{content:''; position:absolute; inset:0; background:linear-gradient(180deg,var(--cream) 0%,rgba(246,242,238,.2) 18%,rgba(246,242,238,.2) 82%,var(--cream) 100%)}
-  .dm-ab3-in{width:100%; max-width:1240px; margin:0 auto; padding:0 clamp(20px,5vw,80px)}
+  .dm-ab3-in{box-sizing:border-box; width:100%; max-width:1240px; margin:0 auto; padding:0 clamp(20px,5vw,80px)}      /* border-box: інакше на телефоні блок ширший за екран і текст обрізається справа */
 
   .dm-r3{opacity:0; transition:opacity 1s ease var(--d,0s)}
   .dm-ab3.in .dm-r3{opacity:1}
@@ -1013,8 +1041,11 @@
   .dm-ab3-big path{fill:var(--script)}
 
   @media (max-width:900px){
-    .dm-ab3-list{grid-template-columns:1fr; gap:14px}
-    .dm-ab3-card{aspect-ratio:1/1}
+    /* телефон: фото-картки – горизонтальна стрічка, що гортається пальцем (замість трьох величезних квадратів один під одним) */
+    .dm-ab3-list{display:flex; grid-template-columns:none; gap:12px; overflow-x:auto; scroll-snap-type:x mandatory; -webkit-overflow-scrolling:touch; scrollbar-width:none;
+      margin:0 calc(-1 * clamp(20px,5vw,80px)) 0; padding:6px clamp(20px,5vw,80px) 50px}      /* запас знизу, щоб тінь карток не обрізалась */
+    .dm-ab3-list::-webkit-scrollbar{display:none}
+    .dm-ab3-card{flex:0 0 min(76vw,340px); aspect-ratio:4/5; scroll-snap-align:center}
   }
   @media (prefers-reduced-motion:reduce){ .dm-ab3-t s::after{transition:none} }
 </style>
@@ -1086,7 +1117,7 @@
   }
   function onScroll(){ if (!ticking){ ticking = true; requestAnimationFrame(update); } }
   var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion:reduce)').matches;
-  if (reduce || !CFG.depth){ CFG.depth = 0; }
+  if (reduce || !CFG.depth || (window.matchMedia && matchMedia('(max-width:900px)').matches)){ CFG.depth = 0; }      /* на телефоні без паралакса: картки гортаються вбік */
   window.addEventListener('scroll', onScroll, { passive:true });
   window.addEventListener('resize', layout);
   cards.forEach(function(o){ o.img.addEventListener('load', layout); });
@@ -1349,7 +1380,7 @@
   @media (prefers-reduced-motion:reduce){ .dm-ft-cta::before{animation:none} }
 </style>
 
-<footer id="dm-ft" class="dm-ft" aria-label="Футер">
+<div id="dm-ft" class="dm-ft" role="presentation" aria-label="Футер">
   <div class="dm-ft-in">
     <div class="dm-ft-top">
       <div class="dm-ft-brand">
@@ -1368,7 +1399,7 @@
       <button class="dm-ft-up" type="button" id="dm-ft-up">Нагору <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6"/></svg></button>
     </div>
   </div>
-</footer>
+</div>
 
 <script>
 (function(){
@@ -1395,8 +1426,8 @@
       { t:'Питання й відповіді', h:'#demo' }             // ← те саме
     ],
     contact : [                                      // порожнє значення – рядок зникне
-      { l:'Телефон',  t:'+38 0__ ___ __ __', h:'tel:+380000000000' },   // ← ВПИСАТИ СВІЙ НОМЕР (в обох полях)
-      { l:'Пошта',    t:'hello@damore.ua',  h:'mailto:hello@damore.ua' }, // ← ВПИСАТИ СВОЮ ПОШТУ
+      { l:'Телефон',  t:'+38 097 508 42 19', h:'tel:+380975084219' },
+      { l:'Пошта',    t:'damoreua@gmail.com',  h:'mailto:damoreua@gmail.com' }, 
       { l:'Графік',   t:'Пн–Пт, 10:00–18:00' }                             // ← або прибрати
     ],
     social : {                                       // порожнє = іконки не буде

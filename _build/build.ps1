@@ -18,7 +18,7 @@ function Conv([string]$t, [string]$name){
     @(("https://res\.cloudinary\.com/$Q" + 'logo_damore\.png'), '@@/assets/img/logo_damore.png'),
     @(("https://res\.cloudinary\.com/$Q" + 'video3\.mp4'), '@@/assets/video/hero.mp4'),
     @(("https://res\.cloudinary\.com/$Q" + 'Video_mob\.mp4'), '@@/assets/video/hero-mobile.mp4'),
-    @("https://res\.cloudinary\.com/w9airxdm/image/upload/bg\.jpg", '@@/assets/img/hero-bg.jpg'),
+    @(("https://res\.cloudinary\.com/$Q" + '/bg\.jpg'), '@@/assets/img/hero-bg.jpg'),
     @(("https://res\.cloudinary\.com/$Q" + 'heart_preload\.png'), '@@/assets/img/heart_preload.png'),
     @(("https://res\.cloudinary\.com/$Q" + 'cursor\.png'), '@@/assets/img/cursor.png'),
     @(("https://res\.cloudinary\.com/$Q" + 'reel(\d)\.mp4'), '@@/assets/video/reel$1.mp4'),
@@ -29,7 +29,15 @@ function Conv([string]$t, [string]$name){
     @(("https://res\.cloudinary\.com/$Q" + 'Banochki2\.mp4'), '@@/assets/video/cold-hero.mp4'),
     @(("https://res\.cloudinary\.com/$Q" + 'Banochki2\.jpg'), '@@/assets/img/poster-cold.jpg'),
     @(("https://res\.cloudinary\.com/$Q" + 'howuse\.mp4'), '@@/assets/video/howuse.mp4'),
-    @(("https://res\.cloudinary\.com/$Q" + 'howuse\.jpg'), '@@/assets/img/poster-howuse.jpg')
+    @(("https://res\.cloudinary\.com/$Q" + 'howuse\.jpg'), '@@/assets/img/poster-howuse.jpg'),
+    @(("https://res\.cloudinary\.com/$Q" + 'Video_new\.mp4'), '@@/assets/video/hero.mp4'),
+    @(("https://res\.cloudinary\.com/$Q" + 'Video_new_mob\.mp4'), '@@/assets/video/hero-mobile.mp4'),
+    @(("https://res\.cloudinary\.com/$Q" + 'Banochki_mob\.mp4'), '@@/assets/video/cold-hero-mobile.mp4'),
+    @(("https://res\.cloudinary\.com/$Q" + 'Banochki_mob\.jpg'), ''),
+    @(("https://res\.cloudinary\.com/$Q" + 'Reel1\.jpg'), ''),
+    @(("https://res\.cloudinary\.com/$Q" + 'Reel(\d)\.mp4'), '@@/assets/video/reel$1.mp4'),
+    @("https://static\.tildacdn\.com/[^/\x27\x22]+/Heart_bonus\.png", '@@/assets/img/heart-bonus.png'),
+    @("https://static\.tildacdn\.com/[^/\x27\x22]+/Heart_bonus2\.png", '@@/assets/img/heart-bonus2.png')
   )
   foreach($m in $map){ $t = Rx $t $m[0] $m[1] }
   # решта: бази для фото (…/image/upload/ або …/upload/<перетворення>/) → локальна папка
@@ -126,10 +134,10 @@ if ((Test-Path $t2) -and -not (Test-Path $mark)){
 $common = @('cursor-block.html','topbar-block.html','menu-block.html')
 $tail   = @('footer-block.html')
 
-Page 'index.html' 0 'D{AP}AMORE — професійний догляд за волоссям' 'D{AP}AMORE: набір «Холодна реконструкція» — салонний догляд за волоссям вдома. Moment for me.' ($common + @('hero-block.html','video-slider-light-block.html','before-after-block.html','categories-block.html','blog-block.html','about-teaser-block.html','benefits-block.html') + $tail)
+Page 'index.html' 0 'D{AP}AMORE — професійний догляд за волоссям' 'D{AP}AMORE: набір «Холодна реконструкція» — салонний догляд за волоссям вдома. Moment for me.' ($common + @('hero-block.html','hero-heart-block.html','video-slider-light-block.html','before-after-block.html','categories-block.html','blog-block.html','about-teaser-block.html','benefits-block.html') + $tail)
 Page 'about/index.html' 1 'Про бренд — D{AP}AMORE' 'Історія D{AP}AMORE: чому ми створили догляд, який нагадує — ти теж важлива.' ($common + @('about-1-hero-block.html','about-2-story-block.html','about-3-time-block.html','about-4-manifest-block.html') + $tail)
 Page 'catalog/index.html' 1 'Каталог — D{AP}AMORE' 'Розділи продукції D{AP}AMORE.' ($common + @('catalog-page-block.html','benefits-block.html') + $tail)
-Page 'catalog/cold-reconstruction/index.html' 2 'Холодна реконструкція — D{AP}AMORE' '5-етапний догляд за волоссям: шампунь, маска, кондиціонер, молочко для блиску, спрей-термозахист.' ($common + @('cold-hero-block.html','store-card-block.html','product-details-block.html','benefits-block.html') + $tail)
+Page 'catalog/cold-reconstruction/index.html' 2 'Холодна реконструкція — D{AP}AMORE' '5-етапний догляд за волоссям: шампунь, маска, кондиціонер, молочко для блиску, спрей-термозахист.' ($common + @('cold-hero-block.html','components-block.html','store-card-block.html','product-details-block.html','benefits-block.html') + $tail)
 foreach($s in @(@('home-care','stub-home-care.html','Домашній догляд'),@('body-care','stub-body-care.html','Догляд за тілом'),@('accessories','stub-accessories.html','Аксесуари'),@('gifts','stub-gifts.html','Сертифікати та подарунки'))){
   Page ("catalog/$($s[0])/index.html") 2 ("$($s[2]) — D{AP}AMORE") 'Цей розділ з{AP}явиться скоро.' ($common + @($s[1]) + $tail)
 }

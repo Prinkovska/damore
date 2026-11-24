@@ -30,7 +30,7 @@
 <style>
   html.dm-nocur, html.dm-nocur *{cursor:none!important}
   .dm-cur{
-    position:fixed; left:0; top:0; width:16px; height:24px; z-index:1000000; pointer-events:none; opacity:0;
+    position:fixed; left:0; top:0; width:16px; height:24px; z-index:2147483647; pointer-events:none; opacity:0;
     background:center/contain no-repeat; will-change:transform; transition:opacity .25s ease;
     transform-origin:50% 100%;
     filter:drop-shadow(0 3px 5px rgba(120,25,15,.28));
@@ -58,6 +58,7 @@
       var x=-100,y=-100,tx=-100,ty=-100,sc=1,tsc=1,rot=0,shown=false;
       window.addEventListener('mousemove', function(e){
         tx = e.clientX; ty = e.clientY;
+        if (el.nextSibling) document.body.appendChild(el);                          // лишатися поверх елементів, що з'являються пізніше (збільшення фото, попапи Tilda)
         if (!shown){ shown = true; x = tx; y = ty; root.classList.add('dm-nocur'); el.style.opacity = 1; }
         var t = e.target;
         tsc = (t && t.closest && t.closest('a,button,input,textarea,select,label,summary,[role=button],[role=tab],.t-btn')) ? 1.45 : 1;
@@ -310,6 +311,9 @@
   .dmh-ig svg{width:20px; height:20px; stroke:currentColor; fill:none; stroke-width:1.6; stroke-linecap:round; stroke-linejoin:round}
   .dmh-ig:hover{background:rgba(171,55,36,.08); color:var(--red)}
   .dmh-ig:focus-visible{outline:2px solid var(--red); outline-offset:3px}
+  /* вікно кошика Tilda: заголовок «Ваше замовлення» не має свого поля кольору в налаштуваннях — фарбуємо тут */
+  .t706__cartwin-heading{color:#5B1210!important; font-weight:500!important; letter-spacing:-.01em}
+  .t706__cartwin .t-input-title{color:#433d3c!important}
   html.dmh-hide-tcart .t706__carticon{display:none!important}          /* ховаємо власну плаваючу іконку кошика Tilda (CONFIG.hideTildaCartIcon) */
   .dmh-badge.pop{animation:dmhPop .5s cubic-bezier(.2,.8,.2,1)}
   @keyframes dmhPop{0%{transform:scale(.4)} 55%{transform:scale(1.35)} 100%{transform:scale(1)}}
@@ -362,7 +366,7 @@
 </style>
 
 <div class="dmh-wrap" id="dmh-wrap">
-  <header class="dmh" id="dmh">
+  <div class="dmh" id="dmh" role="presentation">
     <div class="dmh-in">
       <div class="dmh-side l" id="dmh-l">
         <button class="dmh-burger" id="dmh-burger" type="button" aria-label="Відкрити меню" aria-expanded="false" aria-controls="dmh-mob"><i></i><i></i></button>
@@ -370,7 +374,7 @@
       <a class="dmh-logo" id="dmh-logo" href="./" aria-label="D'AMORE — на головну"><img alt="D'AMORE"></a>
       <div class="dmh-side r" id="dmh-r"></div>
     </div>
-  </header>
+  </div>
   <div class="dmh-mob" id="dmh-mob" aria-hidden="true"></div>
 </div>
 
@@ -539,6 +543,20 @@
   window.addEventListener('resize', function(){ if (window.innerWidth > 1024 && mob.classList.contains('open')) setMenu(false); });
   onScroll();
 })();
+
+  /* доступність: мова сторінки й підписи до фото у стрічці блогу (Tilda їх не додає) */
+  (function(){
+    var de = document.documentElement; if (!de.getAttribute('lang')) de.setAttribute('lang', 'uk');
+    function lab(){
+      var im = document.querySelectorAll('.t-cms__card__image[role="img"]:not([aria-label]), .t-cms__card__image[role="img"][aria-label=""]');
+      for (var i = 0; i < im.length; i++){
+        var c = im[i].closest('.t-cms__card'), h = c && c.querySelector('[data-style="title_typo"]');
+        im[i].setAttribute('aria-label', (h && h.textContent.trim()) ? h.textContent.trim() : 'Фото до статті блогу D’AMORE');
+      }
+    }
+    lab();
+    if (window.MutationObserver){ var mo = new MutationObserver(function(){ lab(); }); mo.observe(document.body, { childList:true, subtree:true }); setTimeout(function(){ mo.disconnect(); }, 15000); }
+  })();
 </script>
 
 <!--
@@ -597,7 +615,7 @@
   .dm-media{position:absolute; inset:0}
   .dm-video{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:50% 50%; display:block}
   .dm-content{
-    position:absolute; left:clamp(24px,13vw,280px); top:50%; transform:translateY(-52%);
+    position:absolute; left:clamp(24px,10vw,260px); top:50%; transform:translateY(-52%);
     max-width:min(52vw,780px); z-index:2;
   }
   .dm-hello{
@@ -680,7 +698,7 @@
   /* ───────── КУРСОР-СЕРЦЕ ───────── */
   html.dm-nocur, html.dm-nocur *{cursor:none!important}
   .dm-cur{
-    position:fixed; left:0; top:0; width:16px; height:24px; z-index:1000000; pointer-events:none; opacity:0;
+    position:fixed; left:0; top:0; width:16px; height:24px; z-index:2147483647; pointer-events:none; opacity:0;
     background:center/contain no-repeat; will-change:transform; transition:opacity .25s ease;
     transform-origin:50% 100%;                       /* гострий кінець серця = точка кліку (як кінчик стрілки) */
     filter:drop-shadow(0 3px 5px rgba(120,25,15,.28));
@@ -763,7 +781,7 @@
   };
   var HEART_RED = '#AB3724';
   var isMob = !!(window.matchMedia && matchMedia('(max-width:767px)').matches);
-  if (isMob) T.revealAt = 3.0;                         // телефон: текст з'являється з ~3 с, коли модель починає рухатись
+  if (isMob) T.revealAt = 1.5;                         // телефон: текст з'являється з ~1,5 с відео
   if (window.DM_ASSETS) for (var k in window.DM_ASSETS) ASSETS[k] = window.DM_ASSETS[k];
 
   /* ═══════════ helpers ═══════════ */
@@ -851,6 +869,7 @@
       var x=-100,y=-100,tx=-100,ty=-100,sc=1,tsc=1,rot=0,shown=false;
       window.addEventListener('mousemove', function(e){
         tx = e.clientX; ty = e.clientY;
+        if (el.nextSibling) document.body.appendChild(el);                          // лишатися поверх елементів, що з'являються пізніше (збільшення фото, попапи Tilda)
         if (!shown){ shown = true; x = tx; y = ty; root.classList.add('dm-nocur'); el.style.opacity = 1; }
         var t = e.target;
         tsc = (t && t.closest && t.closest('a,button,input,textarea,select,label,[role=button],.t-btn')) ? 1.45 : 1;
@@ -1026,6 +1045,204 @@
     if (window.console) console.warn('[D\'AMORE preload]', e);
     running = false; pre.remove(); root.classList.remove('dm-lock'); startVideo();
   });
+})();
+</script>
+
+<!--
+  D'AMORE · СЕРДЕЧКО-СКРЕТЧ НА ПЕРШОМУ ЕКРАНІ (Tilda → T123 «HTML-код»)
+  ─────────────────────────────────────────────────────────────────────────────
+  Ставиться ОДРАЗУ ПІД блоком «Перший екран» (hero) – сам вмонтовується в нього і лягає поверх відео.
+  Дві картинки: ЗАЛИВКА (cover – «Зітри…») і ПІД НЕЮ (reveal – «Музика для твого ритуалу») + кнопка «Слухати» на Telegram.
+  Стираєш заливку – решта зникає хвилею від центру, розлітаються сердечка, серце росте і показує нижню картинку.
+  ЩО МІНЯТИ: CONFIG в <script> (посилання на Telegram, картинки cover / reveal, кут нахилу, прозорі PNG/WEBP однакового розміру).
+  Положення: CSS «.dm-hh» (left/bottom – комп'ютер; right/top – телефон). Нахил: CONFIG.tilt.
+-->
+<style>
+  @property --w{syntax:'<length>'; inherits:true; initial-value:168px}      /* плавна зміна розміру серця (картинки перемальовуються, а не розтягуються) */
+  .dm-hh{
+    --red:#AB3724; --tilt:-9deg;
+    --w0:clamp(184px,12.3vw,263px); --w:var(--w0); --g:1.55;
+    position:absolute; left:45%; bottom:4%; z-index:6; width:var(--w); font-family:'Onest','Helvetica Neue',Arial,sans-serif;
+    opacity:0; pointer-events:none; margin-left:calc((var(--w0) - var(--w)) / 2); transition:opacity 1s ease .2s, --w .9s cubic-bezier(.2,.8,.2,1);
+  }
+  .dm-hh.open{--w:calc(var(--w0) * var(--g))}
+  .dm-hh.open.shrunk{--w:var(--w0)}
+  .dm-hh:not(.mounted){display:none}
+  .dm-in .dm-hh, .dm-hh.on{opacity:1; pointer-events:auto}
+  .dm-hh.solo{position:relative; left:auto; bottom:auto; margin:40px auto}
+  .dm-hh-float{position:relative; width:100%; transform:rotate(var(--tilt)); animation:dmhhFloat 6s ease-in-out infinite; filter:drop-shadow(0 22px 24px rgba(122,29,20,.3)); transition:transform .6s ease}
+  @keyframes dmhhFloat{0%,100%{transform:translateY(0) rotate(calc(var(--tilt) - 2deg))} 50%{transform:translateY(-9px) rotate(calc(var(--tilt) + 2deg))}}
+  .dm-hh.open .dm-hh-float{animation:none; transform:rotate(var(--tilt))}      /* відкрите серце стоїть спокійно – картинка чітка */
+  .dm-hh-heart{position:relative; -webkit-user-select:none; user-select:none; width:100%; aspect-ratio:888/1095; transform-origin:50% 100%; transform:scale(var(--k,1)); transition:transform .9s cubic-bezier(.2,.8,.2,1); -webkit-tap-highlight-color:transparent}
+  .dm-hh-heart:hover{--k:1.05}
+  .dm-hh-heart.drag{--k:1.02}
+  .dm-hh-heart.open{--k:1; cursor:pointer}      /* клік по відкритому серцю згортає його, повторний – розгортає */
+  .dm-hh-heart.open:hover{--k:1}
+  .dm-hh-rev{position:absolute; inset:0; width:100%; height:100%; display:block; user-select:none; -webkit-user-drag:none; pointer-events:none}
+  .dm-hh-btn{
+    --c1:#7A1D14; --c2:#B4422F; --c3:#8E271B; --c4:#CF6A55;
+    position:absolute; left:50%; top:63%; transform:translate(-50%,-50%); z-index:3;
+    display:inline-flex; align-items:center; justify-content:center; padding:calc(var(--w) * .043) calc(var(--w) * .092); border-radius:99px; overflow:hidden; isolation:isolate; white-space:nowrap;
+    font:500 calc(var(--w) * .05)/1 'Onest',sans-serif; letter-spacing:.04em; color:#FFF4EC; text-decoration:none; background:var(--c1); -webkit-tap-highlight-color:transparent;
+    box-shadow:0 8px 16px -8px rgba(122,29,20,.75), inset 0 1px 0 rgba(255,225,215,.38), inset 0 -4px 8px rgba(50,6,4,.26);
+    opacity:0; pointer-events:none; transition:opacity .5s ease .5s, box-shadow .3s ease;
+  }
+  .dm-hh-heart.open .dm-hh-btn{opacity:1; pointer-events:auto}
+  .dm-hh-btn span{position:relative; z-index:2; text-shadow:0 1px 2px rgba(60,8,4,.35)}
+  .dm-hh-btn::before{content:''; position:absolute; inset:-60% -25%; z-index:-2; background:linear-gradient(100deg,var(--c1) 0%,var(--c2) 22%,var(--c3) 38%,var(--c4) 55%,var(--c3) 72%,var(--c2) 88%,var(--c1) 100%); background-size:240% 100%; animation:dmhhSilk 7s ease-in-out infinite alternate}
+  @keyframes dmhhSilk{0%{background-position:0% 0} 100%{background-position:100% 0}}
+  .dm-hh-btn:hover{box-shadow:0 12px 20px -8px rgba(122,29,20,.85), inset 0 1px 0 rgba(255,225,215,.45), inset 0 -4px 8px rgba(50,6,4,.3)}
+  .dm-hh-btn:focus-visible{outline:2px solid var(--red); outline-offset:3px}
+  .dm-hh-cv{position:absolute; inset:0; width:100%; height:100%; display:block; touch-action:none; cursor:grab; z-index:4}
+  .dm-hh-heart.drag .dm-hh-cv{cursor:grabbing}
+  .dm-hh-heart.open .dm-hh-cv{pointer-events:none}
+  .dm-hh-burst{position:absolute; left:50%; top:42%; width:0; height:0; pointer-events:none; z-index:5}
+  .dm-hh-burst svg{position:absolute; left:0; top:0; width:var(--s,16px); height:var(--s,16px); margin:calc(var(--s,16px) / -2) 0 0 calc(var(--s,16px) / -2); fill:var(--c,#AB3724); opacity:0; will-change:transform,opacity}
+  .dm-hh-skip{position:absolute; left:50%; bottom:-6px; transform:translateX(-50%); z-index:7; padding:8px 14px; border:0; border-radius:99px; cursor:pointer; white-space:nowrap; font:500 12px/1 'Onest',sans-serif; color:var(--red); background:#FFF4EC; box-shadow:0 0 0 1px rgba(171,55,36,.25)}
+  .dm-hh-skip:not(:focus){position:absolute; width:1px; height:1px; margin:-1px; padding:0; overflow:hidden; clip:rect(0 0 0 0)}
+  .dm-hh-heart.open ~ .dm-hh-skip{display:none}
+
+  @media (max-width:767px){
+    .dm-hh{--w0:clamp(114px,29.6vw,145px); --w:var(--w0); --g:1.3; left:2%; margin-left:0; right:auto; bottom:auto; top:12%}      /* телефон: зліва під меню, вільне місце над баночками */
+    .dm-hh-heart{transform-origin:20% 8%}
+    .dm-hh-btn{top:62%; font-size:calc(var(--w) * .064); padding:calc(var(--w) * .062) calc(var(--w) * .088)}      /* кнопка вписана в серце: ширина ≈ 42% від ширини, висота ≈ 19% */
+  }
+  @media (prefers-reduced-motion:reduce){ .dm-hh-float,.dm-hh-btn::before{animation:none} .dm-hh-heart{transition:none} }
+</style>
+
+<div class="dm-hh" id="dm-hh" role="group" aria-label="Подарунок від D’AMORE">
+  <div class="dm-hh-float">
+    <div class="dm-hh-heart" id="dm-hh-heart">
+      <img class="dm-hh-rev" id="dm-hh-rev" alt="Подарунок: музика для твого ритуалу. Вмикай плейлист, поки догляд працює" draggable="false">
+      <a class="dm-hh-btn" id="dm-hh-link" href="#" target="_blank" rel="noopener noreferrer" tabindex="-1"><span>Слухати</span></a>
+      <canvas class="dm-hh-cv" id="dm-hh-cv" aria-hidden="true"></canvas>
+      <div class="dm-hh-burst" id="dm-hh-burst" aria-hidden="true"></div>
+    </div>
+    <button class="dm-hh-skip" id="dm-hh-skip" type="button">Відкрити подарунок</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  'use strict';
+
+  /* ═══════════ CONFIG ═══════════ */
+  var CFG = {
+    link  : 'https://t.me/+TOGmmVCpzfwxMmVi',     // ← ПОСИЛАННЯ НА TELEGRAM-ЧАТ
+    tilt  : '-9deg',                                // нахил серця на комп'ютері (мінус – проти годинникової)
+    tiltMobile: '12deg',                            // нахил на телефоні (плюс – за годинниковою)
+    need  : .5,                                     // скільки стерти (0–1), щоб решта заливки зникла хвилею
+    brush : .11,                                    // товщина «пальця» (частка від ширини серця)
+    remember: false,                                // true = пам'ятати, що подарунок уже відкрито; false = при кожному оновленні серце знову просить стерти
+    /* ← КАРТИНКИ: посилання з Tilda (прозорі PNG/WEBP однакового розміру). Код сам бере зменшену копію під екран */
+    cover : './assets/img/heart-bonus.png',   // заливка «Зітри…»
+    reveal: './assets/img/heart-bonus2.png',   // що під нею «Музика для твого ритуалу»
+    wDesk : 640,                                    // ширина зменшеної копії на комп'ютері (px)
+    wMob  : 480                                     // …на телефоні
+  };
+
+  var wrap = document.getElementById('dm-hh'), heart = document.getElementById('dm-hh-heart'), cv = document.getElementById('dm-hh-cv'), rev = document.getElementById('dm-hh-rev');
+  var link = document.getElementById('dm-hh-link'), burst = document.getElementById('dm-hh-burst'), skip = document.getElementById('dm-hh-skip');
+  link.setAttribute('href', CFG.link);
+  function pic(u){ var w = (window.matchMedia && matchMedia('(max-width:767px)').matches) ? CFG.wMob : CFG.wDesk; return u.replace(/^https?:\/\/static\.tildacdn\.(com|net|one|info)\/(til[a-z][\w-]+)\/([^\/]+)$/, 'https://thb.tildacdn.$1/$2/-/resize/' + w + 'x/$3'); }      /* повне посилання Tilda → зменшена копія */
+  rev.src = pic(CFG.reveal);
+  var mqm = window.matchMedia ? window.matchMedia('(max-width:767px)') : { matches:false };
+  function setTilt(){ wrap.style.setProperty('--tilt', mqm.matches ? CFG.tiltMobile : CFG.tilt); }
+  setTilt(); if (mqm.addEventListener) mqm.addEventListener('change', setTilt);
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion:reduce)').matches;
+  var ctx = cv.getContext('2d'), W = 0, H = 0, dpr = 1, cover = new Image();
+  var lo = document.createElement('canvas'), lx = lo.getContext('2d'), LW = 60, LH = 74, total = 1; lo.width = LW; lo.height = LH;
+  var opened = false, drawing = false, last = null, tick = 0, ready = false, noPix = false, stroked = 0;      // noPix: якщо браузер не дає читати пікселі картинки – рахуємо стерте за довжиною штриха
+  var HEART = 'M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z';
+
+  /* вмонтовуємо у перший екран (поверх відео) */
+  (function(){
+    var hero = document.getElementById('dm-hero');
+    if (hero){ hero.appendChild(wrap); wrap.classList.add('mounted'); }
+    else { wrap.classList.add('mounted', 'solo', 'on'); }
+  })();
+  setTimeout(function(){ wrap.classList.add('on'); }, 7000);      // страховка: показати, навіть якщо перший екран не дав сигнал
+
+  function drawCover(){
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.globalCompositeOperation = 'source-over'; ctx.clearRect(0, 0, W, H);
+    ctx.drawImage(cover, 0, 0, W, H);
+  }
+  function resetMap(){
+    stroked = 0; if (noPix) return;
+    try{
+      lx.setTransform(1, 0, 0, 1, 0, 0); lx.globalCompositeOperation = 'source-over'; lx.clearRect(0, 0, LW, LH); lx.drawImage(cover, 0, 0, LW, LH);
+      var d = lx.getImageData(0, 0, LW, LH).data, n = 0; for (var i = 3; i < d.length; i += 4) if (d[i] > 128) n++; total = n || 1;
+    }catch(e){ noPix = true; }
+  }
+  function erasedShare(){
+    if (!noPix){ try{ var d = lx.getImageData(0, 0, LW, LH).data, n = 0; for (var i = 3; i < d.length; i += 4) if (d[i] > 128) n++; return 1 - n / total; }catch(e){ noPix = true; } }
+    return Math.min(1, stroked * .5 / (W * H * .6));      /* запасний підрахунок: площа штрихів ÷ площа серця (з поправкою на перекриття) */
+  }
+  function size(){
+    var w = heart.offsetWidth, h = heart.offsetHeight; if (!w || !ready) return;
+    dpr = Math.min(window.devicePixelRatio || 1, 2) * 1.3; W = w; H = h; cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
+    drawCover(); resetMap();
+  }
+
+  /* координати в системі самого серця (враховують нахил і збільшення) */
+  function pos(e){ var ox = (typeof e.offsetX === 'number') ? e.offsetX : 0, oy = (typeof e.offsetY === 'number') ? e.offsetY : 0; return { x: ox * (W / (cv.clientWidth || W)), y: oy * (H / (cv.clientHeight || H)) }; }
+  function stroke(a, b){
+    var lw = Math.max(16, W * CFG.brush) * 2; stroked += lw * Math.sqrt((b.x - a.x) * (b.x - a.x) + (b.y - a.y) * (b.y - a.y));
+    ctx.save(); ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.globalCompositeOperation = 'destination-out'; ctx.lineCap = ctx.lineJoin = 'round'; ctx.lineWidth = lw;
+    ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x + .01, b.y + .01); ctx.stroke(); ctx.restore();
+    lx.save(); lx.globalCompositeOperation = 'destination-out'; lx.lineCap = lx.lineJoin = 'round'; lx.lineWidth = lw * LW / W;
+    lx.beginPath(); lx.moveTo(a.x * LW / W, a.y * LH / H); lx.lineTo(b.x * LW / W + .01, b.y * LH / H + .01); lx.stroke(); lx.restore();
+  }
+  function check(){ tick = 0; if (!opened && erasedShare() >= CFG.need) reveal(); }
+  cv.addEventListener('pointerdown', function(e){ if (opened || !ready) return; drawing = true; heart.classList.add('drag'); try{ cv.setPointerCapture(e.pointerId); }catch(_){} last = pos(e); stroke(last, last); });
+  cv.addEventListener('pointermove', function(e){ if (!drawing || opened) return; var p = pos(e); stroke(last, p); last = p; if (!tick) tick = setTimeout(check, 90); });
+  function end(){ if (!drawing) return; drawing = false; heart.classList.remove('drag'); last = null; check(); }
+  cv.addEventListener('pointerup', end); cv.addEventListener('pointercancel', end);
+  skip.addEventListener('click', function(){ reveal(); link.focus(); });
+  heart.addEventListener('click', function(e){ if (opened && !e.target.closest('a')) wrap.classList.toggle('shrunk'); });
+
+  function open(){ opened = true; wrap.classList.add('open'); heart.classList.add('open'); link.removeAttribute('tabindex'); cv.style.display = 'none'; try{ if (CFG.remember) localStorage.setItem('dm_hh_open', '1'); }catch(_){} }
+  function reveal(){
+    if (opened) return; opened = true; heart.classList.remove('drag'); drawing = false;
+    if (reduce){ open(); return; }
+    var cx = W * .5, cy = H * .4, maxR = Math.sqrt(W * W + H * H) * .75, t0 = performance.now(), dur = 780, a0 = Math.random() * 6.283, a1 = Math.random() * 6.283;
+    link.removeAttribute('tabindex'); wrap.classList.add('open'); heart.classList.add('open'); sprinkle();
+    (function frame(now){
+      var t = Math.min(1, (now - t0) / dur), e = 1 - Math.pow(1 - t, 3), r = maxR * e;
+      ctx.save(); ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.globalCompositeOperation = 'destination-out'; ctx.fillStyle = '#000'; ctx.beginPath();
+      var n = 44; for (var j = 0; j <= n; j++){ var a = j / n * 6.283, w = 1 + .16 * Math.sin(a * 5 + a0) + .1 * Math.sin(a * 9 + a1); var x = cx + Math.cos(a) * r * w, y = cy + Math.sin(a) * r * w; if (j) ctx.lineTo(x, y); else ctx.moveTo(x, y); }
+      ctx.closePath(); ctx.fill(); ctx.restore();
+      if (t < 1) requestAnimationFrame(frame); else cv.style.display = 'none';
+    })(t0);
+    try{ if (CFG.remember) localStorage.setItem('dm_hh_open', '1'); }catch(_){}
+  }
+  function sprinkle(){
+    var cols = ['#AB3724', '#E0705F', '#CF6A55', '#FFD9CB', '#7A1D14'], N = 22, ns = 'http://www.w3.org/2000/svg', R = Math.max(W * 1.4, 150);
+    for (var i = 0; i < N; i++){
+      var s = document.createElementNS(ns, 'svg'); s.setAttribute('viewBox', '0 0 24 24'); s.setAttribute('aria-hidden', 'true');
+      var p = document.createElementNS(ns, 'path'); p.setAttribute('d', HEART); s.appendChild(p);
+      s.style.setProperty('--s', (8 + Math.random() * 16).toFixed(1) + 'px'); s.style.setProperty('--c', cols[i % cols.length]);
+      burst.appendChild(s);
+      var a = Math.random() * 6.283, d = R * (.55 + Math.random() * 1.1), dx = Math.cos(a) * d, dy = Math.sin(a) * d * .9 - R * .1, rot = (Math.random() - .5) * 140;
+      var an = s.animate([
+        { transform: 'translate(0,0) scale(.2) rotate(0deg)', opacity: 0 },
+        { transform: 'translate(' + (dx * .55) + 'px,' + (dy * .55) + 'px) scale(1.1) rotate(' + (rot * .5) + 'deg)', opacity: 1, offset: .35 },
+        { transform: 'translate(' + dx + 'px,' + (dy + R * .2) + 'px) scale(.7) rotate(' + rot + 'deg)', opacity: 0 }
+      ], { duration: 1100 + Math.random() * 800, delay: Math.random() * 160, easing: 'cubic-bezier(.2,.7,.2,1)', fill: 'forwards' });
+      (function(el){ an.onfinish = function(){ if (el.parentNode) el.parentNode.removeChild(el); }; })(s);
+    }
+  }
+
+  function start(){
+    if (ready) return; ready = true;
+    var seen = false; try{ seen = CFG.remember && localStorage.getItem('dm_hh_open') === '1'; }catch(_){}
+    if (seen){ opened = true; wrap.classList.add('open'); heart.classList.add('open'); link.removeAttribute('tabindex'); cv.style.display = 'none'; return; }
+    size();
+  }
+  cover.onload = start;
+  cover.onerror = function(){ if (cover.crossOrigin){ cover.removeAttribute('crossorigin'); cover.crossOrigin = null; noPix = true; cover.src = pic(CFG.cover); } };      /* якщо CDN не дозволив читати пікселі – показуємо без них */
+  cover.crossOrigin = 'anonymous'; cover.src = pic(CFG.cover);
+  var rz; window.addEventListener('resize', function(){ clearTimeout(rz); rz = setTimeout(function(){ if (!opened && ready) size(); }, 160); });
 })();
 </script>
 
@@ -1486,7 +1703,7 @@
 
   /* ───── сцена: порівняння + мініатюри ───── */
   .dm-ba-stage{
-    width:100%; max-width:540px; margin-left:auto;
+    min-width:0; width:100%; max-width:540px; margin-left:auto;
     opacity:0; transform:translateY(26px); transition:opacity 1s ease .15s, transform 1.1s cubic-bezier(.2,.7,.2,1) .15s;
   }
   .dm-ba.dm-in .dm-ba-stage{opacity:1; transform:none}
@@ -1525,7 +1742,23 @@
 
   .dm-ba-hint{margin:16px 0 0; text-align:center; font:300 13px/1 'Onest',sans-serif; letter-spacing:.1em; color:rgba(67,61,60,.6); transition:opacity .6s ease}
   .dm-ba-hint.off{opacity:0}
-  .dm-ba-thumbs{display:flex; justify-content:center; gap:12px; margin-top:20px}
+  .dm-ba-thumbs{display:flex; gap:12px; margin-top:14px; padding:8px 6px 10px; overflow-x:auto; scrollbar-width:none; -webkit-overflow-scrolling:touch}      /* 13 пар не вміщуються в ряд – стрічка гортається вбік */
+  .dm-ba-thumbs::-webkit-scrollbar{display:none}
+  .dm-ba-thw{position:relative; margin-top:14px}
+  .dm-ba-thw .dm-ba-thumbs{margin-top:0; cursor:grab; -webkit-user-select:none; user-select:none}
+  .dm-ba-thw .dm-ba-thumbs.grab{cursor:grabbing}
+  .dm-ba-thw::before,.dm-ba-thw::after{content:''; position:absolute; top:0; bottom:0; width:34px; z-index:2; pointer-events:none; opacity:0; transition:opacity .3s ease}
+  .dm-ba-thw::before{left:0; background:linear-gradient(90deg,var(--cream),rgba(246,242,238,0))} .dm-ba-thw::after{right:0; background:linear-gradient(270deg,var(--cream),rgba(246,242,238,0))}
+  .dm-ba-thw.can-l::before{opacity:1} .dm-ba-thw.can-r::after{opacity:1}
+  .dm-ba-arr{position:absolute; top:50%; z-index:3; width:34px; height:34px; margin-top:-17px; padding:0; border:0; border-radius:50%; cursor:pointer; display:grid; place-items:center; color:var(--graph);
+    background:rgba(255,248,242,.96); box-shadow:0 8px 18px -6px rgba(67,40,30,.5), inset 0 0 0 1px rgba(171,55,36,.14); transition:opacity .3s ease, transform .3s ease; -webkit-tap-highlight-color:transparent}
+  .dm-ba-arr.l{left:2px} .dm-ba-arr.r{right:2px}
+  .dm-ba-arr svg{width:8px; height:12px; stroke:currentColor; fill:none; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round}
+  .dm-ba-arr:hover{transform:scale(1.08); color:var(--red)}
+  .dm-ba-arr:focus-visible{outline:2px solid var(--red); outline-offset:2px}
+  .dm-ba-arr[disabled]{opacity:0; pointer-events:none}
+  .dm-ba-thumbs .dm-ba-th{flex:none}
+  .dm-ba-thumbs .dm-ba-th:first-child{margin-left:auto} .dm-ba-thumbs .dm-ba-th:last-child{margin-right:auto}      /* коли вміщуються – по центру */
   .dm-ba-th{
     position:relative; width:clamp(46px,6vw,62px); aspect-ratio:3/4; padding:0; border:0; border-radius:14px; overflow:hidden; cursor:pointer; background:#e6ddd4;
     opacity:.62; transform:scale(.94); transition:opacity .35s ease, transform .45s cubic-bezier(.2,.8,.2,1), box-shadow .35s ease;
@@ -1536,7 +1769,7 @@
   .dm-ba-th:focus-visible{outline:2px solid var(--red); outline-offset:3px}
 
   @media (max-width:900px){
-    .dm-ba-in{grid-template-columns:1fr; gap:34px}
+    .dm-ba-in{grid-template-columns:minmax(0,1fr); gap:34px}      /* minmax(0,…): довга стрічка мініатюр більше не розпирає колонку за межі екрана */
     .dm-ba-stage{margin:0 auto; max-width:500px}
     .dm-ba-text{text-align:center}
     .dm-ba-p{margin-left:auto; margin-right:auto}
@@ -1578,7 +1811,11 @@
         </div>
       </div>
       <p class="dm-ba-hint">Тягніть повзунок</p>
-      <div class="dm-ba-thumbs" id="dm-ba-thumbs" role="tablist" aria-label="Приклади"></div>
+      <div class="dm-ba-thw">
+        <button class="dm-ba-arr l" id="dm-ba-al" type="button" aria-label="Попередні приклади"><svg viewBox="0 0 8 12" aria-hidden="true"><path d="M6 1L2 6l4 5"/></svg></button>
+        <div class="dm-ba-thumbs" id="dm-ba-thumbs" role="tablist" aria-label="Приклади"></div>
+        <button class="dm-ba-arr r" id="dm-ba-ar" type="button" aria-label="Наступні приклади"><svg viewBox="0 0 8 12" aria-hidden="true"><path d="M2 1l4 5-4 5"/></svg></button>
+      </div>
     </div>
   </div>
 </section>
@@ -1600,7 +1837,15 @@
       ['https://static.tildacdn.com/tild6332-6330-4637-a134-643566316366/2before.jpg', 'https://static.tildacdn.com/tild3433-6265-4036-b066-626436386235/2after.jpg'],
       ['https://static.tildacdn.com/tild3236-3066-4061-b238-356432313132/3before.jpg', 'https://static.tildacdn.com/tild6162-6363-4536-b865-663739326434/3after.jpg'],
       ['https://static.tildacdn.com/tild3030-3665-4034-a639-616133313130/4before.jpg', 'https://static.tildacdn.com/tild3636-6166-4634-b037-373065356338/4after.jpg'],
-      ['https://static.tildacdn.com/tild3337-3835-4532-b332-323630353337/5before.jpg', 'https://static.tildacdn.com/tild3139-3132-4433-a661-356666643436/5after.jpg']
+      ['https://static.tildacdn.com/tild3337-3835-4532-b332-323630353337/5before.jpg', 'https://static.tildacdn.com/tild3139-3132-4433-a661-356666643436/5after.jpg'],
+      ['https://static.tildacdn.com/tila6536-3435-4435-a632-656437646465/6before.jpg', 'https://static.tildacdn.com/tila6266-3330-4466-b230-666337363230/6after.jpg'],
+      ['https://static.tildacdn.com/tila3162-6237-4431-b361-646434343264/7before.jpg', 'https://static.tildacdn.com/tila3163-6464-4031-a462-316166393664/7after.jpg'],
+      ['https://static.tildacdn.com/tila3736-3563-4538-a332-353066363132/8before.jpg', 'https://static.tildacdn.com/tila3439-3130-4331-b161-316636323339/8after.jpg'],
+      ['https://static.tildacdn.com/tila3330-3939-4231-a366-386237373563/9before.jpg', 'https://static.tildacdn.com/tila6163-3232-4834-b139-323461326163/9after.jpg'],
+      ['https://static.tildacdn.com/tila3835-3233-4465-b861-383732383566/10before.jpg', 'https://static.tildacdn.com/tila6365-6635-4533-a565-343238356362/10after.jpg'],
+      ['https://static.tildacdn.com/tila3830-6531-4931-b731-393162623938/11before.jpg', 'https://static.tildacdn.com/tila6262-6134-4038-b237-383833613961/11after.jpg'],
+      ['https://static.tildacdn.com/tila3334-6261-4364-a536-343862343638/12before.jpg', 'https://static.tildacdn.com/tila3061-6562-4937-a161-616136636337/12after.jpg'],
+      ['https://static.tildacdn.com/tila3865-3438-4435-a634-373630363034/13before.jpg', 'https://static.tildacdn.com/tila6431-3766-4637-a231-666534666135/13after.jpg']
     ]
   };
   if (window.DM_BA) for (var k in window.DM_BA) CFG[k] = window.DM_BA[k];
@@ -1620,7 +1865,7 @@
   /* повне посилання Tilda (…/tildXXXX/файл.jpg) → зменшена копія через /-/resize/ШИРИНАx/; інше посилання — як є; назва — Cloudinary */
   var url = function(id, t, w){
     if (!/^https?:\/\//.test(id)) return CFG.base + t + id;
-    return id.replace(/^https?:\/\/static\.tildacdn\.com\/(tild[\w-]+)\/([^\/]+)$/, 'https://thb.tildacdn.com/$1/-/resize/' + w + 'x/$2');
+    return id.replace(/^https?:\/\/static\.tildacdn\.(com|net|one|info)\/(til[a-z][\w-]+)\/([^\/]+)$/, 'https://thb.tildacdn.$1/$2/-/resize/' + w + 'x/$3');
   };
   if (CFG.bg) root.querySelector('.dm-ba-bg i').style.backgroundImage = 'url("' + CFG.bg + '")';
 
@@ -1662,6 +1907,7 @@
     var first = !loadedFirst;
     cur = i; loadedFirst = true;
     ths.forEach(function(t, k){ t.btn.classList.toggle('on', k === i); t.btn.setAttribute('aria-selected', k === i); });
+    (function(){ var b = ths[i].btn, bar = b.parentNode; try{ var br = bar.getBoundingClientRect(), r = b.getBoundingClientRect(); bar.scrollTo({ left: bar.scrollLeft + (r.left - br.left) - (br.width - r.width) / 2, behavior: first ? 'auto' : 'smooth' }); }catch(_){}      /* позиція рахується від стрічки, а не від сторінки – інакше мініатюри «застрягали» */ })();
     num.textContent = pad(i + 1) + ' / ' + pad(N);
     var a = new Image(), b = new Image(), pending = 2;
     var done = function(){
@@ -1700,6 +1946,39 @@
   });
   function touched(){ userTouched = true; if (hint) hint.classList.add('off'); }
 
+
+  /* ═══════════ стрічка мініатюр: стрілки + гортання «змахом» миші ═══════════ */
+  (function(){
+    var bar = thumbs, wrapEl = bar.parentNode, bl = document.getElementById('dm-ba-al'), br = document.getElementById('dm-ba-ar');
+    function upd(){
+      var max = bar.scrollWidth - bar.clientWidth, x = bar.scrollLeft, canL = x > 4, canR = x < max - 4;
+      bl.disabled = !canL; br.disabled = !canR; wrapEl.classList.toggle('can-l', canL); wrapEl.classList.toggle('can-r', canR);
+    }
+    function step(dir){ try{ bar.scrollBy({ left: dir * Math.max(120, bar.clientWidth * .7), behavior: 'smooth' }); }catch(_){ bar.scrollLeft += dir * 200; } }
+    bl.addEventListener('click', function(){ step(-1); }); br.addEventListener('click', function(){ step(1); });
+    bar.addEventListener('scroll', upd, { passive:true }); window.addEventListener('resize', upd);
+    var down = false, moved = false, sx = 0, sl = 0, lastX = 0, lastT = 0, vel = 0, raf = 0;
+    bar.addEventListener('pointerdown', function(e){
+      if (e.pointerType !== 'mouse' || e.button !== 0) return;            // на дотику працює звичайне гортання
+      down = true; moved = false; sx = lastX = e.clientX; sl = bar.scrollLeft; lastT = performance.now(); vel = 0; cancelAnimationFrame(raf);
+    });
+    window.addEventListener('pointermove', function(e){
+      if (!down) return; var dx = e.clientX - sx;
+      if (!moved && Math.abs(dx) > 4){ moved = true; bar.classList.add('grab'); bar.style.scrollBehavior = 'auto'; }
+      if (!moved) return;
+      bar.scrollLeft = sl - dx; var now = performance.now(), dt = Math.max(1, now - lastT); vel = (e.clientX - lastX) / dt; lastX = e.clientX; lastT = now;
+    });
+    function end(){
+      if (!down) return; down = false; bar.classList.remove('grab');
+      if (moved){                                                              // інерція після змаху
+        var v = vel * 16;
+        (function glide(){ if (Math.abs(v) < .4){ bar.style.scrollBehavior = ''; upd(); return; } bar.scrollLeft -= v; v *= .93; raf = requestAnimationFrame(glide); })();
+      }
+    }
+    window.addEventListener('pointerup', end); window.addEventListener('pointercancel', end);
+    bar.addEventListener('click', function(e){ if (moved){ e.stopPropagation(); e.preventDefault(); moved = false; } }, true);   // після змаху не вибирати пару випадково
+    setTimeout(upd, 400); setTimeout(upd, 1500);
+  })();
   /* ═══════════ показати «підказку-рух» при появі ═══════════ */
   function demo(){
     if (demoDone || userTouched) return; demoDone = true;
@@ -1802,13 +2081,13 @@
 
   /* ───── телефон / планшет: горизонтальна стрічка ───── */
   @media (max-width:960px){
-    .dm-ct{--fx:10px; --ft:12px; --fb:16px; --fr:24px}
+    .dm-ct{--fx:10px; --ft:12px; --fb:16px; --fr:24px; padding-bottom:calc(var(--fb) + 28px)}      /* менше порожнього місця під плитками на телефоні */
     .dm-ct-in{padding:0 calc(var(--fx) + 18px)}
     .dm-ct-head{flex-direction:column; align-items:flex-start}
     .dm-ct-sub{text-align:left}
     .dm-ct-row{
       overflow-x:auto; -webkit-overflow-scrolling:touch; scroll-snap-type:x mandatory; scrollbar-width:none;
-      margin:0 -18px; padding:6px 18px 30px; gap:12px;
+      margin:0 -18px; padding:6px 18px 18px; gap:12px;
     }
     .dm-ct-row::-webkit-scrollbar{display:none}
     .dm-ct-tile,.dm-ct-tile.hot{flex:0 0 clamp(210px,62vw,300px); height:clamp(330px,92vw,420px); scroll-snap-align:center}
@@ -1822,8 +2101,7 @@
   <div class="dm-ct-in">
     <div class="dm-ct-head">
       <div>
-        <p class="dm-ct-tag">Продукція</p>
-        <h2 class="dm-ct-h">Обери свій <em>розділ</em></h2>
+        <h2 class="dm-ct-h">Обирай свій <em>догляд</em></h2>
       </div>
       <p class="dm-ct-sub">Один набір уже чекає на тебе.<br>Інші розділи з’являться скоро.</p>
     </div>
@@ -2223,7 +2501,7 @@
   @media (prefers-reduced-motion:reduce){ .dm-ft-cta::before{animation:none} }
 </style>
 
-<footer id="dm-ft" class="dm-ft" aria-label="Футер">
+<div id="dm-ft" class="dm-ft" role="presentation" aria-label="Футер">
   <div class="dm-ft-in">
     <div class="dm-ft-top">
       <div class="dm-ft-brand">
@@ -2242,7 +2520,7 @@
       <button class="dm-ft-up" type="button" id="dm-ft-up">Нагору <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6"/></svg></button>
     </div>
   </div>
-</footer>
+</div>
 
 <script>
 (function(){
@@ -2269,8 +2547,8 @@
       { t:'Питання й відповіді', h:'#demo' }             // ← те саме
     ],
     contact : [                                      // порожнє значення – рядок зникне
-      { l:'Телефон',  t:'+38 0__ ___ __ __', h:'tel:+380000000000' },   // ← ВПИСАТИ СВІЙ НОМЕР (в обох полях)
-      { l:'Пошта',    t:'hello@damore.ua',  h:'mailto:hello@damore.ua' }, // ← ВПИСАТИ СВОЮ ПОШТУ
+      { l:'Телефон',  t:'+38 097 508 42 19', h:'tel:+380975084219' },
+      { l:'Пошта',    t:'damoreua@gmail.com',  h:'mailto:damoreua@gmail.com' }, 
       { l:'Графік',   t:'Пн–Пт, 10:00–18:00' }                             // ← або прибрати
     ],
     social : {                                       // порожнє = іконки не буде

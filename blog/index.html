@@ -30,7 +30,7 @@
 <style>
   html.dm-nocur, html.dm-nocur *{cursor:none!important}
   .dm-cur{
-    position:fixed; left:0; top:0; width:16px; height:24px; z-index:1000000; pointer-events:none; opacity:0;
+    position:fixed; left:0; top:0; width:16px; height:24px; z-index:2147483647; pointer-events:none; opacity:0;
     background:center/contain no-repeat; will-change:transform; transition:opacity .25s ease;
     transform-origin:50% 100%;
     filter:drop-shadow(0 3px 5px rgba(120,25,15,.28));
@@ -58,6 +58,7 @@
       var x=-100,y=-100,tx=-100,ty=-100,sc=1,tsc=1,rot=0,shown=false;
       window.addEventListener('mousemove', function(e){
         tx = e.clientX; ty = e.clientY;
+        if (el.nextSibling) document.body.appendChild(el);                          // лишатися поверх елементів, що з'являються пізніше (збільшення фото, попапи Tilda)
         if (!shown){ shown = true; x = tx; y = ty; root.classList.add('dm-nocur'); el.style.opacity = 1; }
         var t = e.target;
         tsc = (t && t.closest && t.closest('a,button,input,textarea,select,label,summary,[role=button],[role=tab],.t-btn')) ? 1.45 : 1;
@@ -310,6 +311,9 @@
   .dmh-ig svg{width:20px; height:20px; stroke:currentColor; fill:none; stroke-width:1.6; stroke-linecap:round; stroke-linejoin:round}
   .dmh-ig:hover{background:rgba(171,55,36,.08); color:var(--red)}
   .dmh-ig:focus-visible{outline:2px solid var(--red); outline-offset:3px}
+  /* вікно кошика Tilda: заголовок «Ваше замовлення» не має свого поля кольору в налаштуваннях — фарбуємо тут */
+  .t706__cartwin-heading{color:#5B1210!important; font-weight:500!important; letter-spacing:-.01em}
+  .t706__cartwin .t-input-title{color:#433d3c!important}
   html.dmh-hide-tcart .t706__carticon{display:none!important}          /* ховаємо власну плаваючу іконку кошика Tilda (CONFIG.hideTildaCartIcon) */
   .dmh-badge.pop{animation:dmhPop .5s cubic-bezier(.2,.8,.2,1)}
   @keyframes dmhPop{0%{transform:scale(.4)} 55%{transform:scale(1.35)} 100%{transform:scale(1)}}
@@ -362,7 +366,7 @@
 </style>
 
 <div class="dmh-wrap" id="dmh-wrap">
-  <header class="dmh" id="dmh">
+  <div class="dmh" id="dmh" role="presentation">
     <div class="dmh-in">
       <div class="dmh-side l" id="dmh-l">
         <button class="dmh-burger" id="dmh-burger" type="button" aria-label="Відкрити меню" aria-expanded="false" aria-controls="dmh-mob"><i></i><i></i></button>
@@ -370,7 +374,7 @@
       <a class="dmh-logo" id="dmh-logo" href="../" aria-label="D'AMORE — на головну"><img alt="D'AMORE"></a>
       <div class="dmh-side r" id="dmh-r"></div>
     </div>
-  </header>
+  </div>
   <div class="dmh-mob" id="dmh-mob" aria-hidden="true"></div>
 </div>
 
@@ -539,6 +543,20 @@
   window.addEventListener('resize', function(){ if (window.innerWidth > 1024 && mob.classList.contains('open')) setMenu(false); });
   onScroll();
 })();
+
+  /* доступність: мова сторінки й підписи до фото у стрічці блогу (Tilda їх не додає) */
+  (function(){
+    var de = document.documentElement; if (!de.getAttribute('lang')) de.setAttribute('lang', 'uk');
+    function lab(){
+      var im = document.querySelectorAll('.t-cms__card__image[role="img"]:not([aria-label]), .t-cms__card__image[role="img"][aria-label=""]');
+      for (var i = 0; i < im.length; i++){
+        var c = im[i].closest('.t-cms__card'), h = c && c.querySelector('[data-style="title_typo"]');
+        im[i].setAttribute('aria-label', (h && h.textContent.trim()) ? h.textContent.trim() : 'Фото до статті блогу D’AMORE');
+      }
+    }
+    lab();
+    if (window.MutationObserver){ var mo = new MutationObserver(function(){ lab(); }); mo.observe(document.body, { childList:true, subtree:true }); setTimeout(function(){ mo.disconnect(); }, 15000); }
+  })();
 </script>
 
 <!--
@@ -686,7 +704,7 @@
   @media (prefers-reduced-motion:reduce){ .dm-ft-cta::before{animation:none} }
 </style>
 
-<footer id="dm-ft" class="dm-ft" aria-label="Футер">
+<div id="dm-ft" class="dm-ft" role="presentation" aria-label="Футер">
   <div class="dm-ft-in">
     <div class="dm-ft-top">
       <div class="dm-ft-brand">
@@ -705,7 +723,7 @@
       <button class="dm-ft-up" type="button" id="dm-ft-up">Нагору <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6"/></svg></button>
     </div>
   </div>
-</footer>
+</div>
 
 <script>
 (function(){
@@ -732,8 +750,8 @@
       { t:'Питання й відповіді', h:'#demo' }             // ← те саме
     ],
     contact : [                                      // порожнє значення – рядок зникне
-      { l:'Телефон',  t:'+38 0__ ___ __ __', h:'tel:+380000000000' },   // ← ВПИСАТИ СВІЙ НОМЕР (в обох полях)
-      { l:'Пошта',    t:'hello@damore.ua',  h:'mailto:hello@damore.ua' }, // ← ВПИСАТИ СВОЮ ПОШТУ
+      { l:'Телефон',  t:'+38 097 508 42 19', h:'tel:+380975084219' },
+      { l:'Пошта',    t:'damoreua@gmail.com',  h:'mailto:damoreua@gmail.com' }, 
       { l:'Графік',   t:'Пн–Пт, 10:00–18:00' }                             // ← або прибрати
     ],
     social : {                                       // порожнє = іконки не буде
